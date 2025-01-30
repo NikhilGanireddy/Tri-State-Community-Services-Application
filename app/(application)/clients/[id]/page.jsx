@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import * as React from 'react'
 import { useEffect, useState } from 'react'
 import { Separator } from '@/components/ui/separator'
@@ -43,10 +43,21 @@ import {
 } from '@/components/ui/table'
 import { connectToDB } from '@/lib/mongoose'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+
 
 const Page = () => {
-  // State for Plaintiff and Defendant Data
+
+  const [clientDaata, setClientDaata] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const router = useRouter();
+
+    const pathname = usePathname().split("/")
+    const id = pathname[pathname.length-1]
+    // console.log(clientId)
+
+    const [user, setUser] = useState(null);
   const [clientData, setClientData] = useState({
     plaintiff: {
       firstName: '',
@@ -177,28 +188,29 @@ const Page = () => {
     serviceFee: '' // New field for service fee
   })
 
-  const router = useRouter()
-  const handleSave = async () => {
+  const onPageLoad = async () => {
     try {
-      const response = await fetch('/api/saveClientData', {
+      const response = await fetch('/api/editClientData', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(clientData) // Send clientData to the backend
-      })
+        body: JSON.stringify(clientId), // Send clientData to the backend
+      });
 
       if (response.ok) {
-        alert('Client data saved successfully!')
-        // router.push(`${}`)
+        setClientData(response.body)
+        alert('Client data fetched successfully!');
       } else {
-        const errorData = await response.json()
-        alert(`Error: ${errorData.message}`)
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error('Error saving client data:', error)
-      alert('Error saving client data.')
+      console.error('Error saving client data:', error);
+      alert('Error saving client data.');
     }
-  }
+  };
+  
 
+// onPageLoad()
   const handleFieldChange = (category, field, value) => {
     setClientData(prev => ({
       ...prev,
@@ -312,6 +324,28 @@ const Page = () => {
     }))
   }
 
+  const handleSave = async () => {
+    try {
+      const response = await fetch('/api/saveClientData', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(clientData), // Send clientData to the backend
+      });
+
+      if (response.ok) {
+        alert('Client data saved successfully!');
+        // router.push(`${}`)
+        
+      } else {
+        const errorData = await response.json();
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      console.error('Error saving client data:', error);
+      alert('Error saving client data.');
+    }
+  };
+
   const handleSaveChildrenData = () => {
     // Your logic to save or process the data goes here
     // Example: you could send clientData to an API or local storage
@@ -329,6 +363,7 @@ const Page = () => {
       sex: ''
     }
   ])
+
 
   useEffect(() => {
     setChildrenData(prev => {
@@ -414,11 +449,31 @@ const Page = () => {
       </TableRow>
     ))
   }
+  useEffect(() => {
+    if (!id) return; // Wait for the ID to be available
+
+    const fetchClientData = async () => {
+      try {
+        const response = await fetch(`/api/getClientById/${id}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch client data');
+        }
+        const data = await response.json();
+        setClientData(data); // Populate state with fetched data
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+        setLoading(false);
+      }
+    };
+
+    fetchClientData();
+  }, [id]);
+
+  
   return (
     <div className={` max-w-[1200px] mx-auto rounded-2xl py-12 px-4`}>
-      <Link href={'/'} className={`text-2xl font-semibold`}>
-        Tri State Community Services
-      </Link>
+      <Link href={"/"} className={`text-2xl font-semibold`}>Tri State Community Services</Link>
       <h2 className={`text-xl`}>Intake Sheet</h2>
 
       <div>
@@ -2003,7 +2058,10 @@ const Page = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button onClick={handleSave}>Submit </Button>
+                  <Button
+                  >
+                    Submit{' '}
+                  </Button>
                 </CardFooter>
               </Card>
             </TabsContent>
