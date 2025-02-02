@@ -55,7 +55,6 @@ const Page = () => {
 
     const pathname = usePathname().split("/")
     const id = pathname[pathname.length-1]
-    // console.log(clientId)
 
     const [user, setUser] = useState(null);
   const [clientData, setClientData] = useState({

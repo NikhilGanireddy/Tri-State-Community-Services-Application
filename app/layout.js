@@ -10,7 +10,7 @@ import {
 import { Poppins } from 'next/font/google'
 
 // If loading a variable font, you don't need to specify the font weight
-const poppins = Poppins({ subsets: ['latin'], weight:"400" })
+const poppins = Poppins({ subsets: ['latin'], weight:["100", "200","300","400","500","600","700","800"] })
 
 export const metadata = {
   title: "Create Next App",
@@ -20,7 +20,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
       <ClerkProvider>
-          <html lang="en" className={`min-h-screen h-full ${poppins.className}`}>
+          <html lang="en" className={`min-h-screen h-full text-sm ${poppins.className}`}>
           <body>
 
           {children}
