@@ -17,7 +17,6 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 
-
 const Page = () => {
   const pathname = usePathname().split('/')
   const id = pathname[pathname.length - 2]
@@ -169,32 +168,35 @@ const Page = () => {
     setSubmitted(true)
   }
 
-  const [extraData, setExtraData] = useState("civil-action-complaint-for-divorce");
+  const [visible, setVisible] = useState(true)
 
-  const downloadPDF = async () => {
-    try {
-      const response = await fetch("/api/generate-pdf", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Ensures Clerk authentication is passed
-        body: JSON.stringify({ id, extraData }), // Send data to backend
-      });
+  const handlePrint = async () => {
+    setVisible(false) // Hide button
 
-      if (!response.ok) throw new Error("Failed to generate PDF");
+    // Prepare file content
+    const fileContent = `Plaintiff: ${clientData.plaintiff.firstName}\nDefendant: ${clientData.defendant.firstName}\nCase Details: ...`
+    const plaintiff = clientData.plaintiff.firstName
+    const defendant = clientData.defendant.firstName
+    // Send request to backend to save file
+    const response = await fetch('/api/saveFile', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ plaintiff, defendant, fileContent })
+    })
 
-      const blob = await response.blob();
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "page.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
+    if (response.ok) {
+      console.log('File saved successfully')
+    } else {
+      console.error('Failed to save file')
     }
-  };
+
+    setTimeout(() => {
+      window.print() // Open print dialog
+      setVisible(true) // Show button after print
+    }, 500)
+  }
 
   useEffect(() => {
     if (!id) return // Wait for the ID to be available
@@ -218,9 +220,7 @@ const Page = () => {
   }, [id])
 
   return (
-    <div
-      className=' p-4 flex flex-col min-w-screen min-h-screen w-full h-screen'
-    >
+    <div className=' p-4 flex flex-col min-w-screen min-h-screen w-full h-screen'>
       <div className='w-full flex flex-row items-center justify-between'>
         <div className='font-medium capitalize'>
           <h2>{`${clientData.plaintiff.firstName} ${clientData.plaintiff.lastName}`}</h2>
@@ -387,16 +387,21 @@ const Page = () => {
             <div className='w-full space-y-4'>
               {textBoxes.map((box, index) => (
                 <li key={box.id} className=''>
-                  <strong>{box.title}</strong>: {box.details}
+                  {box.title}: {box.details}
                 </li>
               ))}
             </div>
           )}
         </ol>
       </div>
-      <Button onClick={downloadPDF} className='mt-4'>
-        Download PDF
-      </Button>
+      {visible && (
+        <Button
+          onClick={handlePrint}
+          className='px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition'
+        >
+          Print Page
+        </Button>
+      )}
     </div>
   )
 }
