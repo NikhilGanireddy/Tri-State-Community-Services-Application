@@ -45,6 +45,10 @@ import { connectToDB } from '@/lib/mongoose'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+const metadata = {
+  title: 'Intake Sheet | Tri State Community Services',
+};
+
 const Page = () => {
   // State for Plaintiff and Defendant Data
   const [clientData, setClientData] = useState({
@@ -416,6 +420,7 @@ const Page = () => {
   }
   return (
     <div className={` max-w-[1200px] mx-auto rounded-2xl py-12 px-4`}>
+      <title>Intake Sheet | Tri State Community Services</title>
       <Link href={'/'} className={`text-2xl font-semibold`}>
         Tri State Community Services
       </Link>

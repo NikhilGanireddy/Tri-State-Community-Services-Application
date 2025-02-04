@@ -1,5 +1,9 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+ 
+export const metadata = {
+  title: 'Dashboard | Tri State Community Services',
+};
 
 const Page = () => {
   return (

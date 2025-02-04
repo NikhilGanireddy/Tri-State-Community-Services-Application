@@ -472,6 +472,7 @@ const Page = () => {
   
   return (
     <div className={` max-w-[1200px] mx-auto rounded-2xl py-12 px-4`}>
+      <title>Edit Intake Sheet</title>
       <Link href={"/"} className={`text-2xl font-semibold`}>Tri State Community Services</Link>
       <h2 className={`text-xl`}>Intake Sheet</h2>
 

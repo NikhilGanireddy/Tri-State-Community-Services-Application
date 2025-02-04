@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 const Page = () => {
   const pathname = usePathname().split('/')
   const id = pathname[pathname.length - 2]
+  const documentName = pathname[pathname.length - 1]
 
   const [clientData, setClientData] = useState({
     plaintiff: {
@@ -148,12 +149,15 @@ const Page = () => {
       zip: '',
       notes: ''
     },
-    serviceFee: '' // New field for service fee
+    serviceFee: '', // New field for service fee,
+    documentTemplatesExtraDetails: {
+      civilActionComplaintForDivorce: [{ title: String, details: String }]
+    }
   })
-
   const [textBoxes, setTextBoxes] = useState([])
   const [submitted, setSubmitted] = useState(false)
-
+  const [saving, setSaving] = useState(false)
+console.log(clientData)
   const addTextBox = () => {
     setTextBoxes([...textBoxes, { id: Date.now(), title: '', details: '' }])
   }
@@ -168,35 +172,33 @@ const Page = () => {
     setSubmitted(true)
   }
 
-  const [visible, setVisible] = useState(true)
+  const handleSave = async () => {
+    setSaving(true)
+    try {
+      const response = await fetch('/api/saveDocumentTemplates', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          civilActionComplaintForDivorce: textBoxes, // Data entered by the user
+          documentName: 'civilActionComplaintForDivorce', // Static document type
+          id: id // Pass user ID dynamically if needed
+        })
+      })
 
-  const handlePrint = async () => {
-    setVisible(false) // Hide button
-
-    // Prepare file content
-    const fileContent = `Plaintiff: ${clientData.plaintiff.firstName}\nDefendant: ${clientData.defendant.firstName}\nCase Details: ...`
-    const plaintiff = clientData.plaintiff.firstName
-    const defendant = clientData.defendant.firstName
-    // Send request to backend to save file
-    const response = await fetch('/api/saveFile', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ plaintiff, defendant, fileContent })
-    })
-
-    if (response.ok) {
-      console.log('File saved successfully')
-    } else {
-      console.error('Failed to save file')
+      if (response.ok) {
+        alert('Data saved successfully!')
+      } else {
+        alert('Error saving data.')
+      }
+    } catch (error) {
+      console.error('Error:', error)
+      alert('Eror saving data.')
+    } finally {
+      setSaving(false)
     }
-
-    setTimeout(() => {
-      window.print() // Open print dialog
-      setVisible(true) // Show button after print
-    }, 500)
   }
+
+
 
   useEffect(() => {
     if (!id) return // Wait for the ID to be available
@@ -210,6 +212,12 @@ const Page = () => {
         const data = await response.json()
         setClientData(data) // Populate state with fetched data
         setLoading(false)
+        if (
+          data.documentTemplatesExtraDetails.civilActionComplaintForDivorce
+            .length != 0
+        ) {
+          setSubmitted(true)
+        }
       } catch (error) {
         setError(error.message)
         setLoading(false)
@@ -346,9 +354,7 @@ const Page = () => {
 
           {!submitted ? (
             <>
-              <Button className='w-max' onClick={addTextBox}>
-                Add Textbox
-              </Button>
+              <Button onClick={addTextBox}>Add Textbox</Button>
               <div className='w-full max-w-lg space-y-4'>
                 {textBoxes.map(box => (
                   <div key={box.id} className='border p-4 rounded-lg shadow'>
@@ -378,30 +384,34 @@ const Page = () => {
                 ))}
               </div>
               {textBoxes.length > 0 && (
-                <Button className='w-max' onClick={handleSubmit}>
-                  Submit
-                </Button>
+                <Button onClick={handleSubmit}>Submit</Button>
               )}
             </>
           ) : (
-            <div className='w-full space-y-4'>
-              {textBoxes.map((box, index) => (
-                <li key={box.id} className=''>
-                  {box.title}: {box.details}
-                </li>
-              ))}
-            </div>
+            <>
+              {clientData.documentTemplatesExtraDetails
+                .civilActionComplaintForDivorce.length != 0 ? (
+                <div>Hello</div>
+              ) : (
+                <div className='w-full max-w-lg'>
+                  {textBoxes.map((box, index) => (
+                    <li key={box.id} className=''>
+                      {box.title}: {box.details}
+                    </li>
+                  ))}
+                  <Button
+                    onClick={handleSave}
+                    disabled={saving}
+                    className='mt-4'
+                  >
+                    {saving ? 'Saving...' : 'Save'}
+                  </Button>
+                </div>
+              )}
+            </>
           )}
         </ol>
       </div>
-      {visible && (
-        <Button
-          onClick={handlePrint}
-          className='px-4 py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition'
-        >
-          Print Page
-        </Button>
-      )}
     </div>
   )
 }

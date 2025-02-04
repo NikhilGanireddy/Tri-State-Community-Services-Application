@@ -8,13 +8,12 @@ const Page = () => {
   const id = pathname[pathname.length - 1]
   return (
     <div className=' flex flex-col min-w-screen min-h-screen w-full h-screen justify-center items-center'>
-      {id}
-      <Button className="max-w-fit">
-        <Link
-          href={`/document_templates/${id}/civil-action-complaint-for-divorce`}
-        >
+      User id : {id}
+      <title>Documents</title>
+      <Button className='max-w-fit'>
+        <Link href={`/document_templates/${id}/civilActionComplaintForDivorce`}>
           {' '}
-          civil-action-complaint-for-divorce
+          Civil Action Complaint For Divorce
         </Link>
       </Button>
     </div>

@@ -48,6 +48,7 @@ const UsersPage = () => {
   return (
     <div className='container mx-auto p-6'>
       <h1 className='text-2xl font-bold mb-4'>User Data</h1>
+      <title>Clients | Tri State Community Services</title>
 
       {loading && <p>Loading...</p>}
       {error && <p className='text-red-500'>{error}</p>}
