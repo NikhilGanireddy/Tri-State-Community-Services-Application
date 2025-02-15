@@ -8,10 +8,12 @@ import {usePathname} from 'next/navigation'
 import {getDate, getMonth, getYear} from 'date-fns'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
 import {Checkbox} from "@/components/ui/checkbox"
+import { useToast } from "@/hooks/use-toast"
 
 const Page = () => {
     const pathname = usePathname().split('/')
     const id = pathname[pathname.length - 2]
+    const { toast } = useToast()
 
     const [clientData, setClientData] = useState({
         plaintiff: {
@@ -186,11 +188,17 @@ const Page = () => {
                 }))
                 setSubmitted(true)
             } else {
-                alert('Error saving data.')
+                toast({
+                    title: 'Error',
+                    description:"Error saving data."
+                })
             }
         } catch (error) {
             console.error('Error:', error)
-            alert('Error saving data.')
+            toast({
+                title: 'Error',
+                description:"Error saving data."
+            })
         } finally {
             setSaving(false)
         }
@@ -281,16 +289,24 @@ const Page = () => {
             })
 
             if (!response.ok) {
-                alert('Error saving judgment demands.')
+                toast({
+                    title: 'Error',
+                    description:"Error saving judgment demands."
+                })
                 return
             }
-
-            alert('Judgment Demands saved successfully!')
+            toast({
+                title: 'Success',
+                description:"Judgment Demands saved successfully!"
+            })
             setJudgmentDemandsSaved(true)
 
         } catch (error) {
             console.error('Error:', error)
-            alert('Error saving judgment demands.')
+            toast({
+                title: 'Error',
+                description:"Error saving judgment demands."
+            })
         }
     }
 
