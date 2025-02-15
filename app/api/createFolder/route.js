@@ -13,18 +13,7 @@ export async function POST(request) {
                 { status: 400 }
             )
         }
-
-        // Create (if needed) a "documents" folder at project root:
-        const documentsPath = path.join(process.cwd(), 'documents')
-        if (!fs.existsSync(documentsPath)) {
-            fs.mkdirSync(documentsPath, { recursive: true })
-        }
-
-        // Now create a subfolder named folderName:
-        const targetPath = path.join(documentsPath, folderName)
-        if (!fs.existsSync(targetPath)) {
-            fs.mkdirSync(targetPath, { recursive: true })
-        }
+        console.log(folderName)
 
         return NextResponse.json({
             success: true,
