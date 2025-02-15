@@ -6,8 +6,8 @@ import {Input} from '@/components/ui/input'
 import {Textarea} from '@/components/ui/textarea'
 import {usePathname} from 'next/navigation'
 import {getDate, getMonth, getYear} from 'date-fns'
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
-import {Checkbox} from "@/components/ui/checkbox";
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
+import {Checkbox} from "@/components/ui/checkbox"
 
 const Page = () => {
     const pathname = usePathname().split('/')
@@ -27,7 +27,8 @@ const Page = () => {
             dob: null,
             mobile: '',
             placeOfBirth: ''
-        }, defendant: {
+        },
+        defendant: {
             firstName: '',
             middleName: '',
             lastName: '',
@@ -40,93 +41,113 @@ const Page = () => {
             dob: null,
             mobile: '',
             placeOfBirth: ''
-        }, marriage: {
-            dateOfMarriage: null, cityOfMarriage: '', stateOfMarriage: '', dateOfSeparation: null
-        }, children: {
-            count: 1, details: [{
-                id: '0', name: '', dob: null, placeOfBirth: '', ssn: '', sex: ''
+        },
+        marriage: {
+            dateOfMarriage: null,
+            cityOfMarriage: '',
+            stateOfMarriage: '',
+            dateOfSeparation: null
+        },
+        children: {
+            count: 1,
+            details: [{
+                id: '0',
+                name: '',
+                dob: null,
+                placeOfBirth: '',
+                ssn: '',
+                sex: ''
             }]
-        }, custody: {
+        },
+        custody: {
             physicalCustody: '',
             legalCustody: '',
             visitationLimitation: '',
             childSupport: '',
             supportAmount: '',
             supportFrequency: ''
-        }, courtDecision: {
+        },
+        courtDecision: {
             previous: {
-                docketNumber: '', caseName: '', county: ''
-            }, current: {
-                docketNumber: '', caseName: '', county: ''
+                docketNumber: '',
+                caseName: '',
+                county: ''
+            },
+            current: {
+                docketNumber: '',
+                caseName: '',
+                county: ''
             }
-        }, realEstateDetails: {
-            properties: [{description: '', equity: ''}, {description: '', equity: ''}, {description: '', equity: ''}],
+        },
+        realEstateDetails: {
+            properties: [
+                {description: '', equity: ''},
+                {description: '', equity: ''},
+                {description: '', equity: ''}
+            ],
             personalProperty: {
-                defendant: '', plaintiff: ''
+                defendant: '',
+                plaintiff: ''
             }
-        }, insurance: {
-            hasInsurance: false, details: {
-                life: {company: '', policy: ''}, auto: {company: '', policy: ''}, health: {
-                    company: '', policy: '', group: '', throughEmployment: false
-                }, homeowners: {company: '', policy: ''}
+        },
+        insurance: {
+            hasInsurance: false,
+            details: {
+                life: {company: '', policy: ''},
+                auto: {company: '', policy: ''},
+                health: {company: '', policy: '', group: '', throughEmployment: false},
+                homeowners: {company: '', policy: ''}
             }
-        }, licenses: {
-            driversLicense: {
-                number: '', stateOfIssue: ''
-            }, employerDetails: {
-                name: '', contact: '', address: ''
-            }, professionalLicense: {
-                details: ''
-            }
-        }, biographicDetails: {
-            gender: '', race: '', height: '', weight: '', eyeColor: '', hairColor: ''
-        }, referralSource: {
-            media: '', nameOfMedia: ''
-        }, sheriffAddress: {
-            addressLine1: '', addressLine2: '', city: '', state: '', zip: '', notes: ''
-        }, serviceFee: '', documentTemplatesExtraDetails: {
+        },
+        licenses: {
+            driversLicense: {number: '', stateOfIssue: ''},
+            employerDetails: {name: '', contact: '', address: ''},
+            professionalLicense: {details: ''}
+        },
+        biographicDetails: {
+            gender: '',
+            race: '',
+            height: '',
+            weight: '',
+            eyeColor: '',
+            hairColor: ''
+        },
+        referralSource: {media: '', nameOfMedia: ''},
+        sheriffAddress: {addressLine1: '', addressLine2: '', city: '', state: '', zip: '', notes: ''},
+        serviceFee: '',
+        documentTemplatesExtraDetails: {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand:""}]
         }
     })
+    const [isPrinting, setIsPrinting] = useState(false);
 
+    const handlePrint = () => {
+        setIsPrinting(true)
+
+        // For example, wait 2 seconds before calling window.print()
+        setTimeout(() => {
+            window.print()
+
+            // If you want to re-enable the button AFTER printing:
+            // window.onafterprint = () => setIsPrinting(false)
+            window.onafterprint = () => setIsPrinting(false)
+        }, 2000)
+    }
     const [textBoxes, setTextBoxes] = useState([])
     const [submitted, setSubmitted] = useState(false)
     const [saving, setSaving] = useState(false)
-    const [selectedSentences, setSelectedSentences] = useState([])
-    const [customSentences, setCustomSentences] = useState([])
 
-
-    useEffect(() => {
-        if (!id) return
-
-        const fetchClientData = async () => {
-            try {
-                const response = await fetch(`/api/getClientById/${id}`)
-                if (!response.ok) throw new Error('Failed to fetch client data')
-
-                const data = await response.json()
-                setClientData(data)
-                setSubmitted(data.documentTemplatesExtraDetails.civilActionComplaintForDivorce.length !== 0)
-            } catch (error) {
-                console.error('Error:', error)
-            }
-        }
-
-        fetchClientData()
-    }, [id])
-
+    // For the "complaint for divorce" textboxes
     const addTextBox = () => {
         setTextBoxes([...textBoxes, { id: Date.now(), title: '', details: '' }])
     }
 
     const handleChange = (id, field, value) => {
-        setTextBoxes(prev => prev.map(box => (box.id === id ? { ...box, [field]: value } : box)))
+        setTextBoxes(prev =>
+            prev.map(box => (box.id === id ? { ...box, [field]: value } : box))
+        )
     }
-
-    const [showSavedJudgments, setShowSavedJudgments] = useState(false);
-
-    const handleSubmit = () => setSubmitted(true)
 
 
     const handleSave = async () => {
@@ -147,6 +168,7 @@ const Page = () => {
                 setClientData(prev => ({
                     ...prev,
                     documentTemplatesExtraDetails: {
+                        ...prev.documentTemplatesExtraDetails,
                         civilActionComplaintForDivorce: result.data.documentTemplatesExtraDetails.civilActionComplaintForDivorce
                     }
                 }))
@@ -162,10 +184,7 @@ const Page = () => {
         }
     }
 
-
-    const [selectedJudgmentDemands, setSelectedJudgmentDemands] = useState([])
-    const [customJudgmentDemands, setCustomJudgmentDemands] = useState([])
-
+    // Judgment demands
     const judgmentOptions = [
         "The plaintiff demands child support payments.",
         "The plaintiff requests sole custody of children.",
@@ -174,17 +193,54 @@ const Page = () => {
         "The plaintiff requests reimbursement for legal fees."
     ]
 
+    // These store both default judgment demands (the ones from judgmentOptions that were selected)
+    // and also custom demands the user enters manually
+    const [selectedJudgmentDemands, setSelectedJudgmentDemands] = useState([])
+    const [customJudgmentDemands, setCustomJudgmentDemands] = useState([])
+
+    // Hide the custom-demand UI after saving demands
+    const [judgmentDemandsSaved, setJudgmentDemandsSaved] = useState(false)
+
+    // Fetch data on mount
     useEffect(() => {
-        if (clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {
-            setSelectedJudgmentDemands(
-                clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands.map(d => d.demand)
-            )
+        if (!id) return
+
+        const fetchClientData = async () => {
+            try {
+                const response = await fetch(`/api/getClientById/${id}`)
+                if (!response.ok) new Error('Failed to fetch client data')
+
+                const data = await response.json()
+                setClientData(data)
+
+                // Build up "selected" vs. "custom" from DB
+                if (data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {
+                    setSelectedJudgmentDemands(
+                        data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
+                            .filter(d => judgmentOptions.includes(d.demand))
+                            .map(d => d.demand)
+                    )
+                    setCustomJudgmentDemands(
+                        data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
+                            .filter(d => !judgmentOptions.includes(d.demand))
+                            .map(d => ({ id: Date.now() + Math.random(), demand: d.demand }))
+                    )
+                }
+
+                setSubmitted(data.documentTemplatesExtraDetails.civilActionComplaintForDivorce.length !== 0)
+            } catch (error) {
+                console.error('Error:', error)
+            }
         }
-    }, [clientData])
+
+        fetchClientData()
+    }, [id])
 
     const toggleJudgmentDemand = (sentence) => {
         setSelectedJudgmentDemands(prev =>
-            prev.includes(sentence) ? prev.filter(item => item !== sentence) : [...prev, sentence]
+            prev.includes(sentence)
+                ? prev.filter(item => item !== sentence)
+                : [...prev, sentence]
         )
     }
 
@@ -200,6 +256,7 @@ const Page = () => {
 
     const handleSaveJudgmentDemands = async () => {
         try {
+            // 1) Save demands
             const response = await fetch('/api/saveDocumentTemplates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -213,151 +270,223 @@ const Page = () => {
                 })
             });
 
-            if (response.ok) {
-                alert('Judgment Demands saved successfully!');
-                setShowSavedJudgments(true);  // Hide Save button and display list
-            } else {
-                alert('Error saving judgment demands.');
+            if (!response.ok) {
+                alert('Error saving judgment demands.')
+                return
             }
+
+            // 2) Create folder named "plaintiffName_defendantName"
+            // (Implementation depends on your environment; this is just an example)
+            const folderName = `${clientData.plaintiff.firstName} Vs ${clientData.defendant.firstName}`
+            const folderRes = await fetch('/api/createFolder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ folderName })
+            })
+            if (!folderRes.ok) {
+                alert('Error creating folder on server.')
+                return
+            }
+
+            alert('Judgment Demands saved and folder created successfully!')
+
+            // 3) Hide "Add Custom Demand" UI
+            setJudgmentDemandsSaved(true)
+
         } catch (error) {
-            console.error('Error:', error);
-            alert('Error saving judgment demands.');
+            console.error('Error:', error)
+            alert('Error saving judgment demands.')
         }
-    };
+    }
 
-    return (<div className='p-4 flex flex-col min-w-screen min-h-screen w-full h-screen'>
-        <div className='w-full flex flex-row items-center justify-between'>
-            <div className='font-medium capitalize'>
-                <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
-                <h2>{clientData.plaintiff.address1}</h2>
-                <h2>{clientData.plaintiff.address2}</h2>
-                <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
-                <h2>+1{clientData.plaintiff.mobile}</h2>
-            </div>
-            <div className='font-medium capitalize'>
-                <h2>SUPERIOR COURT OF NEW JERSEY</h2>
-                <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                <h2>COUNTY</h2>
-                <h2>DOCKET NUMBER NONE</h2>
-            </div>
-        </div>
-        <div className='bg-black text-black w-full h-[1px] my-3'/>
-        <div className='w-full flex justify-between items-center'>
-            <div className='font-medium capitalize flex justify-between items-center space-x-4'>
-                <div>
+
+
+    return (
+        <div className='p-4 flex flex-col min-w-screen min-h-screen w-full h-screen'>
+            <div className='w-full flex flex-row items-center justify-between'>
+                <div className='font-medium capitalize'>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
-                    <h2>Plaintiff</h2>
+                    <h2>{clientData.plaintiff.address1}</h2>
+                    <h2>{clientData.plaintiff.address2}</h2>
+                    <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
+                    <h2>+1{clientData.plaintiff.mobile}</h2>
                 </div>
-                <h2>Vs</h2>
-                <div>
-                    <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
-                    <h2>Defendant</h2>
+                <div className='font-medium capitalize'>
+                    <h2>SUPERIOR COURT OF NEW JERSEY</h2>
+                    <h2>CHANCERY DIVISION-FAMILY PART</h2>
+                    <h2>COUNTY</h2>
+                    <h2>DOCKET NUMBER NONE</h2>
                 </div>
             </div>
-            <div className='font-medium'>
-                <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
-                <h1 className='text-2xl text-center font-bold'>COMPLAINT FOR DIVORCE</h1>
-                <h2 className='capitalize'>based on irreconcilable differences</h2>
-                <h2>Pro/Se</h2>
+            <div className='bg-black text-black w-full h-[1px] my-3'/>
+            <div className='w-full flex justify-between items-center'>
+                <div className='font-medium capitalize flex justify-between items-center space-x-4'>
+                    <div>
+                        <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                        <h2>Plaintiff</h2>
+                    </div>
+                    <h2>Vs</h2>
+                    <div>
+                        <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
+                        <h2>Defendant</h2>
+                    </div>
+                </div>
+                <div className='font-medium'>
+                    <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
+                    <h1 className='text-2xl text-center font-bold'>COMPLAINT FOR DIVORCE</h1>
+                    <h2 className='capitalize'>based on irreconcilable differences</h2>
+                    <h2>Pro/Se</h2>
+                </div>
             </div>
-        </div>
-        <div className='mt-8'>
-            <ol className='list-inside list-decimal flex flex-col space-y-4'>
-                <li>
-                    The Plaintiff, {clientData.plaintiff.firstName} {clientData.plaintiff.lastName}, resides
-                    at {clientData.plaintiff.address1},
-                    in the City of {clientData.plaintiff.city} and the State of {clientData.plaintiff.state}.
-                </li>
-                <li>
-                    Plaintiff was lawfully married
-                    to {clientData.defendant.firstName} {clientData.defendant.lastName} on {clientData.marriage.dateOfMarriage}
-                    in {clientData.marriage.cityOfMarriage}, {clientData.marriage.stateOfMarriage}.
-                </li>
-                <li>
-                    There are {clientData.children.count > 0 ? clientData.children.count : 'no'} children born of
-                    marriage.
-                </li>
+            <div className='mt-8'>
+                <ol className='list-inside list-decimal flex flex-col space-y-4'>
+                    <li>
+                        The Plaintiff, {clientData.plaintiff.firstName} {clientData.plaintiff.lastName}, resides
+                        at {clientData.plaintiff.address1},
+                        in the City of {clientData.plaintiff.city} and the State of {clientData.plaintiff.state}.
+                    </li>
+                    <li>
+                        Plaintiff was lawfully married
+                        to {clientData.defendant.firstName} {clientData.defendant.lastName} on {clientData.marriage.dateOfMarriage}
+                        in {clientData.marriage.cityOfMarriage}, {clientData.marriage.stateOfMarriage}.
+                    </li>
+                    <li>
+                        There are {clientData.children.count > 0 ? clientData.children.count : 'no'} children born of
+                        marriage.
+                    </li>
 
-                {clientData.children.count > 0 && (<Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>First Name</TableHead>
-                            <TableHead>Place of Birth</TableHead>
-                            <TableHead>Date of Birth</TableHead>
-                            <TableHead className='text-right'>Sex</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {clientData.children.details.map(user => (<TableRow key={user.id}>
-                            <TableCell>{user.name}</TableCell>
-                            <TableCell>{user.placeOfBirth}</TableCell>
-                            <TableCell>{user.dob ? `${getMonth(user.dob) + 1}-${getDate(user.dob)}-${getYear(user.dob)}` : ''}</TableCell>
-                            <TableCell className='text-right'>{user.sex}</TableCell>
-                        </TableRow>))}
-                    </TableBody>
-                </Table>)}
+                    {clientData.children.count > 0 && (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>First Name</TableHead>
+                                    <TableHead>Place of Birth</TableHead>
+                                    <TableHead>Date of Birth</TableHead>
+                                    <TableHead className='text-right'>Sex</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {clientData.children.details.map(user => (
+                                    <TableRow key={user.id}>
+                                        <TableCell>{user.name}</TableCell>
+                                        <TableCell>{user.placeOfBirth}</TableCell>
+                                        <TableCell>
+                                            {user.dob
+                                                ? `${getMonth(user.dob) + 1}-${getDate(user.dob)}-${getYear(user.dob)}`
+                                                : ''
+                                            }
+                                        </TableCell>
+                                        <TableCell className='text-right'>{user.sex}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    )}
 
-                {submitted ? (clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorce.map((item, index) => (
-                    <li key={index}>{item.title}: {item.details}</li>))) : (<>
-                    <Button onClick={addTextBox}>Add Textbox</Button>
-                    {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow'>
-                        <Label>Title</Label>
-                        <Input value={box.title}
-                               onChange={e => handleChange(box.id, 'title', e.target.value)}/>
-                        <Label>Details</Label>
-                        <Textarea value={box.details}
-                                  onChange={e => handleChange(box.id, 'details', e.target.value)}/>
-                    </div>))}
-                    <Button onClick={handleSave} disabled={saving}>{saving ? 'Saving...' : 'Save'}</Button>
-                </>)}
-                <li>The plaintiff and the defendant in the matter have been parties to the following prior action:
-                    <div className={`ml-4 mt-4`}>Caption of the
-                        case: {clientData.courtDecision.previous.caseName}</div>
-                    <div className={`ml-4`}>Docket No.: {clientData.courtDecision.previous.docketNumber}</div>
-                </li>
-            </ol>
-            <div className="mt-4">
-                {showSavedJudgments ? (
-                    <ul className="list-disc pl-5">
+                    {/* Additional paragraphs from DB or newly added */}
+                    {submitted ? (
+                        clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorce.map((item, index) => (
+                            <li key={index}>
+                                {item.title}: {item.details}
+                            </li>
+                        ))
+                    ) : (
+                        <>
+                            <Button onClick={addTextBox}>Add Textbox</Button>
+                            {textBoxes.map(box => (
+                                <div key={box.id} className='border p-4 rounded-lg shadow my-2'>
+                                    <Label>Title</Label>
+                                    <Input
+                                        value={box.title}
+                                        onChange={e => handleChange(box.id, 'title', e.target.value)}
+                                    />
+                                    <Label>Details</Label>
+                                    <Textarea
+                                        value={box.details}
+                                        onChange={e => handleChange(box.id, 'details', e.target.value)}
+                                    />
+                                </div>
+                            ))}
+                            <Button onClick={handleSave} disabled={saving}>
+                                {saving ? 'Saving...' : 'Save'}
+                            </Button>
+                        </>
+                    )}
+
+                    <li>
+                        The plaintiff and the defendant in the matter have been parties to the following prior action:
+                        <div className='ml-4 mt-4'>
+                            Caption of the case: {clientData.courtDecision.previous.caseName}
+                        </div>
+                        <div className='ml-4'>
+                            Docket No.: {clientData.courtDecision.previous.docketNumber}
+                        </div>
+                    </li>
+                </ol>
+
+                <div className='mt-8 border-t pt-4'>
+                    <h2 className="font-bold mb-3">WHEREFORE THE PLAINTIF DEMANDS THE JUDGEMENT:</h2>
+                    <ul className="list-disc pl-5 mb-6">
                         {selectedJudgmentDemands.map((demand, index) => (
-                            <li key={index} className="mt-1">{demand}</li>
+                            <li key={`selected-${index}`} className="mt-1">{demand}</li>
                         ))}
                         {customJudgmentDemands.map((demand, index) => (
                             <li key={`custom-${index}`} className="mt-1">{demand.demand}</li>
                         ))}
                     </ul>
-                ) : (
-                    <>
-                        {judgmentOptions.map((option, index) => (
-                            <div key={index} className='flex items-center gap-2'>
-                                <Checkbox
-                                    checked={selectedJudgmentDemands.includes(option)}
-                                    onCheckedChange={() => toggleJudgmentDemand(option)}
-                                />
-                                <Label>{option}</Label>
-                            </div>
-                        ))}
 
-                        {customJudgmentDemands.map((demand) => (
-                            <div key={demand.id} className='mt-2'>
-                                <Input
-                                    value={demand.demand}
-                                    placeholder='Enter custom demand...'
-                                    onChange={(e) => updateCustomJudgmentDemand(demand.id, e.target.value)}
-                                />
-                            </div>
-                        ))}
+                    {/* Hide "Add or Remove Judgments" after saving */}
+                    {!judgmentDemandsSaved && (
+                        <>
+                            <h2 className="font-bold mb-2">Add or Remove Judgments</h2>
+                            {judgmentOptions.map((option, index) => (
+                                <div key={index} className='flex items-center gap-2 mb-1'>
+                                    <Checkbox
+                                        checked={selectedJudgmentDemands.includes(option)}
+                                        onCheckedChange={() => toggleJudgmentDemand(option)}
+                                    />
+                                    <Label>{option}</Label>
+                                </div>
+                            ))}
 
-                        {!showSavedJudgments && (
-                            <Button className='mt-4' onClick={handleSaveJudgmentDemands}>
-                                Save Judgment Demands
-                            </Button>
-                        )}
-                    </>
-                )}
+                            <div className="mt-4">
+                                <Button onClick={addCustomJudgmentDemand}>
+                                    Add Custom Demand
+                                </Button>
+                                {customJudgmentDemands.map((demand) => (
+                                    <div key={demand.id} className='mt-3 flex items-center gap-2'>
+                                        <Input
+                                            value={demand.demand}
+                                            placeholder='Enter custom demand...'
+                                            onChange={(e) => updateCustomJudgmentDemand(demand.id, e.target.value)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="mt-4">
+                                <Button onClick={handleSaveJudgmentDemands}>
+                                    Save Judgment Demands
+                                </Button>
+                            </div>
+                        </>
+                    )}
+
+
+                            {isPrinting ? " " : <div className="mt-6" disabled={isPrinting}>
+                                <Button
+                                    variant="outline"
+                                    onClick={handlePrint}
+                                    disabled={isPrinting}
+                                >
+                                    {isPrinting ? 'Printing...' : 'Print Document'}
+                                </Button>
+                            </div>}
+
+                </div>
             </div>
-    </div>
-</div>)
+        </div>
+    )
 }
 
 export default Page
