@@ -50,14 +50,16 @@ const Page = () => {
         },
         children: {
             count: 1,
-            details: [{
-                id: '0',
-                name: '',
-                dob: null,
-                placeOfBirth: '',
-                ssn: '',
-                sex: ''
-            }]
+            details: [
+                {
+                    id: '0',
+                    name: '',
+                    dob: null,
+                    placeOfBirth: '',
+                    ssn: '',
+                    sex: ''
+                }
+            ]
         },
         custody: {
             physicalCustody: '',
@@ -95,7 +97,12 @@ const Page = () => {
             details: {
                 life: {company: '', policy: ''},
                 auto: {company: '', policy: ''},
-                health: {company: '', policy: '', group: '', throughEmployment: false},
+                health: {
+                    company: '',
+                    policy: '',
+                    group: '',
+                    throughEmployment: false
+                },
                 homeowners: {company: '', policy: ''}
             }
         },
@@ -113,32 +120,38 @@ const Page = () => {
             hairColor: ''
         },
         referralSource: {media: '', nameOfMedia: ''},
-        sheriffAddress: {addressLine1: '', addressLine2: '', city: '', state: '', zip: '', notes: ''},
+        sheriffAddress: {
+            addressLine1: '',
+            addressLine2: '',
+            city: '',
+            state: '',
+            zip: '',
+            notes: ''
+        },
         serviceFee: '',
         documentTemplatesExtraDetails: {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand:""}]
         }
     })
-    const [isPrinting, setIsPrinting] = useState(false);
 
+    // For delaying window.print
+    const [isPrinting, setIsPrinting] = useState(false)
     const handlePrint = () => {
         setIsPrinting(true)
-
-        // For example, wait 2 seconds before calling window.print()
+        // Wait 2 seconds before calling window.print()
         setTimeout(() => {
             window.print()
-
-            // If you want to re-enable the button AFTER printing:
-            // window.onafterprint = () => setIsPrinting(false)
+            // Re-enable the button after printing completes
             window.onafterprint = () => setIsPrinting(false)
         }, 2000)
     }
+
+    // For the "complaint for divorce" textboxes
     const [textBoxes, setTextBoxes] = useState([])
     const [submitted, setSubmitted] = useState(false)
     const [saving, setSaving] = useState(false)
 
-    // For the "complaint for divorce" textboxes
     const addTextBox = () => {
         setTextBoxes([...textBoxes, { id: Date.now(), title: '', details: '' }])
     }
@@ -148,7 +161,6 @@ const Page = () => {
             prev.map(box => (box.id === id ? { ...box, [field]: value } : box))
         )
     }
-
 
     const handleSave = async () => {
         setSaving(true)
@@ -193,23 +205,20 @@ const Page = () => {
         "The plaintiff requests reimbursement for legal fees."
     ]
 
-    // These store both default judgment demands (the ones from judgmentOptions that were selected)
-    // and also custom demands the user enters manually
+    // Default & custom demands
     const [selectedJudgmentDemands, setSelectedJudgmentDemands] = useState([])
     const [customJudgmentDemands, setCustomJudgmentDemands] = useState([])
-
-    // Hide the custom-demand UI after saving demands
     const [judgmentDemandsSaved, setJudgmentDemandsSaved] = useState(false)
 
-    // Fetch data on mount
     useEffect(() => {
         if (!id) return
 
         const fetchClientData = async () => {
             try {
                 const response = await fetch(`/api/getClientById/${id}`)
-                if (!response.ok) new Error('Failed to fetch client data')
-
+                if (!response.ok) {
+                    new Error('Failed to fetch client data')
+                }
                 const data = await response.json()
                 setClientData(data)
 
@@ -256,7 +265,8 @@ const Page = () => {
 
     const handleSaveJudgmentDemands = async () => {
         try {
-            // 1) Save demands
+            // Only saving demands to the DB;
+            // no file or folder creation is happening here.
             const response = await fetch('/api/saveDocumentTemplates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -268,29 +278,14 @@ const Page = () => {
                     documentName: 'civilActionComplaintForDivorceJudgementDemands',
                     id
                 })
-            });
+            })
 
             if (!response.ok) {
                 alert('Error saving judgment demands.')
                 return
             }
 
-            // 2) Create folder named "plaintiffName_defendantName"
-            // (Implementation depends on your environment; this is just an example)
-            const folderName = `${clientData.plaintiff.firstName} Vs ${clientData.defendant.firstName}`
-            const folderRes = await fetch('/api/createFolder', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ folderName })
-            })
-            if (!folderRes.ok) {
-                alert('Error creating folder on server.')
-                return
-            }
-
-            alert('Judgment Demands saved and folder created successfully!')
-
-            // 3) Hide "Add Custom Demand" UI
+            alert('Judgment Demands saved successfully!')
             setJudgmentDemandsSaved(true)
 
         } catch (error) {
@@ -299,10 +294,9 @@ const Page = () => {
         }
     }
 
-
-
     return (
         <div className='p-4 flex flex-col min-w-screen min-h-screen w-full h-screen'>
+            {/* Top Section */}
             <div className='w-full flex flex-row items-center justify-between'>
                 <div className='font-medium capitalize'>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
@@ -338,6 +332,8 @@ const Page = () => {
                     <h2>Pro/Se</h2>
                 </div>
             </div>
+
+            {/* Body Content */}
             <div className='mt-8'>
                 <ol className='list-inside list-decimal flex flex-col space-y-4'>
                     <li>
@@ -347,14 +343,16 @@ const Page = () => {
                     </li>
                     <li>
                         Plaintiff was lawfully married
-                        to {clientData.defendant.firstName} {clientData.defendant.lastName} on {clientData.marriage.dateOfMarriage}
-                        in {clientData.marriage.cityOfMarriage}, {clientData.marriage.stateOfMarriage}.
+                        to {clientData.defendant.firstName} {clientData.defendant.lastName} on{' '}
+                        {clientData.marriage.dateOfMarriage} in {clientData.marriage.cityOfMarriage},{' '}
+                        {clientData.marriage.stateOfMarriage}.
                     </li>
                     <li>
-                        There are {clientData.children.count > 0 ? clientData.children.count : 'no'} children born of
-                        marriage.
+                        There are {clientData.children.count > 0 ? clientData.children.count : 'no'} children born
+                        of marriage.
                     </li>
 
+                    {/* Children Table */}
                     {clientData.children.count > 0 && (
                         <Table>
                             <TableHeader>
@@ -424,14 +422,19 @@ const Page = () => {
                     </li>
                 </ol>
 
+                {/* Judgment Demands */}
                 <div className='mt-8 border-t pt-4'>
-                    <h2 className="font-bold mb-3">WHEREFORE THE PLAINTIF DEMANDS THE JUDGEMENT:</h2>
+                    <h2 className="font-bold mb-3">WHEREFORE THE PLAINTIFF DEMANDS JUDGMENT:</h2>
                     <ul className="list-disc pl-5 mb-6">
                         {selectedJudgmentDemands.map((demand, index) => (
-                            <li key={`selected-${index}`} className="mt-1">{demand}</li>
+                            <li key={`selected-${index}`} className="mt-1">
+                                {demand}
+                            </li>
                         ))}
                         {customJudgmentDemands.map((demand, index) => (
-                            <li key={`custom-${index}`} className="mt-1">{demand.demand}</li>
+                            <li key={`custom-${index}`} className="mt-1">
+                                {demand.demand}
+                            </li>
                         ))}
                     </ul>
 
@@ -472,17 +475,16 @@ const Page = () => {
                         </>
                     )}
 
-
-                            {isPrinting ? " " : <div className="mt-6" disabled={isPrinting}>
-                                <Button
-                                    variant="outline"
-                                    onClick={handlePrint}
-                                    disabled={isPrinting}
-                                >
-                                    {isPrinting ? 'Printing...' : 'Print Document'}
-                                </Button>
-                            </div>}
-
+                    {/* Print Button (delayed by 2s, disabled while waiting) */}
+                    {isPrinting ? (
+                       " "
+                    ) : (
+                        <div className="mt-6">
+                            <Button variant="outline" onClick={handlePrint}>
+                                Print Document
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
