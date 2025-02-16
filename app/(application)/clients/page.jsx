@@ -42,32 +42,54 @@ const UsersPage = () => {
     }, [])
 
     const options = {year: 'numeric', month: 'long', day: 'numeric'}
+    const handleDelete = async (userId) => {
+        if (!confirm("Are you sure you want to delete this user?")) return;
 
-    return (<div className='container mx-auto p-6 bg-white/20 rounded-2xl shadow-md backdrop-blur-md '>
-            <h1 className='text-2xl font-bold mb-4'>Clients</h1>
-            <title>Clients | Tri State Community Services</title>
+        try {
+            const response = await fetch(`/api/deleteClient`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id: userId }),
+            });
 
-            {loading && <p>Loading...</p>}
-            {error && <p className='text-red-500'>{error}</p>}
+            if (response.ok) {
+                alert("User deleted successfully!");
+                setUsers((prevUsers) => prevUsers.filter((user) => user._id !== userId));
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            alert("Error deleting user.");
+        }
+    };
 
-            {!loading && !error && users.length > 0 ? (<Table>
-                    <TableCaption>A list of your recent invoices.</TableCaption>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className='w-[100px]'>First Name</TableHead>
-                            <TableHead>Last Name</TableHead>
-                            <TableHead>Date Added</TableHead>
-                            <TableHead className='text-right'>Properties</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {users.map(user => (<TableRow key={user.plaintiff.firstName}>
-                                <TableCell className='font-medium'>
-                                    {user.plaintiff.firstName}
-                                </TableCell>
-                                <TableCell>{user.plaintiff.lastName}</TableCell>
-                                <TableCell>{`${getMonth(user.dateCreated) + 1}-${getDate(user.dateCreated)}-${getYear(user.dateCreated)}`}</TableCell>
-                                <TableCell className='text-right flex gap-2 justify-end items-center'>
+    return (<div className='container mx-auto p-6 bg-white/20 rounded-2xl backdrop-blur-md '>
+        <h1 className='text-2xl font-bold mb-4'>Clients</h1>
+        <title>Clients | Tri State Community Services</title>
+
+        {loading && <p>Loading...</p>}
+        {error && <p className='text-red-500'>{error}</p>}
+
+        {!loading && !error && users.length > 0 ? (<Table>
+            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableHeader>
+                <TableRow>
+                    <TableHead className='w-[100px]'>First Name</TableHead>
+                    <TableHead>Last Name</TableHead>
+                    <TableHead>Date Added</TableHead>
+                    <TableHead className='text-right'>Properties</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {users.map(user => (<TableRow key={user.plaintiff.firstName}>
+                    <TableCell className='font-medium'>
+                        {user.plaintiff.firstName}
+                    </TableCell>
+                    <TableCell>{user.plaintiff.lastName}</TableCell>
+                    <TableCell>{`${getMonth(user.dateCreated) + 1}-${getDate(user.dateCreated)}-${getYear(user.dateCreated)}`}</TableCell>
+                    <TableCell className='text-right flex gap-2 justify-end items-center'>
                   <span>
                     <Link href={`/clients/${user._id}`}>
                       <svg
@@ -86,16 +108,16 @@ const UsersPage = () => {
                       </svg>
                     </Link>
                   </span>
-                                    <span>
+                        <span>
                     {' '}
-                                        <Link href={`/document_templates/${user._id}`}>
+                            <Link href={`/document_templates/${user._id}`}>
                       <svg
                           xmlns='http://www.w3.org/2000/svg'
                           fill='none'
                           viewBox='0 0 24 24'
                           strokeWidth='1.5'
                           stroke='currentColor'
-                          class='size-5'
+                          className='size-5'
                       >
                         <path
                             strokeLinecap='round'
@@ -105,15 +127,15 @@ const UsersPage = () => {
                       </svg>
                     </Link>
                   </span>
-                                    <span>
-                    <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        fill='none'
-                        viewBox='0 0 24 24'
-                        strokeWidth={1.5}
-                        stroke='currentColor'
-                        className='size-5'
-                    >
+                        <span onClick={() => handleDelete(user._id)}>
+                        <svg
+                            xmlns='http://www.w3.org/2000/svg'
+                            fill='none'
+                            viewBox='0 0 24 24'
+                            strokeWidth={1.5}
+                            stroke='currentColor'
+                            className='size-5'
+                        >
                       <path
                           strokeLinecap='round'
                           strokeLinejoin='round'
@@ -122,17 +144,17 @@ const UsersPage = () => {
                     </svg>
                   </span>
 
-                                </TableCell>
-                            </TableRow>))}
-                    </TableBody>
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={3}>Total</TableCell>
-                            <TableCell className='text-right'>$2,500.00</TableCell>
-                        </TableRow>
-                    </TableFooter>
-                </Table>) : (!loading && <p>No users found.</p>)}
-        </div>)
+                    </TableCell>
+                </TableRow>))}
+            </TableBody>
+            <TableFooter>
+                <TableRow>
+                    <TableCell colSpan={3}>Total</TableCell>
+                    <TableCell className='text-right'>$2,500.00</TableCell>
+                </TableRow>
+            </TableFooter>
+        </Table>) : (!loading && <p>No users found.</p>)}
+    </div>)
 }
 
 export default UsersPage

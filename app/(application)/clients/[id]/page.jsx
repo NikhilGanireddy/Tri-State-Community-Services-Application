@@ -322,26 +322,24 @@ const Page = () => {
       }
     }))
   }
-
   const handleSave = async () => {
     try {
-      const response = await fetch('/api/saveClientData', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(clientData), // Send clientData to the backend
+      const response = await fetch("/api/updateClient", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, clientData }),
       });
 
       if (response.ok) {
-        alert('Client data saved successfully!');
-        // router.push(`${}`)
-        
+        alert("Client data updated successfully!");
+        router.push("/");
       } else {
         const errorData = await response.json();
         alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      console.error('Error saving client data:', error);
-      alert('Error saving client data.');
+      console.error("Error updating client data:", error);
+      alert("Error updating client data.");
     }
   };
 
@@ -2058,10 +2056,7 @@ const Page = () => {
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button
-                  >
-                    Submit{' '}
-                  </Button>
+                  <Button onClick={handleSave}>Save Changes</Button>
                 </CardFooter>
               </Card>
             </TabsContent>
