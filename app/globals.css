@@ -91,3 +91,13 @@ body::-webkit-scrollbar {
   }
 
 }
+
+.bg-wallpaper{
+  background-image: url("./../public/Wallpaper.jpg");
+  height: 100%;
+  width: 100%;
+  object-position: center;
+  object-fit: cover;
+  z-index: 100;
+  background-repeat: no-repeat;
+}
