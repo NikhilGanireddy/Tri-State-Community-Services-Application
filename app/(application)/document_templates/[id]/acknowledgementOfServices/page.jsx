@@ -93,12 +93,6 @@ const Page = () => {
         }, 2000)
     }
 
-    // For the "complaint for divorce" textboxes
-
-
-    // Judgment demands
-    const judgmentOptions = ["The plaintiff demands child support payments.", "The plaintiff requests sole custody of children.", "The plaintiff seeks an equitable distribution of marital assets.", "The plaintiff asks for spousal support for a period of 5 years.", "The plaintiff requests reimbursement for legal fees."]
-
     // Default & custom demands
 
     useEffect(() => {
@@ -116,17 +110,7 @@ const Page = () => {
                 if (data?.plaintiff?.firstName && data?.defendant?.firstName) {
                     document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Acknowledgement Of Services`;
                 }
-                // Build up "selected" vs. "custom" from DB
-                if (data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {
-                    setSelectedJudgmentDemands(data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
-                        .filter(d => judgmentOptions.includes(d.demand))
-                        .map(d => d.demand))
-                    setCustomJudgmentDemands(data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
-                        .filter(d => !judgmentOptions.includes(d.demand))
-                        .map(d => ({id: Date.now() + Math.random(), demand: d.demand})))
-                }
 
-                setSubmitted(data.documentTemplatesExtraDetails.civilActionComplaintForDivorce.length !== 0)
             } catch (error) {
                 console.error('Error:', error)
             }

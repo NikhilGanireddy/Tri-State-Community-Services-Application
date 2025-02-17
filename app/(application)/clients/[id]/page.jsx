@@ -70,7 +70,8 @@ const Page = () => {
       zip: '',
       dob: null,
       mobile: '',
-      placeOfBirth: ''
+      placeOfBirth: '',
+      inNewJersey: null
     },
     defendant: {
       firstName: '',
@@ -84,7 +85,8 @@ const Page = () => {
       zip: '',
       dob: null,
       mobile: '',
-      placeOfBirth: ''
+      placeOfBirth: '',
+      fault: '',
     },
     marriage: {
       dateOfMarriage: null,
@@ -101,7 +103,6 @@ const Page = () => {
           dob: null,
           placeOfBirth: '',
           ssn: '',
-          sex: ''
         }
       ]
     },
@@ -230,6 +231,10 @@ const Page = () => {
       }
     })
   }
+  const [selectedPlaintiffDobDate, setSelectedPlaintiffDobDate] = useState(clientData.plaintiff.dob || null);
+  const [selectedDefendantDobDate, setSelectedDefendantDobDate] = useState(clientData.defendant.dob || null);
+  const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.plaintiff.dob || null);
+  const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.plaintiff.dob || null);
 
   const handleChildrenCountChange = count => {
     setClientData(prev => {
@@ -435,14 +440,7 @@ const Page = () => {
             onChange={e => handleChildFieldChange(i, 'ssn', e.target.value)}
           />
         </TableCell>
-        <TableCell>
-          <Input
-            type='text'
-            placeholder='Sex'
-            value={child.sex}
-            onChange={e => handleChildFieldChange(i, 'sex', e.target.value)}
-          />
-        </TableCell>
+
       </TableRow>
     ))
   }
@@ -636,6 +634,69 @@ const Page = () => {
                             handlePlaintiffChange('city', e.target.value)
                           }
                         />
+                        <Select
+                            value={clientData.plaintiff.state}
+                            onValueChange={value => handleFieldChange('plaintiff', 'state', value)}
+                        >
+                          <SelectTrigger className='w-full'>
+                            <SelectValue placeholder='Select State'/>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectLabel>Select State</SelectLabel>
+                              <SelectItem value='Alabama'>Alabama</SelectItem>
+                              <SelectItem value='Alaska'>Alaska</SelectItem>
+                              <SelectItem value='Arizona'>Arizona</SelectItem>
+                              <SelectItem value='Arkansas'>Arkansas</SelectItem>
+                              <SelectItem value='California'>California</SelectItem>
+                              <SelectItem value='Colorado'>Colorado</SelectItem>
+                              <SelectItem value='Connecticut'>Connecticut</SelectItem>
+                              <SelectItem value='Delaware'>Delaware</SelectItem>
+                              <SelectItem value='Florida'>Florida</SelectItem>
+                              <SelectItem value='Georgia'>Georgia</SelectItem>
+                              <SelectItem value='Hawaii'>Hawaii</SelectItem>
+                              <SelectItem value='Idaho'>Idaho</SelectItem>
+                              <SelectItem value='Illinois'>Illinois</SelectItem>
+                              <SelectItem value='Indiana'>Indiana</SelectItem>
+                              <SelectItem value='Iowa'>Iowa</SelectItem>
+                              <SelectItem value='Kansas'>Kansas</SelectItem>
+                              <SelectItem value='Kentucky'>Kentucky</SelectItem>
+                              <SelectItem value='Louisiana'>Louisiana</SelectItem>
+                              <SelectItem value='Maine'>Maine</SelectItem>
+                              <SelectItem value='Maryland'>Maryland</SelectItem>
+                              <SelectItem value='Massachusetts'>Massachusetts</SelectItem>
+                              <SelectItem value='Michigan'>Michigan</SelectItem>
+                              <SelectItem value='Minnesota'>Minnesota</SelectItem>
+                              <SelectItem value='Mississippi'>Mississippi</SelectItem>
+                              <SelectItem value='Missouri'>Missouri</SelectItem>
+                              <SelectItem value='Montana'>Montana</SelectItem>
+                              <SelectItem value='Nebraska'>Nebraska</SelectItem>
+                              <SelectItem value='Nevada'>Nevada</SelectItem>
+                              <SelectItem value='New Hampshire'>New Hampshire</SelectItem>
+                              <SelectItem value='New Jersey'>New Jersey</SelectItem>
+                              <SelectItem value='New Mexico'>New Mexico</SelectItem>
+                              <SelectItem value='New York'>New York</SelectItem>
+                              <SelectItem value='North Carolina'>North Carolina</SelectItem>
+                              <SelectItem value='North Dakota'>North Dakota</SelectItem>
+                              <SelectItem value='Ohio'>Ohio</SelectItem>
+                              <SelectItem value='Oklahoma'>Oklahoma</SelectItem>
+                              <SelectItem value='Oregon'>Oregon</SelectItem>
+                              <SelectItem value='Pennsylvania'>Pennsylvania</SelectItem>
+                              <SelectItem value='Rhode Island'>Rhode Island</SelectItem>
+                              <SelectItem value='South Carolina'>South Carolina</SelectItem>
+                              <SelectItem value='South Dakota'>South Dakota</SelectItem>
+                              <SelectItem value='Tennessee'>Tennessee</SelectItem>
+                              <SelectItem value='Texas'>Texas</SelectItem>
+                              <SelectItem value='Utah'>Utah</SelectItem>
+                              <SelectItem value='Vermont'>Vermont</SelectItem>
+                              <SelectItem value='Virginia'>Virginia</SelectItem>
+                              <SelectItem value='Washington'>Washington</SelectItem>
+                              <SelectItem value='West Virginia'>West Virginia</SelectItem>
+                              <SelectItem value='Wisconsin'>Wisconsin</SelectItem>
+                              <SelectItem value='Wyoming'>Wyoming</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                         <Input
                           id='zip'
                           value={clientData.plaintiff.zip}
@@ -652,24 +713,25 @@ const Page = () => {
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full justify-start text-left font-normal',
-                            !clientData.plaintiff.dob && 'text-muted-foreground'
-                          )}
+                            variant={'outline'}
+                            className={`w-full justify-start text-left font-normal ${!selectedPlaintiffDobDate ? 'text-muted-foreground' : ''}`}
                         >
-                          <CalendarIcon />
-                          {clientData.plaintiff.dob
-                            ? format(clientData.plaintiff.dob, 'PPP')
-                            : 'Pick a date'}
+                          <CalendarIcon className='mr-2 h-4 w-4' />
+                          {clientData.plaintiff.dob ? format(clientData.plaintiff.dob, 'PPP') : 'Pick a date'}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className='w-auto p-0' align='start'>
                         <Calendar
-                          mode='single'
-                          selected={clientData.plaintiff.dob}
-                          onSelect={date => handlePlaintiffChange('dob', date)}
-                          initialFocus
+                            mode='single'
+                            selected={clientData.plaintiff.dob}
+                            onSelect={(date) => {
+                              setSelectedPlaintiffDobDate(date);
+                              handlePlaintiffChange('dob', date);
+                            }}
+                            initialFocus
+                            captionLayout="dropdown-buttons" // Enables dropdowns for year & month
+                            fromYear={1900} // Set an appropriate range for year selection
+                            toYear={new Date().getFullYear()}
                         />
                       </PopoverContent>
                     </Popover>
@@ -688,23 +750,21 @@ const Page = () => {
                   <div className='space-y-1'>
                     <Label>Mobile</Label>
                     <Input
-                      id='mobile'
-                      value={clientData.plaintiff.mobile}
-                      placeholder='Mobile'
-                      onChange={e =>
-                        handlePlaintiffChange('mobile', e.target.value)
-                      }
+                        id='mobile'
+                        value={clientData.plaintiff.mobile}
+                        placeholder="+1 (555) 123-4567"
+                        type={'tel'}
+                        onChange={e => handlePlaintiffChange('mobile', e.target.value)}
                     />
                   </div>
-                  <div className='space-y-1'>
+                  <div className='space-y-1 space-x-2 items-center flex justify-start'>
                     <Checkbox
-                      checked={clientData.plaintiff.inNewJersey}
-                      onCheckedChange={checked =>
-                        handlePlaintiffChange('inNewJersey', checked)
-                      }
+                        checked={clientData.plaintiff.inNewJersey}
+                        onCheckedChange={checked => handlePlaintiffChange('inNewJersey', checked)}
                     >
-                      Resides in New Jersey
+
                     </Checkbox>
+                    <span>Resides in New Jersey</span>
                   </div>
                 </CardContent>
               </Card>
@@ -790,6 +850,69 @@ const Page = () => {
                           handleDefendantChange('city', e.target.value)
                         }
                       />
+                      <Select
+                          value={clientData.defendant.state}
+                          onValueChange={value => handleFieldChange('defendant', 'state', value)}
+                      >
+                        <SelectTrigger className='w-full'>
+                          <SelectValue placeholder='Select State'/>
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Select State</SelectLabel>
+                            <SelectItem value='Alabama'>Alabama</SelectItem>
+                            <SelectItem value='Alaska'>Alaska</SelectItem>
+                            <SelectItem value='Arizona'>Arizona</SelectItem>
+                            <SelectItem value='Arkansas'>Arkansas</SelectItem>
+                            <SelectItem value='California'>California</SelectItem>
+                            <SelectItem value='Colorado'>Colorado</SelectItem>
+                            <SelectItem value='Connecticut'>Connecticut</SelectItem>
+                            <SelectItem value='Delaware'>Delaware</SelectItem>
+                            <SelectItem value='Florida'>Florida</SelectItem>
+                            <SelectItem value='Georgia'>Georgia</SelectItem>
+                            <SelectItem value='Hawaii'>Hawaii</SelectItem>
+                            <SelectItem value='Idaho'>Idaho</SelectItem>
+                            <SelectItem value='Illinois'>Illinois</SelectItem>
+                            <SelectItem value='Indiana'>Indiana</SelectItem>
+                            <SelectItem value='Iowa'>Iowa</SelectItem>
+                            <SelectItem value='Kansas'>Kansas</SelectItem>
+                            <SelectItem value='Kentucky'>Kentucky</SelectItem>
+                            <SelectItem value='Louisiana'>Louisiana</SelectItem>
+                            <SelectItem value='Maine'>Maine</SelectItem>
+                            <SelectItem value='Maryland'>Maryland</SelectItem>
+                            <SelectItem value='Massachusetts'>Massachusetts</SelectItem>
+                            <SelectItem value='Michigan'>Michigan</SelectItem>
+                            <SelectItem value='Minnesota'>Minnesota</SelectItem>
+                            <SelectItem value='Mississippi'>Mississippi</SelectItem>
+                            <SelectItem value='Missouri'>Missouri</SelectItem>
+                            <SelectItem value='Montana'>Montana</SelectItem>
+                            <SelectItem value='Nebraska'>Nebraska</SelectItem>
+                            <SelectItem value='Nevada'>Nevada</SelectItem>
+                            <SelectItem value='New Hampshire'>New Hampshire</SelectItem>
+                            <SelectItem value='New Jersey'>New Jersey</SelectItem>
+                            <SelectItem value='New Mexico'>New Mexico</SelectItem>
+                            <SelectItem value='New York'>New York</SelectItem>
+                            <SelectItem value='North Carolina'>North Carolina</SelectItem>
+                            <SelectItem value='North Dakota'>North Dakota</SelectItem>
+                            <SelectItem value='Ohio'>Ohio</SelectItem>
+                            <SelectItem value='Oklahoma'>Oklahoma</SelectItem>
+                            <SelectItem value='Oregon'>Oregon</SelectItem>
+                            <SelectItem value='Pennsylvania'>Pennsylvania</SelectItem>
+                            <SelectItem value='Rhode Island'>Rhode Island</SelectItem>
+                            <SelectItem value='South Carolina'>South Carolina</SelectItem>
+                            <SelectItem value='South Dakota'>South Dakota</SelectItem>
+                            <SelectItem value='Tennessee'>Tennessee</SelectItem>
+                            <SelectItem value='Texas'>Texas</SelectItem>
+                            <SelectItem value='Utah'>Utah</SelectItem>
+                            <SelectItem value='Vermont'>Vermont</SelectItem>
+                            <SelectItem value='Virginia'>Virginia</SelectItem>
+                            <SelectItem value='Washington'>Washington</SelectItem>
+                            <SelectItem value='West Virginia'>West Virginia</SelectItem>
+                            <SelectItem value='Wisconsin'>Wisconsin</SelectItem>
+                            <SelectItem value='Wyoming'>Wyoming</SelectItem>
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                       <Input
                         id='defendantZip'
                         value={clientData.defendant.zip}
@@ -805,24 +928,25 @@ const Page = () => {
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
-                          variant={'outline'}
-                          className={cn(
-                            'w-full justify-start text-left font-normal',
-                            !clientData.defendant.dob && 'text-muted-foreground'
-                          )}
+                            variant={'outline'}
+                            className={`w-full justify-start text-left font-normal ${!selectedPlaintiffDobDate ? 'text-muted-foreground' : ''}`}
                         >
-                          <CalendarIcon />
-                          {clientData.defendant.dob
-                            ? format(clientData.defendant.dob, 'PPP')
-                            : 'Pick a date'}
+                          <CalendarIcon className='mr-2 h-4 w-4' />
+                          {clientData.defendant.dob ? format(clientData.defendant.dob, 'PPP') : 'Pick a date'}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className='w-auto p-0' align='start'>
                         <Calendar
-                          mode='single'
-                          selected={clientData.defendant.dob}
-                          onSelect={date => handleDefendantChange('dob', date)}
-                          initialFocus
+                            mode='single'
+                            selected={selectedDefendantDobDate}
+                            onSelect={(date) => {
+                              setSelectedDefendantDobDate(date);
+                              handleDefendantChange('dob', date);
+                            }}
+                            initialFocus
+                            captionLayout="dropdown-buttons" // Enables dropdowns for year & month
+                            fromYear={1900} // Set an appropriate range for year selection
+                            toYear={new Date().getFullYear()}
                         />
                       </PopoverContent>
                     </Popover>
@@ -840,14 +964,21 @@ const Page = () => {
                   </div>
                   <div className='space-y-1'>
                     <Label>Fault</Label>
-                    <Input
-                      id='defendantFault'
-                      value={clientData.defendant.fault}
-                      placeholder='Fault'
-                      onChange={e =>
-                        handleDefendantChange('fault', e.target.value)
-                      }
-                    />
+                    <Select
+                        value={clientData.defendant.fault}
+                        onValueChange={value => handleFieldChange('defendant', 'fault', value)}
+                    >
+                      <SelectTrigger className='w-full'>
+                        <SelectValue placeholder='Select Fault'/>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Select Fault</SelectLabel>
+                          <SelectItem value='Alabama'>No Fault</SelectItem>
+                          <SelectItem value='Wyoming'>Irr. Diff.</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </CardContent>
               </Card>
@@ -865,70 +996,65 @@ const Page = () => {
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
-                        variant={'outline'}
-                        className={`w-full justify-start text-left font-normal ${
-                          !clientData.marriage.dateOfMarriage &&
-                          'text-muted-foreground'
-                        }`}
+                          variant={'outline'}
+                          className={`w-full justify-start text-left font-normal ${!selectedMarriageDate ? 'text-muted-foreground' : ''}`}
                       >
-                        <CalendarIcon />
-                        {clientData.marriage.dateOfMarriage
-                          ? format(clientData.marriage.dateOfMarriage, 'PPP')
-                          : 'Pick a date'}
+                        <CalendarIcon className='mr-2 h-4 w-4' />
+                        {selectedMarriageDate ? format(selectedMarriageDate, 'PPP') : 'Pick a date'}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className='w-auto p-0' align='start'>
                       <Calendar
-                        mode='single'
-                        selected={clientData.marriage.dateOfMarriage}
-                        onSelect={date =>
-                          handleFieldChange('marriage', 'dateOfMarriage', date)
-                        }
-                        initialFocus
+                          mode='single'
+                          selected={selectedMarriageDate}
+                          onSelect={(date) => {
+                            setSelectedMarriageDate(date);
+                            handleFieldChange('marr', "dateOfMarriage");
+                          }}
+                          initialFocus
+                          captionLayout="dropdown-buttons" // Enables dropdowns for year & month
+                          fromYear={1900} // Set an appropriate range for year selection
+                          toYear={new Date().getFullYear()}
                       />
                     </PopoverContent>
                   </Popover>
                   <Label htmlFor='cityOfMarriage'>City of Marriage</Label>
                   <Input
-                    id='cityOfMarriage'
-                    value={clientData.marriage.cityOfMarriage}
-                    placeholder='City of Marriage'
-                    onChange={e =>
-                      handleFieldChange(
-                        'marriage',
-                        'cityOfMarriage',
-                        e.target.value
-                      )
-                    }
+                      id='cityOfMarriage'
+                      value={clientData.marriage.cityOfMarriage}
+                      placeholder='City of Marriage'
+                      onChange={e => handleFieldChange('marriage', 'cityOfMarriage', e.target.value)}
+                  />
+                  <Label htmlFor='stateOfMarriage'>State of Marriage</Label>
+                  <Input
+                      id='stateOfMarriage'
+                      value={clientData.marriage.stateOfMarriage}
+                      placeholder='State of Marriage'
+                      onChange={e => handleFieldChange('marriage', 'stateOfMarriage', e.target.value)}
                   />
                   <Label>Date of Separation</Label>
                   <Popover>
                     <PopoverTrigger asChild>
                       <Button
-                        variant={'outline'}
-                        className={`w-full justify-start text-left font-normal ${
-                          !clientData.marriage.dateOfSeparation &&
-                          'text-muted-foreground'
-                        }`}
+                          variant={'outline'}
+                          className={`w-full justify-start text-left font-normal ${!selectedSeparationDate ? 'text-muted-foreground' : ''}`}
                       >
-                        <CalendarIcon />
-                        {clientData.marriage.dateOfSeparation
-                          ? format(clientData.marriage.dateOfSeparation, 'PPP')
-                          : 'Pick a date'}
+                        <CalendarIcon className='mr-2 h-4 w-4' />
+                        {selectedSeparationDate ? format(selectedSeparationDate, 'PPP') : 'Pick a date'}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className='w-auto p-0' align='start'>
                       <Calendar
-                        mode='single'
-                        selected={clientData.marriage.dateOfSeparation}
-                        onSelect={date =>
-                          handleFieldChange(
-                            'marriage',
-                            'dateOfSeparation',
-                            date
-                          )
-                        }
-                        initialFocus
+                          mode='single'
+                          selected={selectedSeparationDate}
+                          onSelect={(date) => {
+                            setSelectedSeparationDate(date);
+                            handleFieldChange('marriage', "dateOfSeparation");
+                          }}
+                          initialFocus
+                          captionLayout="dropdown-buttons" // Enables dropdowns for year & month
+                          fromYear={1900} // Set an appropriate range for year selection
+                          toYear={new Date().getFullYear()}
                       />
                     </PopoverContent>
                   </Popover>
@@ -960,7 +1086,6 @@ const Page = () => {
                         <TableHead>Date of Birth</TableHead>
                         <TableHead>Place of Birth</TableHead>
                         <TableHead>SSN</TableHead>
-                        <TableHead>Sex</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -1032,15 +1157,7 @@ const Page = () => {
                               placeholder='SSN'
                             />
                           </TableCell>
-                          <TableCell>
-                            <Input
-                              value={child.sex}
-                              onChange={e =>
-                                handleChildFieldChange(i, 'sex', e.target.value)
-                              }
-                              placeholder='Sex'
-                            />
-                          </TableCell>
+
                         </TableRow>
                       ))}
                     </TableBody>
