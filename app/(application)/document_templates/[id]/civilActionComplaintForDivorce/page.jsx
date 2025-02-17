@@ -5,11 +5,10 @@ import {Label} from '@/components/ui/label'
 import {Input} from '@/components/ui/input'
 import {Textarea} from '@/components/ui/textarea'
 import {usePathname} from 'next/navigation'
-import {getDate, getMonth, getYear} from 'date-fns'
+import {format, getDate, getMonth, getYear} from 'date-fns'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
 import {Checkbox} from "@/components/ui/checkbox"
 import {useToast} from "@/hooks/use-toast"
-import {format} from 'date-fns'
 
 const Page = () => {
     const pathname = usePathname().split('/')
@@ -83,7 +82,9 @@ const Page = () => {
             addressLine1: '', addressLine2: '', city: '', state: '', zip: '', notes: ''
         }, serviceFee: '', documentTemplatesExtraDetails: {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
-            civilActionComplaintForDivorceJudgementDemands: [{demand: ""}]
+            civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
+            acknowledgementOfServices: [{title: "", details: ""}],
+
         }
     })
 
@@ -212,7 +213,7 @@ const Page = () => {
 
             if (!response.ok) {
                 toast({
-                    title: 'Error', description: "Error saving judgment demands.", variant:"sucess"
+                    title: 'Error', description: "Error saving judgment demands.", variant: "sucess"
                 })
                 return
             }
@@ -399,17 +400,17 @@ const Page = () => {
                 </div>
                 <div className={`flex flex-row gap-2 mt-12 w-full justify-end `}>
                     <div>
-
                     </div>
                     <div className={`flex flex-col gap-2 justify-start`}>
                         <h2 className={``}> {`${clientData.plaintiff.lastName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.firstName}`}</h2>
                         <div className={`min-w-64 w-full h-[2px]  -mt-2 bg-black`}/>
-                        <h2 className={``}>(Plaintiff's Name, Printed) <span className={`text-sm`}> Plaintiff</span></h2>
+                        <h2 className={``}>(Plaintiff's Name, Printed) <span className={`text-sm`}> Plaintiff</span>
+                        </h2>
                     </div>
                 </div>
                 <div className={`flex flex-row gap-2 mt-12 w-full justify-start `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2> Dated: <span className={`underline`}>{ format(Date.now(), 'PPP')}</span></h2>
+                        <h2> Dated: <span className={`underline`}>{format(Date.now(), 'PPP')}</span></h2>
                     </div>
                     <div>
 
