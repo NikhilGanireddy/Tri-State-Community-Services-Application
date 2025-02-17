@@ -10,7 +10,6 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Checkbox} from "@/components/ui/checkbox"
 import {useToast} from "@/hooks/use-toast"
 import {format} from 'date-fns'
-import Head from "next/head";
 
 const Page = () => {
     const pathname = usePathname().split('/')
@@ -166,6 +165,9 @@ const Page = () => {
                 const data = await response.json()
                 setClientData(data)
 
+                if (data?.plaintiff?.firstName && data?.defendant?.firstName) {
+                    document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Civil Action Complaint For Divorce`;
+                }
                 // Build up "selected" vs. "custom" from DB
                 if (data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {
                     setSelectedJudgmentDemands(data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
@@ -175,7 +177,6 @@ const Page = () => {
                         .filter(d => !judgmentOptions.includes(d.demand))
                         .map(d => ({id: Date.now() + Math.random(), demand: d.demand})))
                 }
-
                 setSubmitted(data.documentTemplatesExtraDetails.civilActionComplaintForDivorce.length !== 0)
             } catch (error) {
                 console.error('Error:', error)
@@ -211,7 +212,7 @@ const Page = () => {
 
             if (!response.ok) {
                 toast({
-                    title: 'Error', description: "Error saving judgment demands."
+                    title: 'Error', description: "Error saving judgment demands.", variant:"sucess"
                 })
                 return
             }
@@ -230,13 +231,7 @@ const Page = () => {
 
     return (<div className='p-4 flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
-        <Head>
-            <title>
-                {clientData?.plaintiff?.firstName && clientData?.plaintiff?.lastName
-                    ? `${clientData.plaintiff.firstName} Vs ${clientData.defendant.firstName}`
-                    : 'Loading...'}
-            </title>
-        </Head>
+
 
         <div className='w-full flex flex-row items-center justify-between'>
             <div className='font-medium capitalize'>
