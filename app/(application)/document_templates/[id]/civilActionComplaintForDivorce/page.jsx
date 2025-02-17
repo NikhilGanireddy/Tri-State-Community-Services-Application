@@ -10,6 +10,8 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/c
 import {Checkbox} from "@/components/ui/checkbox"
 import {useToast} from "@/hooks/use-toast"
 import {format} from 'date-fns'
+import Head from "next/head";
+
 const Page = () => {
     const pathname = usePathname().split('/')
     const id = pathname[pathname.length - 2]
@@ -228,6 +230,14 @@ const Page = () => {
 
     return (<div className='p-4 flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
+        <Head>
+            <title>
+                {clientData?.plaintiff?.firstName && clientData?.plaintiff?.lastName
+                    ? `${clientData.plaintiff.firstName} Vs ${clientData.defendant.firstName}`
+                    : 'Loading...'}
+            </title>
+        </Head>
+
         <div className='w-full flex flex-row items-center justify-between'>
             <div className='font-medium capitalize'>
                 <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
