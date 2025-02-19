@@ -17,10 +17,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
       <ClerkProvider>
-          <html lang="en" className={`min-h-screen h-full text-sm ${poppins.className}`}>
+          <html lang="en" className={`min-h-screen h-full text-base funnel-display-400`}>
+          <head>
+              <link rel="preconnect" href="https://fonts.googleapis.com"/>
+              <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
+              <link href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap"
+                    rel="stylesheet"/>
+          </head>
           <body>
           {children}
-          <Toaster />
+          <Toaster/>
           </body>
           </html>
       </ClerkProvider>

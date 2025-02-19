@@ -44,6 +44,7 @@
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
     "embla-carousel-react": "^8.5.1",
+    "framer-motion": "^12.4.4",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.2",
     "input-otp": "^1.4.1",

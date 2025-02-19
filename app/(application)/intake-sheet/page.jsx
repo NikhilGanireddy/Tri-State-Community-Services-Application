@@ -1,7 +1,6 @@
 'use client'
 import * as React from 'react'
 import {useEffect, useState} from 'react'
-import {Separator} from '@/components/ui/separator'
 import {Button} from '@/components/ui/button'
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card'
 import {Input} from '@/components/ui/input'
@@ -12,6 +11,18 @@ import {CalendarIcon} from 'lucide-react'
 import {cn} from '@/lib/utils'
 import {Calendar} from '@/components/ui/calendar'
 import {format} from 'date-fns'
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import {
     Select,
     SelectContent,
@@ -26,12 +37,18 @@ import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/c
 import Link from 'next/link'
 import {useRouter} from 'next/navigation'
 
+import {motion} from "framer-motion";
+import useMousePosition from "@/utils/cursor";
+import {useToast} from "@/hooks/use-toast"; // Ensure this is returning correct clientX, clientY
+
 const metadata = {
     title: 'Intake Sheet | Tri State Community Services',
 };
 
 const Page = () => {
     // State for Plaintiff and Defendant Data
+    const {x, y} = useMousePosition();
+
     const [clientData, setClientData] = useState({
         plaintiff: {
             firstName: '',
@@ -46,7 +63,7 @@ const Page = () => {
             dob: null,
             mobile: '',
             placeOfBirth: '',
-            inNewJersey:false,
+            inNewJersey: false,
         }, defendant: {
             firstName: '',
             middleName: '',
@@ -109,6 +126,7 @@ const Page = () => {
     })
 
     const router = useRouter()
+    const {toast} = useToast()
     const handleSave = async () => {
         try {
             const response = await fetch('/api/saveClientData', {
@@ -116,16 +134,24 @@ const Page = () => {
             })
 
             if (response.ok) {
-                alert('Client data saved successfully!')
+                toast({
+                    title: 'Success', description: "Client data saved successfully!"
+                })
+                // alert('Client data saved successfully!')
                 router.push('/clients')
                 // router.push(`${}`)
             } else {
                 const errorData = await response.json()
-                alert(`Error: ${errorData.message}`)
+                toast({
+                    title: 'Error', description: `${errorData.message}`
+                })
             }
         } catch (error) {
             console.error('Error saving client data:', error)
-            alert('Error saving client data.')
+
+            toast({
+                title: 'Error', description: `Error saving client data`,
+            })
         }
     }
 
@@ -220,15 +246,11 @@ const Page = () => {
     const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.plaintiff.dob || null);
     const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.plaintiff.dob || null);
 
-    const handleSaveChildrenData = () => {
-        // Your logic to save or process the data goes here
-        // Example: you could send clientData to an API or local storage
-    }
-    const [date, setDate] = React.useState()
+
     const [childrenCount, setChildrenCount] = useState(1)
 
     const [childrenData, setChildrenData] = useState([{
-        id: '0', name: '', dob: null, placeOfBirth: '', ssn: '', 
+        id: '0', name: '', dob: null, placeOfBirth: '', ssn: '',
     }])
 
     useEffect(() => {
@@ -247,168 +269,196 @@ const Page = () => {
 
     const renderChildrenInputs = () => {
         return childrenData.map((child, i) => (<TableRow key={child.id}>
-                <TableCell className='text-center'>{i + 1}</TableCell>
-                <TableCell>
-                    <Input
-                        type='text'
-                        placeholder={`Child ${i + 1} Name`}
-                        value={child.name}
-                        onChange={e => handleChildFieldChange(i, 'name', e.target.value)}
-                    />
-                </TableCell>
-                <TableCell>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant={'outline'}
-                                className={`w-full justify-start text-left font-normal ${!!child.dob ? 'text-muted-foreground' : ''}`}
-                            >
-                                <CalendarIcon className='mr-2 h-4 w-4' />
-                                {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className='w-auto p-0' align='start'>
-                            <Calendar
-                                mode='single'
-                                selected={child.dob}
-                                onSelect={date => handleChildDateChange(i, date)}
-                                initialFocus
-                                captionLayout="dropdown-buttons" // Enables dropdowns for year & month
-                                fromYear={1900} // Set an appropriate range for year selection
-                                toYear={new Date().getFullYear()}
-                            />
-                        </PopoverContent>
-                    </Popover>
-                    <Popover>
-                        <PopoverTrigger asChild>
-                            <Button
-                                variant='outline'
-                                className={cn('w-full justify-start text-left font-normal', !child.dob && 'text-muted-foreground')}
-                            >
-                                <CalendarIcon className='mr-2 h-4 w-4'/>
-                                {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
-                            </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className='w-auto p-0' align='start'>
-                            <Calendar
-                                mode='single'
-                                selected={child.dob}
-                                onSelect={date => handleChildDateChange(i, date)}
-                                initialFocus
-                            />
-                        </PopoverContent>
-                    </Popover>
-                </TableCell>
-                <TableCell>
-                    <Input
-                        type='text'
-                        placeholder='Place of Birth'
-                        value={child.placeOfBirth}
-                        onChange={e => handleChildFieldChange(i, 'placeOfBirth', e.target.value)}
-                    />
-                </TableCell>
-                <TableCell>
-                    <Input
-                        type='text'
-                        placeholder='SSN'
-                        value={child.ssn}
-                        onChange={e => handleChildFieldChange(i, 'ssn', e.target.value)}
-                    />
-                </TableCell>
+            <TableCell className='text-center'>{i + 1}</TableCell>
+            <TableCell>
+                <Input
+                    type='text'
+                    placeholder={`Child ${i + 1} Name`}
+                    value={child.name}
+                    onChange={e => handleChildFieldChange(i, 'name', e.target.value)}
+                />
+            </TableCell>
+            <TableCell>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant={'outline'}
+                            className={`w-full py-2 px-2 text-left flex justify-start items-start bg-transparent ${!!child.dob ? 'text-black' : ''}`}
+                        >
+                            <CalendarIcon className='mr-2 h-4 w-4'/>
+                            {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-auto p-0' align='start'>
+                        <Calendar
+                            mode='single'
+                            selected={child.dob}
+                            onSelect={date => handleChildDateChange(i, date)}
+                            initialFocus
+                            captionLayout="dropdown-buttons" // Enables dropdowns for year & month
+                            fromYear={1900} // Set an appropriate range for year selection
+                            toYear={new Date().getFullYear()}
+                        />
+                    </PopoverContent>
+                </Popover>
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant='outline'
+                            className={cn('w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ', !child.dob && 'text-muted-foreground')}
+                        >
+                            <CalendarIcon className='mr-2 h-4 w-4'/>
+                            {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-auto p-0' align='start'>
+                        <Calendar
+                            mode='single'
+                            selected={child.dob}
+                            onSelect={date => handleChildDateChange(i, date)}
+                            initialFocus
+                        />
+                    </PopoverContent>
+                </Popover>
+            </TableCell>
+            <TableCell>
+                <Input
+                    type='text'
+                    placeholder='Place of Birth'
+                    value={child.placeOfBirth}
+                    onChange={e => handleChildFieldChange(i, 'placeOfBirth', e.target.value)}
+                />
+            </TableCell>
+            <TableCell>
+                <Input
+                    type='text'
+                    placeholder='SSN'
+                    value={child.ssn}
+                    onChange={e => handleChildFieldChange(i, 'ssn', e.target.value)}
+                />
+            </TableCell>
 
-            </TableRow>))
+        </TableRow>))
     }
-    return (<div className={` max-w-[1200px] w-full min-w-full mx-auto rounded-2xl py-12 px-4`}>
-            <title>Intake Sheet | Tri State Community Services</title>
-            <Link href={'/'} className={`text-2xl font-semibold`}>
-                Tri State Community Services
-            </Link>
-            <h2 className={`text-xl`}>Intake Sheet</h2>
+    return (<div
+        className={` cursor-none relative overflow-y-auto bg-fixed bg-cover bg-center h-full flex flex-col items-center justify-center bg-[url('/Wall2.jpg')]  min-h-screen`}>
+        <motion.div
+            initial={{opacity: 0}}
+            animate={{
+                x: x - 32, // Offset to center
+                y: y - 32, opacity: 1,
+            }}
+            transition={{type: "tween", ease: "backOut", duration: 0.3}}
+            className="hidden md:inline-flex md:fixed md:w-16 md:h-16 md:border-[1px] md:border-black md:bg-transparent md:rounded-full md:z-50 pointer-events-none"
+            style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
+        />
 
-            <div>
-                <Separator className={`my-4`}/>
-                <div>
+        {/* Custom Cursor Small Dot */}
+        <motion.div
+            initial={{opacity: 0}}
+            animate={{
+                x: x - 1, // Small offset for precision
+                y: y - 1, opacity: 1,
+            }}
+            transition={{type: "tween", ease: "backOut", duration: 0.1}}
+            className="hidden md:inline-flex md:fixed md:w-2 md:h-2 md:bg-black md:rounded-full md:z-50 pointer-events-none"
+            style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
+        />
+        <div
+            className={`w-[90%] max-w-[1600px] overflow-y-auto flex flex-col justify-start   p-4 md:p-8 rounded-3xl max-h-[90vh] min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md`}>
+            <title>Intake Sheet | Tri State Community Services</title>
+            <div className={`flex justify-between items-center`}>
+                <Link href={'/'} className={`text-xl md:text-4xl font-semibold w-max`}>
+                    Tri State Community Services
+                </Link>
+                <Link href={'/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
+                    <Button>Dashboard</Button>
+                </Link>
+            </div>
+
+            <div className={`h-full mt-8 md:mt-16`}>
+                <div className={`h-full`}>
                     <Tabs
                         defaultValue='Plaintiff'
-                        className='w-full h-full flex flex-col md:flex-row  gap-4 p-4'
+                        className='w-full h-full flex flex-col md:flex-row  gap-4 bg-transparent'
                     >
                         <TabsList
-                            className='bg-transparent flex flex-row md:flex-col w-full md:w-1/4 h-full px-0 md:px-1 justify-start items-start overflow-x-scroll'>
+                            className=' bg-white/10 shadow-2xl flex flex-1 backdrop-blur-md text-black flex-row md:flex-col w-full md:w-1/4 h-max px-0 p-2 rounded-3xl justify-start items-start overflow-x-scroll'>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='Plaintiff'
                             >
                                 Plaintiff
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='Defendant'
                             >
                                 Defendant
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='Marriage'
                             >
                                 Marriage
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='Children'
                             >
                                 Children
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='Custody'
                             >
                                 Custody
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='CourtDecision'
                             >
                                 Court Decision
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='RealEstateDetails'
                             >
                                 Real Estate Details
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='Insurance'
                             >
                                 Insurance
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='License'
                             >
                                 License
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='BiographicDetails'
                             >
                                 Biographic Details
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
+                                className={``}
                                 value='SheriffAddress'
                             >
                                 Sheriff Address
                             </TabsTrigger>
                             <TabsTrigger
-                                className={`w-full py-2 px-2 text-left flex justify-start items-start`}
-                                value='ServiceFee'
+                                className={``}
+                                value='SaveClientData'
                             >
-                                Service Fee
+                                Save Client Data
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent className={`w-full md:w-3/4`} value='Plaintiff'>
-                            <Card>
+                            <Card className={``}>
                                 <CardHeader>
                                     <CardTitle>Plaintiff</CardTitle>
                                     <CardDescription>
@@ -516,14 +566,16 @@ const Page = () => {
                                                             <SelectItem value='New Jersey'>New Jersey</SelectItem>
                                                             <SelectItem value='New Mexico'>New Mexico</SelectItem>
                                                             <SelectItem value='New York'>New York</SelectItem>
-                                                            <SelectItem value='North Carolina'>North Carolina</SelectItem>
+                                                            <SelectItem value='North Carolina'>North
+                                                                Carolina</SelectItem>
                                                             <SelectItem value='North Dakota'>North Dakota</SelectItem>
                                                             <SelectItem value='Ohio'>Ohio</SelectItem>
                                                             <SelectItem value='Oklahoma'>Oklahoma</SelectItem>
                                                             <SelectItem value='Oregon'>Oregon</SelectItem>
                                                             <SelectItem value='Pennsylvania'>Pennsylvania</SelectItem>
                                                             <SelectItem value='Rhode Island'>Rhode Island</SelectItem>
-                                                            <SelectItem value='South Carolina'>South Carolina</SelectItem>
+                                                            <SelectItem value='South Carolina'>South
+                                                                Carolina</SelectItem>
                                                             <SelectItem value='South Dakota'>South Dakota</SelectItem>
                                                             <SelectItem value='Tennessee'>Tennessee</SelectItem>
                                                             <SelectItem value='Texas'>Texas</SelectItem>
@@ -552,9 +604,9 @@ const Page = () => {
                                             <PopoverTrigger asChild>
                                                 <Button
                                                     variant={'outline'}
-                                                    className={`w-full justify-start text-left font-normal ${!selectedPlaintiffDobDate ? 'text-muted-foreground' : ''}`}
+                                                    className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedPlaintiffDobDate ? 'text-black' : ''}`}
                                                 >
-                                                    <CalendarIcon className='mr-2 h-4 w-4' />
+                                                    <CalendarIcon className='mr-2 h-4 w-4'/>
                                                     {selectedPlaintiffDobDate ? format(selectedPlaintiffDobDate, 'PPP') : 'Pick a date'}
                                                 </Button>
                                             </PopoverTrigger>
@@ -605,7 +657,6 @@ const Page = () => {
                                 </CardContent>
                             </Card>
                         </TabsContent>
-
                         <TabsContent className={`w-full md:w-3/4`} value='Defendant'>
                             <Card>
                                 <CardHeader>
@@ -651,7 +702,7 @@ const Page = () => {
                                             onChange={e => handleDefendantChange('maidenName', e.target.value)}
                                         />
                                     </div>
-                                    <div className='space-y-1'>
+                                    <div className='space-y-2'>
                                         <Label>Address</Label>
                                         <Input
                                             id='defendantAddress1'
@@ -665,7 +716,7 @@ const Page = () => {
                                             placeholder='Address line 2'
                                             onChange={e => handleDefendantChange('address2', e.target.value)}
                                         />
-                                        <div className='flex w-full items-center justify-between gap-3'>
+                                        <div className='flex w-full items-center justify-between gap-2'>
                                             <Input
                                                 id='defendantCity'
                                                 value={clientData.defendant.city}
@@ -749,9 +800,9 @@ const Page = () => {
                                             <PopoverTrigger asChild>
                                                 <Button
                                                     variant={'outline'}
-                                                    className={`w-full justify-start text-left font-normal ${!selectedPlaintiffDobDate ? 'text-muted-foreground' : ''}`}
+                                                    className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedPlaintiffDobDate ? 'text-black ' : ''}`}
                                                 >
-                                                    <CalendarIcon className='mr-2 h-4 w-4' />
+                                                    <CalendarIcon className='mr-2 h-4 w-4'/>
                                                     {selectedDefendantDobDate ? format(selectedDefendantDobDate, 'PPP') : 'Pick a date'}
                                                 </Button>
                                             </PopoverTrigger>
@@ -792,8 +843,8 @@ const Page = () => {
                                             <SelectContent>
                                                 <SelectGroup>
                                                     <SelectLabel>Select Fault</SelectLabel>
-                                                    <SelectItem value='Alabama'>No Fault</SelectItem>
-                                                    <SelectItem value='Wyoming'>Irr. Diff.</SelectItem>
+                                                    <SelectItem value='No Fault'>No Fault</SelectItem>
+                                                    <SelectItem value='Irr. Diff'>Irr. Diff.</SelectItem>
                                                 </SelectGroup>
                                             </SelectContent>
                                         </Select>
@@ -815,9 +866,9 @@ const Page = () => {
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant={'outline'}
-                                                className={`w-full justify-start text-left font-normal ${!selectedMarriageDate ? 'text-muted-foreground' : ''}`}
+                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent text-xs ${!selectedMarriageDate ? 'text-black' : ''}`}
                                             >
-                                                <CalendarIcon className='mr-2 h-4 w-4' />
+                                                <CalendarIcon className='mr-2 h-4 w-4'/>
                                                 {selectedMarriageDate ? format(selectedMarriageDate, 'PPP') : 'Pick a date'}
                                             </Button>
                                         </PopoverTrigger>
@@ -855,9 +906,9 @@ const Page = () => {
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant={'outline'}
-                                                className={`w-full justify-start text-left font-normal ${!selectedSeparationDate ? 'text-muted-foreground' : ''}`}
+                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent text-xs ${!selectedSeparationDate ? 'text-black' : ''}`}
                                             >
-                                                <CalendarIcon className='mr-2 h-4 w-4' />
+                                                <CalendarIcon className='mr-2 h-4 w-4'/>
                                                 {selectedSeparationDate ? format(selectedSeparationDate, 'PPP') : 'Pick a date'}
                                             </Button>
                                         </PopoverTrigger>
@@ -906,56 +957,56 @@ const Page = () => {
                                         </TableHeader>
                                         <TableBody>
                                             {clientData.children.details.map((child, i) => (<TableRow key={child.id}>
-                                                    <TableCell className='text-center'>{i + 1}</TableCell>
-                                                    <TableCell>
-                                                        <Input
-                                                            value={child.name}
-                                                            onChange={e => handleChildFieldChange(i, 'name', e.target.value)}
-                                                            placeholder={`Child ${i + 1} Name`}
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Popover>
-                                                            <PopoverTrigger asChild>
-                                                                <Button
-                                                                    variant={'outline'}
-                                                                    className={`w-full justify-start text-left font-normal ${!child.dob ? 'text-muted-foreground' : ''}`}
-                                                                >
-                                                                    <CalendarIcon className='mr-2 h-4 w-4' />
-                                                                    {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
-                                                                </Button>
-                                                            </PopoverTrigger>
-                                                            <PopoverContent className='w-auto p-0' align='start'>
-                                                                <Calendar
-                                                                    mode='single'
-                                                                    selected={child.dob}
-                                                                    onSelect={(date) => {
-                                                                        handleChildFieldChange(i, 'dob', date)
-                                                                    }}
-                                                                    initialFocus
-                                                                    captionLayout="dropdown-buttons" // Enables dropdowns for year & month
-                                                                    fromYear={1900} // Set an appropriate range for year selection
-                                                                    toYear={new Date().getFullYear()}
-                                                                />
-                                                            </PopoverContent>
-                                                        </Popover>
+                                                <TableCell className='text-center'>{i + 1}</TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        value={child.name}
+                                                        onChange={e => handleChildFieldChange(i, 'name', e.target.value)}
+                                                        placeholder={`Child ${i + 1} Name`}
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Popover>
+                                                        <PopoverTrigger asChild>
+                                                            <Button
+                                                                variant={'outline'}
+                                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent  ${!child.dob ? 'text-black' : ''}`}
+                                                            >
+                                                                <CalendarIcon className='mr-2 h-4 w-4'/>
+                                                                {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
+                                                            </Button>
+                                                        </PopoverTrigger>
+                                                        <PopoverContent className='w-auto p-0' align='start'>
+                                                            <Calendar
+                                                                mode='single'
+                                                                selected={child.dob}
+                                                                onSelect={(date) => {
+                                                                    handleChildFieldChange(i, 'dob', date)
+                                                                }}
+                                                                initialFocus
+                                                                captionLayout="dropdown-buttons" // Enables dropdowns for year & month
+                                                                fromYear={1900} // Set an appropriate range for year selection
+                                                                toYear={new Date().getFullYear()}
+                                                            />
+                                                        </PopoverContent>
+                                                    </Popover>
 
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Input
-                                                            value={child.placeOfBirth}
-                                                            onChange={e => handleChildFieldChange(i, 'placeOfBirth', e.target.value)}
-                                                            placeholder='Place of Birth'
-                                                        />
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        <Input
-                                                            value={child.ssn}
-                                                            onChange={e => handleChildFieldChange(i, 'ssn', e.target.value)}
-                                                            placeholder='SSN'
-                                                        />
-                                                    </TableCell>
-                                                </TableRow>))}
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        value={child.placeOfBirth}
+                                                        onChange={e => handleChildFieldChange(i, 'placeOfBirth', e.target.value)}
+                                                        placeholder='Place of Birth'
+                                                    />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Input
+                                                        value={child.ssn}
+                                                        onChange={e => handleChildFieldChange(i, 'ssn', e.target.value)}
+                                                        placeholder='SSN'
+                                                    />
+                                                </TableCell>
+                                            </TableRow>))}
                                         </TableBody>
                                     </Table>
                                 </CardContent>
@@ -1558,47 +1609,47 @@ const Page = () => {
                                     </div>
 
                                     {/* Referral Source Section */}
-                                    <div className='space-y-2'>
-                                        <Label htmlFor='referralMedia'>How did you find us?</Label>
-                                        <Select
-                                            value={clientData.referralSource.media}
-                                            onValueChange={value => setClientData(prev => ({
-                                                ...prev, referralSource: {
-                                                    ...prev.referralSource, media: value
-                                                }
-                                            }))}
-                                        >
-                                            <SelectTrigger className='w-full'>
-                                                <SelectValue placeholder='Select How You Found Us'/>
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectGroup>
-                                                    <SelectLabel>Referral Source</SelectLabel>
-                                                    <SelectItem value='Newspaper'>Newspaper</SelectItem>
-                                                    <SelectItem value='Street Sign'>
-                                                        Street Sign
-                                                    </SelectItem>
-                                                    <SelectItem value='Internet'>Internet</SelectItem>
-                                                    <SelectItem value='Friend'>Friend</SelectItem>
-                                                    <SelectItem value='Other'>Other</SelectItem>
-                                                </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
+                                    {/*<div className='space-y-2'>*/}
+                                    {/*    <Label htmlFor='referralMedia'>How did you find us?</Label>*/}
+                                    {/*    <Select*/}
+                                    {/*        value={clientData.referralSource.media}*/}
+                                    {/*        onValueChange={value => setClientData(prev => ({*/}
+                                    {/*            ...prev, referralSource: {*/}
+                                    {/*                ...prev.referralSource, media: value*/}
+                                    {/*            }*/}
+                                    {/*        }))}*/}
+                                    {/*    >*/}
+                                    {/*        <SelectTrigger className='w-full'>*/}
+                                    {/*            <SelectValue placeholder='Select How You Found Us'/>*/}
+                                    {/*        </SelectTrigger>*/}
+                                    {/*        <SelectContent>*/}
+                                    {/*            <SelectGroup>*/}
+                                    {/*                <SelectLabel>Referral Source</SelectLabel>*/}
+                                    {/*                <SelectItem value='Newspaper'>Newspaper</SelectItem>*/}
+                                    {/*                <SelectItem value='Street Sign'>*/}
+                                    {/*                    Street Sign*/}
+                                    {/*                </SelectItem>*/}
+                                    {/*                <SelectItem value='Internet'>Internet</SelectItem>*/}
+                                    {/*                <SelectItem value='Friend'>Friend</SelectItem>*/}
+                                    {/*                <SelectItem value='Other'>Other</SelectItem>*/}
+                                    {/*            </SelectGroup>*/}
+                                    {/*        </SelectContent>*/}
+                                    {/*    </Select>*/}
 
-                                        <Label htmlFor='nameOfMedia'>
-                                            Name of the Newspaper/Source
-                                        </Label>
-                                        <Input
-                                            id='nameOfMedia'
-                                            placeholder='Name of the Newspaper/Source'
-                                            value={clientData.referralSource.nameOfMedia}
-                                            onChange={e => setClientData(prev => ({
-                                                ...prev, referralSource: {
-                                                    ...prev.referralSource, nameOfMedia: e.target.value
-                                                }
-                                            }))}
-                                        />
-                                    </div>
+                                    {/*    <Label htmlFor='nameOfMedia'>*/}
+                                    {/*        Name of the Newspaper/Source*/}
+                                    {/*    </Label>*/}
+                                    {/*    <Input*/}
+                                    {/*        id='nameOfMedia'*/}
+                                    {/*        placeholder='Name of the Newspaper/Source'*/}
+                                    {/*        value={clientData.referralSource.nameOfMedia}*/}
+                                    {/*        onChange={e => setClientData(prev => ({*/}
+                                    {/*            ...prev, referralSource: {*/}
+                                    {/*                ...prev.referralSource, nameOfMedia: e.target.value*/}
+                                    {/*            }*/}
+                                    {/*        }))}*/}
+                                    {/*    />*/}
+                                    {/*</div>*/}
                                 </CardContent>
                             </Card>
                         </TabsContent>
@@ -1684,11 +1735,60 @@ const Page = () => {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-                                                        <SelectLabel>State Options</SelectLabel>
-                                                        <SelectItem value='NY'>New York</SelectItem>
-                                                        <SelectItem value='NJ'>New Jersey</SelectItem>
-                                                        <SelectItem value='CA'>California</SelectItem>
-                                                        <SelectItem value='TX'>Texas</SelectItem>
+
+                                                        <SelectLabel>Select State</SelectLabel>
+                                                        <SelectItem value='Alabama'>Alabama</SelectItem>
+                                                        <SelectItem value='Alaska'>Alaska</SelectItem>
+                                                        <SelectItem value='Arizona'>Arizona</SelectItem>
+                                                        <SelectItem value='Arkansas'>Arkansas</SelectItem>
+                                                        <SelectItem value='California'>California</SelectItem>
+                                                        <SelectItem value='Colorado'>Colorado</SelectItem>
+                                                        <SelectItem value='Connecticut'>Connecticut</SelectItem>
+                                                        <SelectItem value='Delaware'>Delaware</SelectItem>
+                                                        <SelectItem value='Florida'>Florida</SelectItem>
+                                                        <SelectItem value='Georgia'>Georgia</SelectItem>
+                                                        <SelectItem value='Hawaii'>Hawaii</SelectItem>
+                                                        <SelectItem value='Idaho'>Idaho</SelectItem>
+                                                        <SelectItem value='Illinois'>Illinois</SelectItem>
+                                                        <SelectItem value='Indiana'>Indiana</SelectItem>
+                                                        <SelectItem value='Iowa'>Iowa</SelectItem>
+                                                        <SelectItem value='Kansas'>Kansas</SelectItem>
+                                                        <SelectItem value='Kentucky'>Kentucky</SelectItem>
+                                                        <SelectItem value='Louisiana'>Louisiana</SelectItem>
+                                                        <SelectItem value='Maine'>Maine</SelectItem>
+                                                        <SelectItem value='Maryland'>Maryland</SelectItem>
+                                                        <SelectItem value='Massachusetts'>Massachusetts</SelectItem>
+                                                        <SelectItem value='Michigan'>Michigan</SelectItem>
+                                                        <SelectItem value='Minnesota'>Minnesota</SelectItem>
+                                                        <SelectItem value='Mississippi'>Mississippi</SelectItem>
+                                                        <SelectItem value='Missouri'>Missouri</SelectItem>
+                                                        <SelectItem value='Montana'>Montana</SelectItem>
+                                                        <SelectItem value='Nebraska'>Nebraska</SelectItem>
+                                                        <SelectItem value='Nevada'>Nevada</SelectItem>
+                                                        <SelectItem value='New Hampshire'>New Hampshire</SelectItem>
+                                                        <SelectItem value='New Jersey'>New Jersey</SelectItem>
+                                                        <SelectItem value='New Mexico'>New Mexico</SelectItem>
+                                                        <SelectItem value='New York'>New York</SelectItem>
+                                                        <SelectItem value='North Carolina'>North
+                                                            Carolina</SelectItem>
+                                                        <SelectItem value='North Dakota'>North Dakota</SelectItem>
+                                                        <SelectItem value='Ohio'>Ohio</SelectItem>
+                                                        <SelectItem value='Oklahoma'>Oklahoma</SelectItem>
+                                                        <SelectItem value='Oregon'>Oregon</SelectItem>
+                                                        <SelectItem value='Pennsylvania'>Pennsylvania</SelectItem>
+                                                        <SelectItem value='Rhode Island'>Rhode Island</SelectItem>
+                                                        <SelectItem value='South Carolina'>South
+                                                            Carolina</SelectItem>
+                                                        <SelectItem value='South Dakota'>South Dakota</SelectItem>
+                                                        <SelectItem value='Tennessee'>Tennessee</SelectItem>
+                                                        <SelectItem value='Texas'>Texas</SelectItem>
+                                                        <SelectItem value='Utah'>Utah</SelectItem>
+                                                        <SelectItem value='Vermont'>Vermont</SelectItem>
+                                                        <SelectItem value='Virginia'>Virginia</SelectItem>
+                                                        <SelectItem value='Washington'>Washington</SelectItem>
+                                                        <SelectItem value='West Virginia'>West Virginia</SelectItem>
+                                                        <SelectItem value='Wisconsin'>Wisconsin</SelectItem>
+                                                        <SelectItem value='Wyoming'>Wyoming</SelectItem>
                                                         {/* Add more states as needed */}
                                                     </SelectGroup>
                                                 </SelectContent>
@@ -1711,36 +1811,40 @@ const Page = () => {
                                 </CardContent>
                             </Card>
                         </TabsContent>
-                        <TabsContent className={`w-full md:w-3/4`} value='ServiceFee'>
+                        <TabsContent className={`w-full md:w-3/4`} value='SaveClientData'>
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Service Fee</CardTitle>
+                                    <CardTitle>Save Client Data</CardTitle>
                                     <CardDescription>
-                                        Enter the service fee details for the client.
+                                        Make sure all the details of the client have been entered properly.
                                     </CardDescription>
                                 </CardHeader>
-                                <CardContent className='space-y-4'>
-                                    <div className='space-y-2'>
-                                        <Label htmlFor='serviceFee'>Service Fee</Label>
-                                        <Input
-                                            id='serviceFee'
-                                            placeholder='Service Fee'
-                                            value={clientData.serviceFee}
-                                            onChange={e => setClientData(prev => ({
-                                                ...prev, serviceFee: e.target.value
-                                            }))}
-                                        />
-                                    </div>
-                                </CardContent>
+
                                 <CardFooter>
-                                    <Button onClick={handleSave}>Submit </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger className={`bg-black text-white px-4 py-2 rounded-xl`}>Submit</AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>Are all the details accurate?</AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    You can go to clients page to edit the clients data after submission.
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                <AlertDialogAction onClick={handleSave}>Submit</AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+
                                 </CardFooter>
                             </Card>
                         </TabsContent>
                     </Tabs>
                 </div>
             </div>
-        </div>)
+        </div>
+    </div>)
 }
 
 export default Page
