@@ -155,7 +155,7 @@ const Page = () => {
 
                     <h1><span className={   `font-bold`}>Name</span> : {clientData.plaintiff.firstName}
                     </h1>
-                    <h2><span className={   `font-bold`}> Date Of Birth:</span> {format(Date.now(), 'PPP')}</h2>
+                    <h2><span className={   `font-bold`}> Date Of Birth:</span> {format(clientData.plaintiff.dob, 'PPP')}</h2>
                     <h1><span className={   `font-bold`}>City</span> : {clientData.plaintiff.city}
                     </h1>
                     <h1><span className={   `font-bold`}>Mobile</span> : {clientData.plaintiff.mobile}
