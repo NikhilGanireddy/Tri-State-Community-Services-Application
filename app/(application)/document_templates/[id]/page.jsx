@@ -6,7 +6,6 @@ import useMousePosition from "@/utils/cursor";
 import {motion} from "framer-motion";
 import {useEffect, useState} from "react";
 import * as React from "react";
-import {format, getDate, getMonth, getYear} from 'date-fns'
 
 
 const Page = () => {
@@ -153,9 +152,9 @@ const Page = () => {
             <div className={`mt-24 flex justify-center items-center w-full h-full`}>
                 <div className={`w-full h-full`}>
 
-                    <h1><span className={   `font-bold`}>Name</span> : {clientData.plaintiff.firstName}
+                    <h1><span className={   `font-bold`}>Plaintiff</span> : {clientData.plaintiff.firstName}
                     </h1>
-                    <h2><span className={   `font-bold`}> Date Of Birth:</span> {format(clientData.plaintiff?.dob, 'PPP')}</h2>
+                    <h2><span className={   `font-bold`}> Defendant:</span> {clientData.defendant.firstName}</h2>
                     <h1><span className={   `font-bold`}>City</span> : {clientData.plaintiff.city}
                     </h1>
                     <h1><span className={   `font-bold`}>Mobile</span> : {clientData.plaintiff.mobile}
