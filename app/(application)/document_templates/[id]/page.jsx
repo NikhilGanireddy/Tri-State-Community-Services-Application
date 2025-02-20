@@ -176,15 +176,15 @@ const [Loading, setLoading]= useState(false);
 
                     </Link>
 
-                    {/*<Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}*/}
-                    {/*      href={`/document_templates/${id}/acknowledgementOfServices`}>*/}
-                    {/*    {' '}*/}
-                    {/*    Acknowledgement Of Services<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"*/}
-                    {/*                                    stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">*/}
-                    {/*    <path strokeLinecap="round" strokeLinejoin="round"*/}
-                    {/*          d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>*/}
-                    {/*</svg>*/}
-                    {/*</Link>*/}
+                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
+                          href={`/document_templates/${id}/acknowledgementOfServices`}>
+                        {' '}
+                        Acknowledgement Of Services<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                                                        stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                    </svg>
+                    </Link>
 
                     <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
                           href={`/document_templates/${id}/requestForNonAppearanceJudgementForDivorce`}>
