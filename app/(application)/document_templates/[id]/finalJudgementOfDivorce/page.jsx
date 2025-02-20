@@ -107,7 +107,7 @@ const Page = () => {
                 setClientData(data)
 
                 if (data?.plaintiff?.firstName && data?.defendant?.firstName) {
-                    document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Request for Non-Appearance Judgement For Divorce`;
+                    document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Final Judgement Of Divorce`;
                 }
 
             } catch (error) {

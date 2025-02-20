@@ -163,7 +163,7 @@ const Page = () => {
                 setClientData(data)
 
                 if (data?.plaintiff?.firstName && data?.defendant?.firstName) {
-                    document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Civil Action Complaint For Divorce`;
+                    document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Martial Settlement Agreement`;
                 }
                 // Build up "selected" vs. "custom" from DB
                 if (data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {

@@ -163,7 +163,7 @@ const Page = () => {
                 setClientData(data)
 
                 if (data?.defendant?.firstName && data?.defendant?.firstName) {
-                    document.title = `${data.defendant.firstName} Vs ${data.defendant.firstName} | Request for Name change - defendant                   `;
+                    document.title = `${data.defendant.firstName} Vs ${data.defendant.firstName} | Request for Name change - Defendant                   `;
                 }
                 // Build up "selected" vs. "custom" from DB
                 if (data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {
