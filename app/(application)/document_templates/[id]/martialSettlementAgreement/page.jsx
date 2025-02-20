@@ -1,13 +1,8 @@
 'use client'
 import {useEffect, useState} from 'react'
 import {Button} from '@/components/ui/button'
-import {Label} from '@/components/ui/label'
-import {Input} from '@/components/ui/input'
-import {Textarea} from '@/components/ui/textarea'
 import {usePathname} from 'next/navigation'
-import {format, getDate, getMonth, getYear} from 'date-fns'
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
-import {Checkbox} from "@/components/ui/checkbox"
+import {format} from 'date-fns'
 import {useToast} from "@/hooks/use-toast"
 
 const Page = () => {
@@ -259,7 +254,6 @@ const Page = () => {
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
                     <h2>COUNTY</h2>
                     <h2>DOCKET NUMBER NONE</h2>
-                    {clientData.defendant.fault}
                 </div>
             </div>
         </div>
@@ -273,172 +267,173 @@ const Page = () => {
             </div>
             <div className='font-medium'>
                 <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
-                <h1 className='text-2xl text-center font-bold'>COMPLAINT FOR DIVORCE</h1>
-                <h2 className='capitalize'>{clientData.defendant?.fault === "No Fault" ? 'Based on 18 Months Separation' : "based on irreconcilable differences"}</h2>
-                <h2 className={`text-center`}>{clientData.defendant?.fault === "No Fault" ? '(No Fault)' : "Pro/Se"}</h2>
+                <h1 className='text-2xl text-center font-bold'>MARTIAL SETTLEMENT AGREEMENT</h1>
             </div>
         </div>
 
         {/* Body Content */}
         <div className='mt-8'>
+            <p>
+
+                I, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName},
+                hereinafter referred to as ‘Plaintiff,’
+                and {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},
+                hereinafter referred to as ‘Defendant,’ hereby agree to the following:
+            </p>
+            <h1 className={`font-bold text-base my-8`}>Preliminary Matter:</h1>
             <ol className='list-inside list-decimal flex flex-col space-y-4'>
                 <li>
-                    The Plaintiff, {clientData.plaintiff.firstName} {clientData.plaintiff.lastName}, resides
-                    at {clientData.plaintiff.address1},
-                    in the City of {clientData.plaintiff.city} and the State of {clientData.plaintiff.state} by way of
-                    complaint against the defendant, says:
+                    Plaintiff and Defendant were lawfully married
+                    on {clientData.marriage.dateOfMarriage},
+                    in {clientData.marriage.cityOfMarriage}, {clientData.marriage.stateOfMarriage} .Because certain
+                    irreconcilable problems have developed between Plaintiff and Defendant, they have agreed to live
+                    separately and apart, have filed for divorce, and are attempting to resolve the property issues
+                    between them without going to trial.
                 </li>
-                <li>
-                    Plaintiff was lawfully married
-                    to {clientData.defendant.firstName} {clientData.defendant.lastName}, the defendant herein, in a
-                    civil ceremony on{' '}
-                    {clientData.marriage.dateOfMarriage} in {clientData.marriage.cityOfMarriage},{' '}
-                    {clientData.marriage.stateOfMarriage}.
-                </li>
-                <li className={``}>
-                    {clientData.defendant?.fault === "No Fault" ? `The parties separated on or about October 2019. Ever since the time and for more than 18 consecutive months, the parties have lived separately and apart and in different locations. the separation has continued to the present time and there is no reasonable prospect of reconciliation` : `For more than one year before the date of filling of this complaint, the plaintiff has been a bona fide resident of the state of the New Jersey and the County of county`}
-                </li>
-                <li className={``}>
-                    {clientData.defendant?.fault === "No Fault" ? `At the point at which plaintiff and defendant had lived separately for 18 months, Plaintiff was a bonafide resident of the State of ${clientData.plaintiff.state}, and has ever since and for more than one year next proceeding the commencement of this action, continued to be such a bonafide resident` : `Plaintiff and defendant have experienced Irreconcilable Differences for a period of six months or more. These irreconcilable differences have caused the breakdown of the marriage. There is no hope of reconciliation between the Plaintiff and the Defendant. It appears to the Plaintiff that this marriage should be dissolved.`}
-                </li>
-                <li className={``}>
-                    {clientData.defendant?.fault === "No Fault" ? `The defendant, ${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName} resides at ${clientData.defendant.address1}, ${clientData.defendant.address2}, ${clientData.defendant.city}, ${clientData.defendant.state}, ${clientData.defendant.zip}.` : `At the point at which plaintiff and defendant experienced irreconcilable differences for a period of six months, plaintiff lives at ${clientData.plaintiff.address1}, ${clientData.plaintiff.address2}, ${clientData.plaintiff.city}, ${clientData.plaintiff.state}, ${clientData.plaintiff.zip}`}
-                </li>
-                <li className={``}>
-                    {clientData.defendant?.fault === "No Fault" ? `At the expiration of the 18-month separation, plaintiff resided ${clientData.plaintiff.address1}, ${clientData.plaintiff.address2}, ${clientData.plaintiff.city}, ${clientData.plaintiff.state}, ${clientData.plaintiff.zip} was a resident of the state of ${clientData.plaintiff.state} when the cause of action arose.` : `The defendant, ${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName} resides at ${clientData.defendant.address1}, ${clientData.defendant.address2}, ${clientData.defendant.city}, ${clientData.defendant.state}, ${clientData.defendant.zip}`}
-                </li>
-                <li>
-                    There are {clientData.children.count > 0 ? clientData.children.count : 'no'} children born
-                    of marriage.
+                <li>Plaintiff and Defendant have made a complete, fair, and accurate disclosure to each other of all
+                    financial matters affecting this agreement.
                 </li>
 
-                {/* Children Table */}
-                {clientData.children.count > 0 && (<Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>First Name</TableHead>
-                            <TableHead>Place of Birth</TableHead>
-                            <TableHead>Date of Birth</TableHead>
-                            <TableHead className='text-right'>SSN</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {clientData.children.details.map(user => (<TableRow key={user.id}>
-                            <TableCell>{user.name}</TableCell>
-                            <TableCell>{user.placeOfBirth}</TableCell>
-                            <TableCell>
-                                {user.dob ? `${getMonth(user.dob) + 1}-${getDate(user.dob)}-${getYear(user.dob)}` : ''}
-                            </TableCell>
-                            <TableCell className='text-right'>{user.ssn}</TableCell>
-                        </TableRow>))}
-                    </TableBody>
-                </Table>)}
-
-                {/* Additional paragraphs from DB or newly added */}
-                {submitted ? (clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorce.map((item, index) => (
-                    <li key={index}>
-                        {item.title}: {item.details}
-                    </li>))) : (<>
-                    <Button onClick={addTextBox}>Add Textbox</Button>
-                    {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow my-2'>
-                        <Label>Title</Label>
-                        <Input
-                            value={box.title}
-                            onChange={e => handleChange(box.id, 'title', e.target.value)}
-                        />
-                        <Label>Details</Label>
-                        <Textarea
-                            value={box.details}
-                            onChange={e => handleChange(box.id, 'details', e.target.value)}
-                        />
-                    </div>))}
-                    <Button onClick={handleSave} disabled={saving}>
-                        {saving ? 'Saving...' : 'Save'}
-                    </Button>
-                </>)}
-
-                <li>
-                    The plaintiff and the defendant in the matter have been parties to the following prior action:
-                    <div className='ml-4 mt-4'>
-                        Caption of the case: {clientData.courtDecision.previous.caseName}
-                    </div>
-                    <div className='ml-4'>
-                        Docket No.: {clientData.courtDecision.previous.docketNumber}
-                    </div>
+                <li className={``}>
+                    This agreement is intended to be final disposition of the matters addressed herein and may be used
+                    as evidence and incorporated into a final decree of divorce or dissolution.
                 </li>
+                <li className={``}>
+                    Should a dispute arise regarding the enforcement of this agreement, the prevailing party will be
+                    entitled to his or her reasonable costs and attorney’s fees.
+                </li>
+
+
+                {/*/!* Additional paragraphs from DB or newly added *!/*/}
+                {/*{submitted ? (clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorce.map((item, index) => (*/}
+                {/*    <li key={index}>*/}
+                {/*        {item.title}: {item.details}*/}
+                {/*    </li>))) : (<>*/}
+                {/*    <Button onClick={addTextBox}>Add Textbox</Button>*/}
+                {/*    {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow my-2'>*/}
+                {/*        <Label>Title</Label>*/}
+                {/*        <Input*/}
+                {/*            value={box.title}*/}
+                {/*            onChange={e => handleChange(box.id, 'title', e.target.value)}*/}
+                {/*        />*/}
+                {/*        <Label>Details</Label>*/}
+                {/*        <Textarea*/}
+                {/*            value={box.details}*/}
+                {/*            onChange={e => handleChange(box.id, 'details', e.target.value)}*/}
+                {/*        />*/}
+                {/*    </div>))}*/}
+                {/*    <Button onClick={handleSave} disabled={saving}>*/}
+                {/*        {saving ? 'Saving...' : 'Save'}*/}
+                {/*    </Button>*/}
+                {/*</>)}*/}
+
             </ol>
 
-            {/* Judgment Demands */}
+            <div className={`mt-4 space-y-4`}>
+                <p>To be owned and occupied by the Defendant. Defendant shall be individually responsible for all the
+                    expenses related to the said real estate.
+                </p>
+                <p>
+                    Plaintiff hereby relinquishes any ownership rights and/or claims and shall execute any documentation
+                    to effectuate the same. Plaintiff shall not be responsible for any expenses related to this property
+                    whatsoever.
+                </p>
+            </div>
+
             <div className='mt-8 border-t pt-4'>
-                <h2 className="font-bold mb-3">WHEREFORE THE PLAINTIFF DEMANDS JUDGMENT:</h2>
-                <ol className="list-decimal pl-5 mb-6">
-                    {selectedJudgmentDemands.map((demand, index) => (<li key={`selected-${index}`} className="mt-1">
-                        {demand}
-                    </li>))}
-                    {customJudgmentDemands.map((demand, index) => (<li key={`custom-${index}`} className="mt-1">
-                        {demand.demand}
-                    </li>))}
-                </ol>
+                {/*<h2 className="font-bold mb-3">WHEREFORE THE PLAINTIFF DEMANDS JUDGMENT:</h2>*/}
+                {/*<ol className="list-decimal pl-5 mb-6">*/}
+                {/*    {selectedJudgmentDemands.map((demand, index) => (<li key={`selected-${index}`} className="mt-1">*/}
+                {/*        {demand}*/}
+                {/*    </li>))}*/}
+                {/*    {customJudgmentDemands.map((demand, index) => (<li key={`custom-${index}`} className="mt-1">*/}
+                {/*        {demand.demand}*/}
+                {/*    </li>))}*/}
+                {/*</ol>*/}
 
                 {/* Hide "Add or Remove Judgments" after saving */}
-                {!judgmentDemandsSaved && (<>
-                    <h2 className="font-bold mb-2">Add or Remove Judgments</h2>
-                    {judgmentOptions.map((option, index) => (<div key={index} className='flex items-center gap-2 mb-1'>
-                        <Checkbox
-                            checked={selectedJudgmentDemands.includes(option)}
-                            onCheckedChange={() => toggleJudgmentDemand(option)}
-                        />
-                        <Label>{option}</Label>
-                    </div>))}
+                {/*{!judgmentDemandsSaved && (<>*/}
+                {/*    <h2 className="font-bold mb-2">Add or Remove Judgments</h2>*/}
+                {/*    {judgmentOptions.map((option, index) => (<div key={index} className='flex items-center gap-2 mb-1'>*/}
+                {/*        <Checkbox*/}
+                {/*            checked={selectedJudgmentDemands.includes(option)}*/}
+                {/*            onCheckedChange={() => toggleJudgmentDemand(option)}*/}
+                {/*        />*/}
+                {/*        <Label>{option}</Label>*/}
+                {/*    </div>))}*/}
 
-                    <div className="mt-4">
-                        <Button onClick={addCustomJudgmentDemand}>
-                            Add Custom Demand
-                        </Button>
-                        {customJudgmentDemands.map((demand) => (
-                            <div key={demand.id} className='mt-3 flex items-center gap-2'>
-                                <Input
-                                    value={demand.demand}
-                                    placeholder='Enter custom demand...'
-                                    onChange={(e) => updateCustomJudgmentDemand(demand.id, e.target.value)}
-                                />
-                            </div>))}
+                {/*    <div className="mt-4">*/}
+                {/*        <Button onClick={addCustomJudgmentDemand}>*/}
+                {/*            Add Custom Demand*/}
+                {/*        </Button>*/}
+                {/*        {customJudgmentDemands.map((demand) => (*/}
+                {/*            <div key={demand.id} className='mt-3 flex items-center gap-2'>*/}
+                {/*                <Input*/}
+                {/*                    value={demand.demand}*/}
+                {/*                    placeholder='Enter custom demand...'*/}
+                {/*                    onChange={(e) => updateCustomJudgmentDemand(demand.id, e.target.value)}*/}
+                {/*                />*/}
+                {/*            </div>))}*/}
+                {/*    </div>*/}
+
+                {/*    <div className="mt-4">*/}
+                {/*        <Button onClick={handleSaveJudgmentDemands}>*/}
+                {/*            Save Judgment Demands*/}
+                {/*        </Button>*/}
+                {/*    </div>*/}
+                {/*</>)}*/}
+
+                <p className={`font-bold mt-4`}>Attestation:</p>
+                <div className={`font-bold flex flex-col gap-4 my-8 w-full justify-start `}>
+                    <div className={`flex space-x-2 items-end justify-start`}>Signed this <div
+                        className={`w-24 h-[1px] bg-black`}/> day of <div
+                        className={`w-24 h-[1px] bg-black`}/> 20 <div className={`w-8 h-[1px] bg-black`}/></div>
+                    <div className={`font-bold`}>By:</div>
+                    <div className={`flex flex-col gap-2 justify-start mt-8`}>
+                        <div className={`w-64 h-[1px] bg-black -2`}/>
+                        <h1> {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h1>
+                        <h2><span className={`text-`}> Plaintiff</span></h2>
                     </div>
-
-                    <div className="mt-4">
-                        <Button onClick={handleSaveJudgmentDemands}>
-                            Save Judgment Demands
-                        </Button>
-                    </div>
-                </>)}
-
-                <div className={`flex flex-row gap-2 mt-32 w-full justify-end `}>
                     <div>
-
+                        <h1>State of New {clientData.plaintiff.state}</h1>
+                        <h1 className={`flex gap-2 justify-start items-end`}>County of <div
+                            className={`w-24 h-[1px] bg-black`}/></h1>
                     </div>
-                    <div className={`flex flex-col gap-2 justify-start`}>
-                        <div className={`w-64 h-[2px] bg-black`}/>
-                        <h2>(Signature of the Plaintiff) <span className={`text-sm`}> Plaintiff</span></h2>
+                    <div className={`my-4`}>
+                        <div className={`flex space-x-2 items-end justify-start`}>Signed before on this <div
+                            className={`w-24 h-[1px] bg-black`}/>of <div
+                            className={`w-24 h-[1px] bg-black`}/> 20 <div className={`w-8 h-[1px] bg-black`}/></div>
+                    </div>
+                    <div className={`flex flex-col gap-2 justify-center mt-4`}>
+                        <div className={`w-64 h-[1px] bg-black `}/>
+                        <h2><span className={`text-`}> Signature of the Notary Public</span></h2>
                     </div>
                 </div>
-                <div className={`flex flex-row gap-2 mt-12 w-full justify-end `}>
-                    <div>
-                    </div>
+                <div className={` font-bold mt-16`}>
+                    <div className={`flex space-x-2 items-end justify-start`}>Signed this <div
+                        className={`w-24 h-[1px] bg-black`}/>day of <div
+                        className={`w-24 h-[1px] bg-black`}/> 20 <div className={`w-8 h-[1px] bg-black`}/></div>
+                </div>
+                <div className={` flex flex-col gap-4 mt-12 w-full font-bold `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2 className={``}> {`${clientData.plaintiff.lastName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.firstName}`}</h2>
-                        <div className={`min-w-64 w-full h-[2px]  -mt-2 bg-black`}/>
-                        <h2 className={``}>(Plaintiff's Name, Printed) <span className={`text-sm`}> Plaintiff</span>
+                        <h2 className={``}> {`${clientData.defendant.lastName} ${clientData.defendant.middleName} ${clientData.defendant.firstName}`}</h2>
+                        <div className={`w-64 h-[1px]  -mt-2 bg-black`}/>
+                        <h2 className={``}>Defendant <span className={`text-`}> </span>
                         </h2>
                     </div>
-                </div>
-                <div className={`flex flex-row gap-2 mt-12 w-full justify-start `}>
-                    <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2> Dated: <span className={`underline`}>{format(Date.now(), 'PPP')}</span></h2>
-                    </div>
                     <div>
-
+                        <h1>City of {clientData.defendant.city}</h1>
+                        <h1 className={`flex space-x-2 items-end`}>Country of <div
+                            className={`w-24 h-[1px] bg-black`}/></h1>
                     </div>
+                    <div className={`flex space-x-2 items-end justify-start`}>Signed before on this <div
+                        className={`w-24 h-[1px] bg-black`}/>of <div
+                        className={`w-24 h-[1px] bg-black`}/> 20 <div className={`w-8 h-[1px] bg-black`}/></div>
 
+                    <div className={`flex flex-col gap-2 justify-center mt-4`}>
+                        <div className={`w-64 h-[1px] bg-black `}/>
+                        <h2><span className={`text-`}> Signature of the Notary Public</span></h2>
+                    </div>
                 </div>
 
                 {/* Print Button (delayed by 2s, disabled while waiting) */}
