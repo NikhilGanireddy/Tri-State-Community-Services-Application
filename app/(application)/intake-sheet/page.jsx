@@ -60,6 +60,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county: '',
             dob: null,
             mobile: '',
             placeOfBirth: '',
@@ -594,6 +595,12 @@ const Page = () => {
                                                     value={clientData.plaintiff.zip}
                                                     placeholder='Zip'
                                                     onChange={e => handlePlaintiffChange('zip', e.target.value)}
+                                                />
+                                                <Input
+                                                    id='county'
+                                                    value={clientData.plaintiff.county}
+                                                    placeholder='County'
+                                                    onChange={e => handlePlaintiffChange('county', e.target.value)}
                                                 />
                                             </div>
                                         </div>

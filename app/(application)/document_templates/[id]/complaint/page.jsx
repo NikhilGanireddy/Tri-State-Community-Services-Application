@@ -18,6 +18,7 @@ const Page = () => {
       city: '',
       state: '',
       zip: '',
+      county:'',
       dob: null,
       mobile: '',
       placeOfBirth: ''
@@ -171,8 +172,8 @@ const Page = () => {
         <div>
           <h2> SUPERIOR COURT OF NEW JERSEY</h2>
           <h2>CHANCERY DIVISION-FAMILY PART</h2>
-          <h2> COUNTY</h2>
-          <h2> DOCKET NUMBER NONE</h2>
+          <h2> COUNTY : {clientData.plaintiff.county}</h2>
+          <h2> DOCKET NUMBER {clientData.courtDecision.current.docketNumber}</h2>
         </div>
       </div>
       <div className='bg-black text-black w-full h-[0.5px]' />

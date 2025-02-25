@@ -26,6 +26,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county: '',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -232,7 +233,7 @@ const Page = () => {
     }
 
 
-    return (<div className='p-4 text-xs flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
+    return (<div className='p-4 text-base flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
 
 
@@ -418,7 +419,7 @@ const Page = () => {
                     </div>
                     <div className={`flex flex-col gap-2 justify-start`}>
                         <div className={`w-64 h-[2px] bg-black`}/>
-                        <h2>(Signature of the Plaintiff) <span className={`text-sm`}> Plaintiff</span></h2>
+                        <h2>(Signature of the Plaintiff) <span className={`text-`}> Plaintiff</span></h2>
                     </div>
                 </div>
                 <div className={`flex flex-row gap-2 mt-12 w-full justify-end `}>
@@ -427,7 +428,7 @@ const Page = () => {
                     <div className={`flex flex-col gap-2 justify-start`}>
                         <h2 className={``}> {`${clientData.plaintiff.lastName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.firstName}`}</h2>
                         <div className={`min-w-64 w-full h-[2px]  -mt-2 bg-black`}/>
-                        <h2 className={``}>(Plaintiff's Name, Printed) <span className={`text-sm`}> Plaintiff</span>
+                        <h2 className={``}>(Plaintiff's Name, Printed) <span className={`text-`}> Plaintiff</span>
                         </h2>
                     </div>
                 </div>

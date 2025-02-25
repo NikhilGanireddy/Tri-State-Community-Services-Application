@@ -14,7 +14,7 @@ const Page = () => {
     const {x, y} = useMousePosition();
     const [error, setError] = useState(null);
     const [submitted, setSubmitted] = useState(false);
-const [Loading, setLoading]= useState(false);
+    const [Loading, setLoading] = useState(false);
     const [clientData, setClientData] = useState({
         plaintiff: {
             firstName: '',
@@ -141,7 +141,7 @@ const [Loading, setLoading]= useState(false);
             style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
         />
         <div
-            className="w-[90%] max-w-[1600px] flex flex-col  items-center p-8 rounded-3xl min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md">
+            className="w-[90%] max-w-[1600px] flex flex-col overflow-y-scroll  items-center p-8 rounded-3xl max-h-[90vh] min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md">
             <div className={`flex justify-between items-center w-full h-full`}>
                 <Link href={'/'} className={`text-xl md:text-4xl font-semibold w-max`}>
                     Tri State Community Services
@@ -161,91 +161,190 @@ const [Loading, setLoading]= useState(false);
                     <h1><span className={`font-bold`}>Mobile</span> : {clientData.plaintiff.mobile}
                     </h1>
 
-                    <h6 className={`mt-12 text-xs opacity-55`}>Please select the documents you want to print.</h6>
+                    <h6 className={`mt-12 text-sm opacity-55`}>Please select the documents you want to print.</h6>
                 </div>
-                <div className={`w-full  h-full text-sm gap-4 flex-col flex text-start`}>
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/civilActionComplaintForDivorce`}>
+                <div
+                    className={`w-full max-h-[60vh] min-h-[60vh] h-full overflow-y-auto text-sm gap-4 flex-col flex text-start`}>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/civilActionComplaintForDivorce`}>
                         {' '}
                         Complaint For Divorce
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                             stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all ease-in-out duration-500 group-hover:inline">
                             <path strokeLinecap="round" strokeLinejoin="round"
                                   d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
                         </svg>
 
                     </Link>
 
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/acknowledgementOfServices`}>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/acknowledgementOfServices`}>
                         {' '}
-                        Acknowledgement Of Services<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                                        stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
+                        Acknowledgement Of Services
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
                     </Link>
 
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/requestForNonAppearanceJudgementForDivorce`}>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/requestForNonAppearanceJudgementForDivorce`}>
                         {' '}
-                        Request for Non-Appearance Judgement For Divorce<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                                                             stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
+                        Request for Non-Appearance Judgement For Divorce
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
                     </Link>
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/martialSettlementAgreement`}>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/martialSettlementAgreement`}>
                         {' '}
-                        Martial Settlement Agreement<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                                         stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
-                    </Link>
-
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/military`}>
-                        {' '}
-                        Military<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                     stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
+                        Martial Settlement Agreement
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
                     </Link>
 
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/requestForNameChangePlaintiff`}>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/military`}>
                         {' '}
-                        Plaintiff - Request For Name Change<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                                                stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
-                    </Link>
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/requestForNameChangeDefendant`}>
-                        {' '}
-                        Defendant - Request For Name Change<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                                                stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
+                        Military
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
                     </Link>
 
-                    <Link className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-xs '}
-                          href={`/document_templates/${id}/finalJudgementOfDivorce`}>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/requestForNameChangePlaintiff`}>
                         {' '}
-                        Final Judgement Of Divorce<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                                                       stroke="currentColor" className="hidden size-4 transition-all duration-100 group-hover:flex">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                              d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
-                    </svg>
+                        Plaintiff - Request For Name Change
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/requestForNameChangeDefendant`}>
+                        {' '}
+                        Defendant - Request For Name Change
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
                     </Link>
 
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/finalJudgementOfDivorce`}>
+                        {' '}
+                        Final Judgement Of Divorce
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/certificationOfVerificationAndNonCollusion`}>
+                        {' '}
+                        Certification Of Verification And Non-Collusion
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/rule5:4_2(h)CertificationBySelf_RepresentedLitigant`}>
+                        {' '}
+                        Rule 5:4-2(h) Certification by Self-Represented Litigant
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/certificationOfNonMilitaryService`}>
+                        {' '}
+                        Certification of Non-Military Service
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/defendantAffidavitOfNon_Military`}>
+                        {' '}
+                        Defendant's Affidavit of Non-Military
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/requestForCertification_EnterDefault`}>
+                        Request And Certification To Enter Default
 
 
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/document_templates/${id}/certificationOfInternationalDomicile`}>
+                      Certification Of International Domicile
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
 
 
                 </div>

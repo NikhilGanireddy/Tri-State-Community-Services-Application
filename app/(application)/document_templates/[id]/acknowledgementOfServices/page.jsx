@@ -121,7 +121,7 @@ const Page = () => {
 
 
 
-    return (<div className='p-4 text-xs flex flex-col min-w-screen min-h-screen font-sans w-full h-screen'>
+    return (<div className='p-4 text-base flex flex-col min-w-screen min-h-screen font-sans w-full h-screen'>
         {/* Top Section */}
         <div className='w-full flex flex-row items-center justify-between font-xs'>
             <div className=' font-xs capitalize'>
@@ -140,7 +140,7 @@ const Page = () => {
         </div>
         <div className='bg-black text-black w-full h-[1px] my-3'/>
         <div className='w-full flex justify-between items-center'>
-            <div className=' font-xs text-xs capitalize flex flex-col justify-start items-start space-y-4'>
+            <div className=' font-xs text-base capitalize flex flex-col justify-start items-start space-y-4'>
                 <div>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
