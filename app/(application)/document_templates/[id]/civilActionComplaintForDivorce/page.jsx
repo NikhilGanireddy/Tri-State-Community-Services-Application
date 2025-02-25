@@ -233,7 +233,7 @@ const Page = () => {
     }
 
 
-    return (<div className='p-4 text-base flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
+    return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
 
 
@@ -258,9 +258,9 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
-                    <h2>DOCKET NUMBER NONE</h2>
-                    {clientData.defendant.fault}
+                    <h2>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER: {clientData.courtDecision.current.docketNumber}</h2>
+                    {/*{clientData.defendant.fault}*/}
                 </div>
             </div>
         </div>
@@ -297,7 +297,7 @@ const Page = () => {
                     {clientData.marriage.stateOfMarriage}.
                 </li>
                 <li className={``}>
-                    {clientData.defendant?.fault === "No Fault" ? `The parties separated on or about October 2019. Ever since the time and for more than 18 consecutive months, the parties have lived separately and apart and in different locations. the separation has continued to the present time and there is no reasonable prospect of reconciliation` : `For more than one year before the date of filling of this complaint, the plaintiff has been a bona fide resident of the state of the New Jersey and the County of county`}
+                    {clientData.defendant?.fault === "No Fault" ? `The parties separated on or about October 2019. Ever since the time and for more than 18 consecutive months, the parties have lived separately and apart and in different locations. the separation has continued to the present time and there is no reasonable prospect of reconciliation` : `For more than one year before the date of filling of this complaint, the plaintiff has been a bona fide resident of the state of the New Jersey and the County of ${clientData.plaintiff.county}`}
                 </li>
                 <li className={``}>
                     {clientData.defendant?.fault === "No Fault" ? `At the point at which plaintiff and defendant had lived separately for 18 months, Plaintiff was a bonafide resident of the State of ${clientData.plaintiff.state}, and has ever since and for more than one year next proceeding the commencement of this action, continued to be such a bonafide resident` : `Plaintiff and defendant have experienced Irreconcilable Differences for a period of six months or more. These irreconcilable differences have caused the breakdown of the marriage. There is no hope of reconciliation between the Plaintiff and the Defendant. It appears to the Plaintiff that this marriage should be dissolved.`}

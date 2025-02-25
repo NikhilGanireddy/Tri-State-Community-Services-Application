@@ -1,13 +1,7 @@
 'use client'
 import {useEffect, useState} from 'react'
 import {Button} from '@/components/ui/button'
-import {Label} from '@/components/ui/label'
-import {Input} from '@/components/ui/input'
-import {Textarea} from '@/components/ui/textarea'
 import {usePathname} from 'next/navigation'
-import {format, getDate, getMonth, getYear} from 'date-fns'
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
-import {Checkbox} from "@/components/ui/checkbox"
 import {useToast} from "@/hooks/use-toast"
 
 const Page = () => {
@@ -26,7 +20,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
-            county:'',
+            county: '',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -233,7 +227,7 @@ const Page = () => {
     }
 
 
-    return (<div className='p-4 text-base flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
+    return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
 
 
@@ -283,7 +277,8 @@ const Page = () => {
         <div className='mt-12
         '>
             <h1 className={`mb-8`}>
-                I, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}, of full age, hereby certify as follows:
+                I, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName},
+                of full age, hereby certify as follows:
             </h1>
             <ol className='list-inside list-decimal flex flex-col space-y-4'>
 
@@ -294,23 +289,26 @@ const Page = () => {
                     I make this Certificate pursuant to New Jersey Court Rule 5:4-2(h).
                 </li>
                 <li className={``}>
-                    I have read the document entitled “Divorce—Dispute Resolution Alternatives to Conventional Litigation.”
+                    I have read the document entitled “Divorce—Dispute Resolution Alternatives to Conventional
+                    Litigation.”
 
                 </li>
                 <li className={``}>
-                    I thus have been informed as to the availability of complimentary dispute resolution alternatives to conventional litigation.
+                    I thus have been informed as to the availability of complimentary dispute resolution alternatives to
+                    conventional litigation.
 
                 </li>
             </ol>
             <h1 className={`mt-12`}>
-                I certify that the foregoing statements made by me are true. I am aware that if any of the foregoing statements made by me are willfully false, I am subject to punishment.
+                I certify that the foregoing statements made by me are true. I am aware that if any of the foregoing
+                statements made by me are willfully false, I am subject to punishment.
 
             </h1>
 
             <div className='mt-8 pt-'>
                 <div className={`flex flex-row gap-2 w-full justify-between items-baseline `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                            <h2> Dated: _______________________</h2>
+                        <h2> Dated: _______________________</h2>
                     </div>
                     <div className={`flex flex-col gap-2 justify-end items-baseline`}>
                         <div className={`w-64 h-[1.5px] bg-black`}/>

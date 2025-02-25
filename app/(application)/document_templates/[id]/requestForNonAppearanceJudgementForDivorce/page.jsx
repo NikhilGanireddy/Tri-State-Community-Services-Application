@@ -120,7 +120,7 @@ const Page = () => {
     }, [id])
 
 
-    return (<div className='p-4 text-xs flex flex-col min-w-screen min-h-screen font-sans w-full h-screen'>
+    return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen font-sans w-full h-screen'>
         {/* Top Section */}
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>

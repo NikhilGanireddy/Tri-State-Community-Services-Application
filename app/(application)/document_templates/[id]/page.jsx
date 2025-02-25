@@ -26,6 +26,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:'',
             dob: null,
             mobile: '',
             placeOfBirth: '',

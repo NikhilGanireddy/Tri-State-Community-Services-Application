@@ -121,43 +121,51 @@ const Page = () => {
 
 
 
-    return (<div className='p-4 text-base flex flex-col min-w-screen min-h-screen font-sans w-full h-screen'>
+    return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen font-sans w-full h-screen'>
         {/* Top Section */}
-        <div className='w-full flex flex-row items-center justify-between font-xs'>
-            <div className=' font-xs capitalize'>
-                <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
-                <h2>{clientData.plaintiff.address1}</h2>
-                <h2>{clientData.plaintiff.address2}</h2>
-                <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
-                <h2>{clientData.plaintiff.mobile}</h2>
-            </div>
-            <div className=' font-xs capitalize'>
-                <h2>SUPERIOR COURT OF NEW JERSEY</h2>
-                <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                <h2>COUNTY</h2>
-                <h2>DOCKET NUMBER NONE</h2>
-            </div>
-        </div>
-        <div className='bg-black text-black w-full h-[1px] my-3'/>
-        <div className='w-full flex justify-between items-center'>
-            <div className=' font-xs text-base capitalize flex flex-col justify-start items-start space-y-4'>
-                <div>
+        <div className='w-full flex flex-col justify-between'>
+            <div className='font-medium capitalize flex flex-row justify-between items-center'>
+                <div className={`w-full`}>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.address1}</h2>
+                    <h2>{clientData.plaintiff.address2}</h2>
+                    <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
+                    <h2>{clientData.plaintiff.mobile}</h2>
+                    <div className='bg-black text-black w-full h-[1px] my-3'/>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
-                <h2 className={`text-center w-full`}>Vs</h2>
-                <div>
-                    <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
-                    <h2>Defendant</h2>
+                <div className={`w-full`}>
+
                 </div>
             </div>
-            <div className=''>
-                <h1 className='text-xl text-center'>CIVIL ACTION</h1>
-                <h1 className='text-xl text-center font-bold'>ACKNOWLEDGEMENT OF SERVICE</h1>
-                <h1 className='text-xl text-center font-bold'>OF SUMMONS AND COMPLAINT BY</h1>
-                <h1 className='text-xl text-center font-bold'>THE DEFENDANT AND WAIVER</h1>
+            <div className={`flex flex-row w-full justify-between items-center`}>
+                <div></div>
+                <div className='font-medium capitalize'>
+                    <h2>SUPERIOR COURT OF NEW JERSEY</h2>
+                    <h2>CHANCERY DIVISION-FAMILY PART</h2>
+                    <h2>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER: {clientData.courtDecision.current.docketNumber}</h2>
+                    {/*{clientData.defendant.fault}*/}
+                </div>
+            </div>
+        </div>
+        <h2 className={`indent-14`}>Vs</h2>
+        <div className=' w-full h-[1px] my-6'/>
+        <div className='w-full flex justify-between items-end'>
+            <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
+                <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
+                <h2>Defendant</h2>
+                <div className='bg-black text-black w-full h-[1px] my-3'/>
+            </div>
+            <div className='font-medium'>
+                <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
+                <h1 className='text-2xl text-center font-bold'>ACKNOWLEDGMENT OF SERVICES</h1>
+                <h1 className='text-2xl text-center font-bold'>SUMMONS AND COMPLAINTS BY THE</h1>
+                <h1 className='text-2xl text-center font-bold'>DEFENDANT AND WAIVER</h1>
 
-                <h2 className='capitalize'>Based on 18 Months Separation (No Fault)</h2>
+                <h2 className='text-center capitalize'>{clientData.defendant?.fault === "No Fault" ? 'Based on 18 Months Separation' : "based on irreconcilable differences"}</h2>
+                <h2 className={`text-center`}>{clientData.defendant?.fault === "No Fault" ? '(No Fault)' : "Pro/Se"}</h2>
             </div>
         </div>
 

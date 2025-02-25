@@ -159,7 +159,7 @@ const Page = () => {
   }, [id])
 
   return (
-    <div className=' flex flex-col min-w-screen min-h-screen w-full h-screen'>
+    <div className=' flex flex-col text-sm min-w-screen min-h-screen w-full h-screen'>
       <div className='w-full flex flex-row items-center justify-between'>
         <div>
           <h2>{`${clientData.plaintiff.firstName} ${clientData.plaintiff.lastName}`}</h2>

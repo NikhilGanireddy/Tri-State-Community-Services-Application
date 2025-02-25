@@ -228,7 +228,7 @@ const Page = () => {
     }
 
 
-    return (<div className='p-4 text-base flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
+    return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
 
         <div className='w-full flex justify-betwee items-center mt-12 mb-8'>
