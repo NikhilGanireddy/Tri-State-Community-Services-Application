@@ -20,6 +20,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:'',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -79,6 +80,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -238,7 +240,7 @@ const Page = () => {
                     <h2>{clientData.plaintiff.address2}</h2>
                     <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
                     <h2>{clientData.plaintiff.mobile}</h2>
-                    <div className='bg-black text-black w-full h-[1px] my-3'/>
+                    <div className='bg-black text-black w-full h-[1.5px] my-3'/>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
@@ -251,23 +253,23 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
-                    <h2>DOCKET NUMBER NONE</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER: ______________</h2>
                 </div>
             </div>
         </div>
         <h2 className={`indent-14`}>Vs</h2>
-        <div className=' w-full h-[1px] my-6'/>
+        <div className=' w-full h-[1.5px] my-6'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
                 <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
                 <h2>Defendant</h2>
-                <div className='bg-black text-black w-full h-[1px] my-3'/>
+                <div className='bg-black text-black w-full h-[1.5px] my-3'/>
             </div>
             <div className='font-medium'>
                 <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
                 <h1 className='text-2xl text-center font-bold'>MILITARY</h1>
-                {clientData.defendant.fault === "No Fault" ? `NO FAULT` : `IRRECONCILABLE DIFFERENCES`}
+                <h1 className={`text-center`}>{clientData.defendant.fault === "No Fault" ? `NO FAULT` : `IRRECONCILABLE DIFFERENCES`}</h1>
             </div>
         </div>
 
@@ -275,7 +277,7 @@ const Page = () => {
         <div className='mt-4'>
             <div className={`uppercase font-bold`}>
                 <h1>STATE OF {clientData.plaintiff.state}</h1>
-                <h1>county of </h1>
+                <h1>county of {clientData.plaintiff.county}</h1>
             </div>
             <div className=' flex flex-col space-y-4 mt-4'>
                 <p className={`indent-8`}>
@@ -365,24 +367,24 @@ const Page = () => {
 
                 <div className={`w-full flex justify-between font-bold`}>
                     <div className={`flex space-x-2  items-end`}>Date:
-                        <div className={`w-32 h-[1px]  -mt-2 bg-black`}/>
+                        <div className={`w-32 h-[1.5px]  -mt-2 bg-black`}/>
                     </div>
                     <div className={`font-bold flex space-x-2  items-end`}>Plaintiff:
-                        <div className={`w-32 h-[1px]  -mt-2 bg-black`}/>
+                        <div className={`w-32 h-[1.5px]  -mt-2 bg-black`}/>
                     </div>
                 </div>
                 <div className={`font-bold flex flex-col mt-8`}>
                     <h1>State of New Jersey</h1>
                     <h1 className={`flex space-x-2 items-end`}>County of <div
-                        className={`w-24 h-[1px] bg-black`}/></h1>
+                        className={`w-24 h-[1.5px] bg-black`}/></h1>
                 </div>
 
                 <div className={`font-bold flex space-x-2 items-end justify-start mt-8`}>Signed before on this <div
-                    className={`w-24 h-[1px] bg-black`}/>of <div
-                    className={`w-24 h-[1px] bg-black`}/> 20 <div className={`w-8 h-[1px] bg-black`}/></div>
+                    className={`w-24 h-[1.5px] bg-black`}/>of <div
+                    className={`w-24 h-[1.5px] bg-black`}/> 20 <div className={`w-8 h-[1.5px] bg-black`}/></div>
 
                 <div className={`font-bold flex flex-col gap-2 justify-center mt-8`}>
-                    <div className={`w-64 h-[1px] bg-black `}/>
+                    <div className={`w-64 h-[1.5px] bg-black `}/>
                     <h2><span className={`text-`}> Signature of the Notary Public</span></h2>
                 </div>
 

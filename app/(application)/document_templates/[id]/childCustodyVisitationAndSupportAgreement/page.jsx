@@ -39,6 +39,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:"",
             dob: null,
             mobile: '',
             placeOfBirth: '',
@@ -85,6 +86,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })

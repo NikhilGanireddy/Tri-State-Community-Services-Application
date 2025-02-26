@@ -46,7 +46,7 @@ const UsersPage = () => {
 
                 const data = await response.json()
                 setUsers(data)
-                console.log(data)
+                // console.log(data)
             } catch (error) {
                 setError(error.message)
             } finally {

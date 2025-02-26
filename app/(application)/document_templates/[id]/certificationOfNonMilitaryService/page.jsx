@@ -20,6 +20,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:"",
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -79,6 +80,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -233,12 +235,11 @@ const Page = () => {
         <div className='w-full flex flex-col justify-between'>
             <div className=' capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full flex flex-col gap-0 justify-between`}>
-                    <h2>Filers' Name _________________________</h2>
-                    <h2>Address ____________________________</h2>
-                    <h2>
-                        City, State, Zip _______________________</h2>
-                    <h2>
-                        Telephone Number ___________________</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.address1}</h2>
+                    <h2>{clientData.plaintiff.address2}</h2>
+                    <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
+                    <h2>{clientData.plaintiff.mobile}</h2>
                     <div className='bg-black text-black w-full h-[1.5px] mt-12'/>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
@@ -252,8 +253,8 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY {clientData.courtDecision.current.county}</h2>
-                    <h2>DOCKET NUMBER {clientData.courtDecision.current.docketNumber}</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.courtDecision.current.county}</h2>
+                    <h2>DOCKET NUMBER: _______________</h2>
                 </div>
             </div>
         </div>

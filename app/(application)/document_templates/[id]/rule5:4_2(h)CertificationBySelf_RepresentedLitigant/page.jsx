@@ -80,6 +80,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -252,7 +253,7 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county}</h2>
                     <h2>DOCKET NUMBER : FM-{clientData.courtDecision.current.docketNumber}</h2>
                     {/*{clientData.defendant.fault}*/}
                 </div>

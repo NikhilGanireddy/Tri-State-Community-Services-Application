@@ -21,6 +21,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:'',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -80,6 +81,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -252,13 +254,13 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
-                    <h2>DOCKET NUMBER {clientData.courtDecision.current.docketNumber}</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county} </h2>
+                    <h2>DOCKET NUMBER: ___________</h2>
                 </div>
             </div>
         </div>
         <h2 className={`indent-14`}>Vs</h2>
-        <div className=' w-full h-[1px] my-6'/>
+        <div className=' w-full h-[1px] my-'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
                 <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName} </h2>
@@ -283,7 +285,7 @@ const Page = () => {
             </p>
             <ol className='list-inside list-decimal flex flex-col space-y-4 mt-4'>
                 <li>
-                    I am the Defendant in the foregoing action for divorce.
+                    I am the Plaintiff in the foregoing action for divorce.
                 </li>
                 <li>My current married name is: {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}.
                 </li>
@@ -370,7 +372,7 @@ const Page = () => {
                 {/*</>)}*/}
 
                 <div className={`font-bold flex flex-col gap-4 my-8 w-full justify-start `}>
-                    <div className={`flex flex-col gap- justify-start mt-8`}>
+                    <div className={`flex flex-col gap- justify-start mt-`}>
                         <div className={`w-64 h-[1px] bg-black -2`}/>
                         <h2><span className={`text-`}> Signature of the Defendant</span></h2>
                     </div>

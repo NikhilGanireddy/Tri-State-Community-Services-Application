@@ -46,7 +46,7 @@ const Page = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const router = useRouter();
-const {toast} = useToast();
+    const {toast} = useToast();
     const pathname = usePathname().split("/")
     const id = pathname[pathname.length - 1]
 
@@ -62,7 +62,7 @@ const {toast} = useToast();
             city: '',
             state: '',
             zip: '',
-            county:'',
+            county: '',
             dob: null,
             mobile: '',
             placeOfBirth: '',
@@ -128,27 +128,26 @@ const {toast} = useToast();
         }, serviceFee: '' // New field for service fee
     })
 
-    const onPageLoad = async () => {
-        try {
-            const response = await fetch('/api/editClientData', {
-                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(clientId), // Send clientData to the backend
-            });
-
-            if (response.ok) {
-                setClientData(response.body)
-                // alert('Client data fetched successfully!');
-                toast({
-                    title: 'Success', description: "Client data fetched successfully!"
-                })
-            } else {
-                const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
-            }
-        } catch (error) {
-            console.error('Error saving client data:', error);
-            alert('Error saving client data.');
-        }
-    };
+    // const onPageLoad = async () => {
+    //     try {
+    //         const response = await fetch('/api/editClientData', {
+    //             method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(clientId), // Send clientData to the backend
+    //         });
+    //
+    //         if (response.ok) {
+    //             setClientData(response.body)
+    //             // alert('Client data fetched successfully!');
+    //             toast({
+    //                 title: 'Success', description: "Client data fetched successfully!"
+    //             })
+    //         } else {
+    //             const errorData = await response.json();
+    //             alert(`Error: ${errorData.message}`);
+    //         }
+    //     } catch (error) {
+    //         alert('Error saving client data.');
+    //     }
+    // };
 
 
 // onPageLoad()
@@ -169,10 +168,6 @@ const {toast} = useToast();
             }
         })
     }
-    const [selectedPlaintiffDobDate, setSelectedPlaintiffDobDate] = useState(clientData.plaintiff.dob || null);
-    const [selectedDefendantDobDate, setSelectedDefendantDobDate] = useState(clientData.defendant.dob || null);
-    const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.plaintiff.dob || null);
-    const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.plaintiff.dob || null);
 
     const handleChildrenCountChange = count => {
         setClientData(prev => {
@@ -347,6 +342,7 @@ const {toast} = useToast();
 
         </TableRow>))
     }
+
     useEffect(() => {
         if (!id) return; // Wait for the ID to be available
 
@@ -356,8 +352,10 @@ const {toast} = useToast();
                 if (!response.ok) {
                     throw new Error('Failed to fetch client data');
                 }
-                const data = await response.json();
-                setClientData(data); // Populate state with fetched data
+                const data = await response.json()
+                setClientData(data)
+                // .then(() => setSelectedMarriageDate(clientData.marriage.dateOfMarriage))
+
                 setLoading(false);
             } catch (error) {
                 setError(error.message);
@@ -368,6 +366,11 @@ const {toast} = useToast();
         fetchClientData();
     }, [id]);
 
+// console.log(clientData);
+    const [selectedPlaintiffDobDate, setSelectedPlaintiffDobDate] = useState(clientData.plaintiff.dob || null);
+    const [selectedDefendantDobDate, setSelectedDefendantDobDate] = useState(clientData.defendant.dob || null);
+    const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.marriage.dateOfMarriage || null);
+    const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.marriage.dateOfSeparation || null);
 
     return (<div
         className={` cursor-none relative overflow-y-auto bg-fixed bg-cover bg-center h-full flex flex-col items-center justify-center bg-[url('/Wall2.jpg')]  min-h-screen`}>
@@ -912,24 +915,24 @@ const {toast} = useToast();
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button
-                                                variant={'outline'}
-                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedMarriageDate ? 'text-black' : ''}`}
+                                                variant="outline"
+                                                className={cn("w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent", !selectedMarriageDate ? "text-black" : "")}
                                             >
-                                                <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                {selectedMarriageDate ? format(selectedMarriageDate, 'PPP') : 'Pick a date'}
+                                                <CalendarIcon className="mr-2 h-4 w-4"/>
+                                                {clientData?.marriage?.dateOfMarriage ? format(clientData?.marriage?.dateOfMarriage, "PPP") : "Pick a date"}
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className='w-auto p-0' align='start'>
+                                        <PopoverContent className="w-auto p-0" align="start">
                                             <Calendar
-                                                mode='single'
+                                                mode="single"
                                                 selected={selectedMarriageDate}
                                                 onSelect={(date) => {
                                                     setSelectedMarriageDate(date);
-                                                    handleFieldChange('marr', "dateOfMarriage");
+                                                    handleFieldChange("marriage", "dateOfMarriage", date);
                                                 }}
                                                 initialFocus
-                                                captionLayout="dropdown-buttons" // Enables dropdowns for year & month
-                                                fromYear={1900} // Set an appropriate range for year selection
+                                                captionLayout="dropdown-buttons"
+                                                fromYear={1900}
                                                 toYear={new Date().getFullYear()}
                                             />
                                         </PopoverContent>
@@ -956,7 +959,7 @@ const {toast} = useToast();
                                                 className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedSeparationDate ? 'text-black' : ''}`}
                                             >
                                                 <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                {selectedSeparationDate ? format(selectedSeparationDate, 'PPP') : 'Pick a date'}
+                                                {clientData?.marriage?.dateOfSeparation ? format(clientData?.marriage?.dateOfSeparation, 'PPP') : 'Pick a date'}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className='w-auto p-0' align='start'>
@@ -965,7 +968,7 @@ const {toast} = useToast();
                                                 selected={selectedSeparationDate}
                                                 onSelect={(date) => {
                                                     setSelectedSeparationDate(date);
-                                                    handleFieldChange('marriage', "dateOfSeparation");
+                                                    handleFieldChange('marriage', "dateOfSeparation", date);
                                                 }}
                                                 initialFocus
                                                 captionLayout="dropdown-buttons" // Enables dropdowns for year & month

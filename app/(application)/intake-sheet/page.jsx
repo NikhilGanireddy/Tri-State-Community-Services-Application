@@ -242,10 +242,7 @@ const Page = () => {
             }
         }))
     }
-    const [selectedPlaintiffDobDate, setSelectedPlaintiffDobDate] = useState(clientData.plaintiff.dob || null);
-    const [selectedDefendantDobDate, setSelectedDefendantDobDate] = useState(clientData.defendant.dob || null);
-    const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.plaintiff.dob || null);
-    const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.plaintiff.dob || null);
+
 
 
     const [childrenCount, setChildrenCount] = useState(1)
@@ -341,6 +338,12 @@ const Page = () => {
 
         </TableRow>))
     }
+
+    const [selectedPlaintiffDobDate, setSelectedPlaintiffDobDate] = useState(clientData.plaintiff.dob || null);
+    const [selectedDefendantDobDate, setSelectedDefendantDobDate] = useState(clientData.defendant.dob || null);
+    const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.plaintiff.dob || null);
+    const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.plaintiff.dob || null);
+
     return (<div
         className={` cursor-none relative overflow-y-auto bg-fixed bg-cover bg-center h-full flex flex-col items-center justify-center bg-[url('/Wall2.jpg')]  min-h-screen`}>
         <motion.div
@@ -876,7 +879,7 @@ const Page = () => {
                                                 className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent text-xs ${!selectedMarriageDate ? 'text-black' : ''}`}
                                             >
                                                 <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                {selectedMarriageDate ? format(selectedMarriageDate, 'PPP') : 'Pick a date'}
+                                                {clientData?.marriage?.dateOfMarriage ? format(clientData?.marriage?.dateOfMarriage, 'PPP') : 'Pick a date'}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className='w-auto p-0' align='start'>
@@ -885,7 +888,7 @@ const Page = () => {
                                                 selected={selectedMarriageDate}
                                                 onSelect={(date) => {
                                                     setSelectedMarriageDate(date);
-                                                    handleFieldChange('marr', "dateOfMarriage");
+                                                    handleFieldChange('marriage', "dateOfMarriage", date);
                                                 }}
                                                 initialFocus
                                                 captionLayout="dropdown-buttons" // Enables dropdowns for year & month
@@ -916,7 +919,7 @@ const Page = () => {
                                                 className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent text-xs ${!selectedSeparationDate ? 'text-black' : ''}`}
                                             >
                                                 <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                {selectedSeparationDate ? format(selectedSeparationDate, 'PPP') : 'Pick a date'}
+                                                {clientData?.marriage?.dateOfSeparation ? format(clientData?.marriage?.dateOfSeparation, 'PPP') : 'Pick a date'}
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className='w-auto p-0' align='start'>
@@ -925,7 +928,7 @@ const Page = () => {
                                                 selected={selectedSeparationDate}
                                                 onSelect={(date) => {
                                                     setSelectedSeparationDate(date);
-                                                    handleFieldChange('marriage', "dateOfSeparation");
+                                                    handleFieldChange('marriage', "dateOfSeparation", date);
                                                 }}
                                                 initialFocus
                                                 captionLayout="dropdown-buttons" // Enables dropdowns for year & month
@@ -1829,12 +1832,14 @@ const Page = () => {
 
                                 <CardFooter>
                                     <AlertDialog>
-                                        <AlertDialogTrigger className={`bg-black text-white px-4 py-2 rounded-xl`}>Submit</AlertDialogTrigger>
+                                        <AlertDialogTrigger
+                                            className={`bg-black text-white px-4 py-2 rounded-xl`}>Submit</AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
                                                 <AlertDialogTitle>Are all the details accurate?</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    You can go to clients page to edit the clients data after submission.
+                                                    You can go to clients page to edit the clients data after
+                                                    submission.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>

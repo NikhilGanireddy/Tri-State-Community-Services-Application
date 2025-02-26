@@ -4,7 +4,7 @@ import User from '@/lib/models/user.model';
 export async function POST(req) {
   try {
     await connectToDB();
-    const { id, documentName, civilActionComplaintForDivorce, civilActionComplaintForDivorceJudgementDemands } = await req.json();
+    const { id, documentName,martialSettlementAgreement, civilActionComplaintForDivorce, civilActionComplaintForDivorceJudgementDemands } = await req.json();
 
     let updateField = {};
 
@@ -12,7 +12,11 @@ export async function POST(req) {
       updateField['documentTemplatesExtraDetails.civilActionComplaintForDivorce'] = civilActionComplaintForDivorce;
     } else if (documentName === 'civilActionComplaintForDivorceJudgementDemands') {
       updateField['documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands'] = civilActionComplaintForDivorceJudgementDemands;
-    } else {
+    }  else if (documentName === 'martialSettlementAgreement') {
+      updateField['documentTemplatesExtraDetails.martialSettlementAgreement'] = martialSettlementAgreement;
+    }
+
+    else {
       return new Response(JSON.stringify({ message: 'Invalid document name' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }

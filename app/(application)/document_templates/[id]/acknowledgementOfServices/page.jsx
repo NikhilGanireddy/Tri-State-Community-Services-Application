@@ -77,6 +77,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -131,7 +132,7 @@ const Page = () => {
                     <h2>{clientData.plaintiff.address2}</h2>
                     <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
                     <h2>{clientData.plaintiff.mobile}</h2>
-                    <div className='bg-black text-black w-full h-[1px] my-3'/>
+                    <div className='bg-black text-black w-full h-[1.5px] my-3'/>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
@@ -144,19 +145,19 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY: {clientData.plaintiff.county}</h2>
-                    <h2>DOCKET NUMBER: {clientData.courtDecision.current.docketNumber}</h2>
+                    <h2 className={ `uppercase`}>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER: _____________</h2>
                     {/*{clientData.defendant.fault}*/}
                 </div>
             </div>
         </div>
         <h2 className={`indent-14`}>Vs</h2>
-        <div className=' w-full h-[1px] my-6'/>
+        <div className=' w-full h-[1.5px] my-'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
                 <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
                 <h2>Defendant</h2>
-                <div className='bg-black text-black w-full h-[1px] my-3'/>
+                <div className='bg-black text-black w-full h-[1.5px] my-3'/>
             </div>
             <div className='font-medium'>
                 <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
@@ -177,15 +178,14 @@ const Page = () => {
                 <p>I, the defendant, waive my 35 days to answer the complaint.</p></div>
             {/* Judgment Demands */}
             <div className='mt-8'>
-                <div className={`flex flex-row gap-2 mt-12 w-full justify-between items-start `}>
+                <div className={`flex flex-row gap-2 mt-8 w-full justify-between items-start `}>
                     <div>
                         <div className={`flex flex-col gap-2 justify-start`}>
-                            <h2> Dated: <span className={`underline`}>{format(Date.now(), 'PPP')}</span></h2>
+                            <h2> Date: ________________</h2>
                         </div>
                     </div>
                     <div className={`flex flex-col gap-1 justify-start`}>
-                        <h2 className={``}> {`${clientData.plaintiff.lastName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.firstName}`}</h2>
-                        <div className={`min-w-64 w-full h-[2px]  -mt-1 bg-black`}/>
+                        <div className={`min-w-64 w-full h-[1.5px]  -mt-1 bg-black`}/>
                         <span className={`text-sm`}> Defendant</span>
                     </div>
                 </div>
@@ -199,16 +199,16 @@ const Page = () => {
                 <div className={`flex flex-col gap-2 mt-12 w-full items-start`}>
                     <h2> Signed before me on this</h2>
                     <div className={`flex items-end`}>
-                        <div className={` w-12 h-[2px] bg-black`}/>
+                        <div className={` w-12 h-[1.5px] bg-black`}/>
                         <span>day of </span>
-                        <div className={` w-40 h-[2px] bg-black`}/>
+                        <div className={` w-40 h-[1.5px] bg-black`}/>
                         <span>20</span>
-                        <div className={` w-20 h-[2px] bg-black`}/>
+                        <div className={` w-20 h-[1.5px] bg-black`}/>
                     </div>
                 </div>
 
-                <div className={`flex flex-col mt-32 w-full justify-between items-start gap-1`}>
-                    <div className={` w-80 h-[2px] bg-black`}/>
+                <div className={`flex flex-col mt-16 w-full justify-between items-start gap-1`}>
+                    <div className={` w-80 h-[1.5px] bg-black`}/>
 
                     <h2> Signature of the Notary Public</h2>
 

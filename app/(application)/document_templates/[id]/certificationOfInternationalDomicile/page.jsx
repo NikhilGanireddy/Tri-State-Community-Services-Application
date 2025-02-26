@@ -80,6 +80,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -239,7 +240,7 @@ const Page = () => {
                     <h2>{clientData.plaintiff.address2}</h2>
                     <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
                     <h2>{clientData.plaintiff.mobile}</h2>
-                    <div className='bg-black text-black w-full h-[1px] my-3'/>
+                    <div className='bg-black text-black w-full h-[1.5px] my-3'/>
                     <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
@@ -252,18 +253,18 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY {clientData.courtDecision.current.county}</h2>
-                    <h2>DOCKET NUMBER : {clientData.courtDecision.current.docketNumber}</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER : _____________</h2>
                 </div>
             </div>
         </div>
         <h2 className={`indent-14`}>Vs</h2>
-        <div className=' w-full h-[1px] my-6'/>
+        <div className=' w-full h-[1.5px] my-6'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
                 <h2>{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}</h2>
                 <h2>Defendant</h2>
-                <div className='bg-black text-black w-full h-[1px] my-3'/>
+                <div className='bg-black text-black w-full h-[1.5px] my-3'/>
             </div>
             <div className='font-medium'>
                 <h1 className='text-2xl text-center font-bold'>CIVIL ACTION</h1>
@@ -272,11 +273,11 @@ const Page = () => {
         </div>
 
         {/* Body Content */}
-        <div className='mt-12
+        <div className='mt-6
         '>
             <div>
                 <h1>STATE OF NEW JERSEY</h1>
-                <h1>COUNTY OF ______________</h1>
+                <h1 className={`uppercase`}>COUNTY OF {clientData.plaintiff.county}</h1>
             </div>
             <h1 className={`mb-8`}>
                 I, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName},
@@ -312,7 +313,7 @@ const Page = () => {
                         <h2>(Defendant Signature)Defendant, Pro Se</h2>
                     </div>
                 </div>
-                <div className={`flex flex-col gap-2 jus mt-8 font-normal`}>
+                <div className={`flex flex-col gap-2 jus mt-4 font-normal`}>
                     <h1 className={`flex items-baseline`}>State
                         of {clientData.defendant.state}
                         {/*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{'}'}*/}
@@ -324,7 +325,7 @@ const Page = () => {
                     </h1>
                 </div>
                 <div className={`flex flex-col mt-20 w-full justify-between items-start gap-1`}>
-                    <div className={` w-80 h-[2px] bg-black`}/>
+                    <div className={` w-80 h-[1.5px] bg-black`}/>
 
                     <h2> Signature of the Notary Public</h2>
 

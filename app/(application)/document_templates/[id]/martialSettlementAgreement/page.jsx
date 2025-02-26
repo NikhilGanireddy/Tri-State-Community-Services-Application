@@ -4,6 +4,9 @@ import {Button} from '@/components/ui/button'
 import {usePathname} from 'next/navigation'
 import {format} from 'date-fns'
 import {useToast} from "@/hooks/use-toast"
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {Textarea} from "@/components/ui/textarea";
 
 const Page = () => {
     const pathname = usePathname().split('/')
@@ -21,6 +24,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:'',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -80,7 +84,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
-
+            martialSettlementAgreement: [{title: "", details: ""}],
         }
     })
 
@@ -114,7 +118,7 @@ const Page = () => {
         try {
             const response = await fetch('/api/saveDocumentTemplates', {
                 method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
-                    civilActionComplaintForDivorce: textBoxes, documentName: 'civilActionComplaintForDivorce', id
+                    martialSettlementAgreement: textBoxes, documentName: 'martialSettlementAgreement', id
                 })
             })
 
@@ -123,7 +127,7 @@ const Page = () => {
                 setClientData(prev => ({
                     ...prev, documentTemplatesExtraDetails: {
                         ...prev.documentTemplatesExtraDetails,
-                        civilActionComplaintForDivorce: result.data.documentTemplatesExtraDetails.civilActionComplaintForDivorce
+                        martialSettlementAgreement: result.data.documentTemplatesExtraDetails.martialSettlementAgreement
                     }
                 }))
                 setSubmitted(true)
@@ -150,6 +154,7 @@ const Page = () => {
     const [customJudgmentDemands, setCustomJudgmentDemands] = useState([])
     const [judgmentDemandsSaved, setJudgmentDemandsSaved] = useState(false)
 
+
     useEffect(() => {
         if (!id) return
 
@@ -174,7 +179,7 @@ const Page = () => {
                         .filter(d => !judgmentOptions.includes(d.demand))
                         .map(d => ({id: Date.now() + Math.random(), demand: d.demand})))
                 }
-                setSubmitted(data.documentTemplatesExtraDetails.civilActionComplaintForDivorce.length !== 0)
+                setSubmitted(data.documentTemplatesExtraDetails.martialSettlementAgreement.length !== 0)
             } catch (error) {
                 console.error('Error:', error)
             }
@@ -226,6 +231,7 @@ const Page = () => {
         }
     }
 
+    console.log(submitted)
 
     return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
@@ -252,8 +258,8 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
-                    <h2>DOCKET NUMBER NONE</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER: __________________</h2>
                 </div>
             </div>
         </div>
@@ -303,42 +309,29 @@ const Page = () => {
                     entitled to his or her reasonable costs and attorney’s fees.
                 </li>
 
-
-                {/*/!* Additional paragraphs from DB or newly added *!/*/}
-                {/*{submitted ? (clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorce.map((item, index) => (*/}
-                {/*    <li key={index}>*/}
-                {/*        {item.title}: {item.details}*/}
-                {/*    </li>))) : (<>*/}
-                {/*    <Button onClick={addTextBox}>Add Textbox</Button>*/}
-                {/*    {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow my-2'>*/}
-                {/*        <Label>Title</Label>*/}
-                {/*        <Input*/}
-                {/*            value={box.title}*/}
-                {/*            onChange={e => handleChange(box.id, 'title', e.target.value)}*/}
-                {/*        />*/}
-                {/*        <Label>Details</Label>*/}
-                {/*        <Textarea*/}
-                {/*            value={box.details}*/}
-                {/*            onChange={e => handleChange(box.id, 'details', e.target.value)}*/}
-                {/*        />*/}
-                {/*    </div>))}*/}
-                {/*    <Button onClick={handleSave} disabled={saving}>*/}
-                {/*        {saving ? 'Saving...' : 'Save'}*/}
-                {/*    </Button>*/}
-                {/*</>)}*/}
-
             </ol>
 
-            <div className={`mt-4 space-y-4`}>
-                <p>To be owned and occupied by the Defendant. Defendant shall be individually responsible for all the
-                    expenses related to the said real estate.
-                </p>
-                <p>
-                    Plaintiff hereby relinquishes any ownership rights and/or claims and shall execute any documentation
-                    to effectuate the same. Plaintiff shall not be responsible for any expenses related to this property
-                    whatsoever.
-                </p>
-            </div>
+            {submitted ? (clientData.documentTemplatesExtraDetails.martialSettlementAgreement.map((item, index) => (
+                <p className={`my-4`} key={index}>
+                    {item.title}: {item.details}
+                </p>))) : (<>
+                <Button onClick={addTextBox}>Add Textbox</Button>
+                {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow my-2'>
+                    <Label>Title</Label>
+                    <Input
+                        value={box.title}
+                        onChange={e => handleChange(box.id, 'title', e.target.value)}
+                    />
+                    <Label>Details</Label>
+                    <Textarea
+                        value={box.details}
+                        onChange={e => handleChange(box.id, 'details', e.target.value)}
+                    />
+                </div>))}
+                <Button onClick={handleSave} disabled={saving}>
+                    {saving ? 'Saving...' : 'Save'}
+                </Button>
+            </>)}
 
             <div className='mt-8 border-t pt-4'>
                 {/*<h2 className="font-bold mb-3">WHEREFORE THE PLAINTIFF DEMANDS JUDGMENT:</h2>*/}

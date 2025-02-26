@@ -18,6 +18,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county: "",
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -76,6 +77,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -124,19 +126,15 @@ const Page = () => {
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full flex flex-col`}>
-                    <h2 className={`flex gap-2`}>Petitioner's Name: <div
-                        className='bg-black text-black w-36 h-[1px] my-3'/></h2>
-                    <h2 className={`flex gap-2`}>Address: <div className='bg-black text-black w-48 h-[1px] my-3'/>
-                    </h2>
-
-                    <div className='bg-black text-black w-64 h-[1px] my-3'/>
-                    <h2 className={`flex gap-2`}>Phone Number: <div className='bg-black text-black w-40 h-[1px] my-3'/>
-                    </h2>
-
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.address1}</h2>
+                    <h2>{clientData.plaintiff.address2}</h2>
+                    <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
+                    <h2>{clientData.plaintiff.mobile}</h2>
 
                     <div className='font-medium capitalize flex flex-col justify-between mt-6'>
                         <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
-                        <div className='bg-black text-black h-[1px] w-[350px] '/>
+                        <div className='bg-black text-black h-[1.5px] w-[350px] '/>
 
                         <h2>Plaintiff</h2>
                     </div>
@@ -150,19 +148,20 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
-                    <h2>DOCKET NUMBER NONE</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county}</h2>
+                    <h2>DOCKET NUMBER: _______________</h2>
                     {clientData.defendant.fault}
                 </div>
             </div>
         </div>
         <h2 className={`indent-14`}>Vs</h2>
-        <div className=' w-full h-[1px] my-2'/>
+        <div className=' w-full h-[1.5px] my-2'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
                 <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
-                <div className='bg-black text-black w-full h-[1px] '/>
                 <h2>Defendant</h2>
+                <div className='bg-black text-black w-full h-[1.5px] '/>
+                
             </div>
             <div className='font-medium'>
                 <h1 className='text-xl font-bold text-center'>CIVIL ACTION</h1>
@@ -184,7 +183,7 @@ const Page = () => {
                     and jurisdiction having acquired over the Defendant pursuant to rules governing the courts.</p>
 
 
-                <p className={``}>It is on this ______ day of _____________, 201, <span
+                <p className={``}>It is on this ______ day of _____________, 20____ , <span
                     className={`font-bold uppercase`}>ORDERED AND ADJUDGED</span> and such court,
                     by virtue of the power and authority of this court and the acts of legislature in such case
                     provided.</p>
@@ -206,11 +205,11 @@ const Page = () => {
 
                     <div className={`flex flex-col gap-2 justify-start`}>
                         <h2 className={`flex justify-between items-end`}> Date: <span
-                            className={`min-w-64 w-full h-[1px]  -mt-1 bg-black`}/></h2>
+                            className={`min-w-64 w-full h-[1.5px]  -mt-1 bg-black`}/></h2>
                     </div>
                     <div className={`flex flex-col gap-1 justify-end mt-8`}>
                         <h2 className={``}></h2>
-                        <div className={`min-w-64 w-full h-[1px]  -mt-1 bg-black`}/>
+                        <div className={`min-w-64 w-full h-[1.5px]  -mt-1 bg-black`}/>
                         <span className={`font-bold`}> J.S.C.</span>
                     </div>
                 </div>

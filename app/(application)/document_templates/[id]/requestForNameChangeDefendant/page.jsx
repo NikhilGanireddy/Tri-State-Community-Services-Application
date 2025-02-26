@@ -21,6 +21,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
+            county:'',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -80,6 +81,7 @@ const Page = () => {
             civilActionComplaintForDivorce: [{title: "", details: ""}],
             civilActionComplaintForDivorceJudgementDemands: [{demand: ""}],
             acknowledgementOfServices: [{title: "", details: ""}],
+            martialSettlementAgreement: [{title: "", details: ""}],
 
         }
     })
@@ -239,9 +241,9 @@ const Page = () => {
                     <h2>{clientData.defendant.address2}</h2>
                     <h2>{clientData.defendant.city}, {clientData.defendant.state}, {clientData.defendant.zip}</h2>
                     <h2>{clientData.defendant.mobile}</h2>
-                    <div className='bg-black text-black w-full h-[1px] my-3'/>
-                    <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
-                    <h2>defendant</h2>
+                    <div className='bg-black text-black w-full h-[1.5px] my-3'/>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>Plaintiff</h2>
                 </div>
                 <div className={`w-full`}>
 
@@ -252,17 +254,19 @@ const Page = () => {
                 <div className='font-medium capitalize'>
                     <h2>SUPERIOR COURT OF NEW JERSEY</h2>
                     <h2>CHANCERY DIVISION-FAMILY PART</h2>
-                    <h2>COUNTY</h2>
-                    <h2>DOCKET NUMBER {clientData.courtDecision.current.docketNumber}</h2>
+                    <h2 className={`uppercase`}>COUNTY: {clientData.plaintiff.county} </h2>
+                    <h2>DOCKET NUMBER: ___________</h2>
                 </div>
             </div>
         </div>
         <h2 className={`indent-14`}>Vs</h2>
-        <div className=' w-full h-[1px] my-6'/>
+        <div className=' w-full h-[1.5px] my-'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
                 <h2>{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName} </h2>
-                <div className='bg-black text-black w-full h-[1px] '/>
+                <h2>Defendant</h2>
+                <div className='bg-black text-black w-full h-[1.5px] '/>
+                
             </div>
             <div className='font-medium'>
                 <h1 className='text-2xl text-center'>CIVIL ACTION</h1>
@@ -275,7 +279,7 @@ const Page = () => {
         <div className='mt-4 space-y-8'>
             <div className={`uppercase font-bold`}>
                 <h1>STATE OF NEW JERSEY</h1>
-                <h1>county of </h1>
+                <h1>county of {clientData.plaintiff.county}</h1>
             </div>
             <p>
                 I, {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},
@@ -370,21 +374,21 @@ const Page = () => {
                 {/*</>)}*/}
 
                 <div className={`font-bold flex flex-col gap-4 my-8 w-full justify-start `}>
-                    <div className={`flex flex-col gap- justify-start mt-8`}>
-                        <div className={`w-64 h-[1px] bg-black -2`}/>
+                    <div className={`flex flex-col gap- justify-start mt-`}>
+                        <div className={`w-64 h-[1.5px] bg-black -2`}/>
                         <h2><span className={`text-`}> Signature of the Defendant</span></h2>
                     </div>
                     <div>
                         <h1>State of New New Jersey</h1>
                         <h1 className={`flex gap-2 justify-start items-end`}>County of <div
-                            className={`w-24 h-[1px] bg-black`}/></h1>
+                            className={`w-24 h-[1.5px] bg-black`}/></h1>
                     </div>
                     <div className={`flex space-x-2 items-end justify-start`}>Signed before me on this <div
-                        className={`w-8 h-[1px] bg-black`}/>of <div
-                        className={`w-24 h-[1px] bg-black`}/> 20 <div className={`w-8 h-[1px] bg-black`}/></div>
+                        className={`w-8 h-[1.5px] bg-black`}/>of <div
+                        className={`w-24 h-[1.5px] bg-black`}/> 20 <div className={`w-8 h-[1.5px] bg-black`}/></div>
 
                     <div className={`flex flex-col gap- justify-start mt-8`}>
-                        <div className={`w-64 h-[1px] bg-black -2`}/>
+                        <div className={`w-64 h-[1.5px] bg-black -2`}/>
                         <h2><span className={`text-`}> Signature and Seal of the Notary Public</span></h2>
                     </div>
                 </div>
