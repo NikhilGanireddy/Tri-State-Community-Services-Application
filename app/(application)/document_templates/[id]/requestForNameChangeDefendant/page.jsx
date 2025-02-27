@@ -236,13 +236,13 @@ const Page = () => {
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full`}>
-                    <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
+                    <h2>{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}</h2>
                     <h2>{clientData.defendant.address1}</h2>
                     <h2>{clientData.defendant.address2}</h2>
                     <h2>{clientData.defendant.city}, {clientData.defendant.state}, {clientData.defendant.zip}</h2>
                     <h2>{clientData.defendant.mobile}</h2>
                     <div className='bg-black text-black w-full h-[1.5px] my-3'/>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
                 <div className={`w-full`}>

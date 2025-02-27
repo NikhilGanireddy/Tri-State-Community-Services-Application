@@ -241,13 +241,13 @@ const Page = () => {
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full`}>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>{clientData.plaintiff.address1}</h2>
                     <h2>{clientData.plaintiff.address2}</h2>
                     <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
                     <h2>{clientData.plaintiff.mobile}</h2>
                     <div className='bg-black text-black w-full h-[1px] my-3'/>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
                 <div className={`w-full`}>
@@ -269,7 +269,7 @@ const Page = () => {
         <div className=' w-full h-[1px] my-6'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
-                <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
+                <h2>{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}</h2>
                 <h2>Defendant</h2>
                 <div className='bg-black text-black w-full h-[1px] my-3'/>
             </div>
@@ -285,14 +285,14 @@ const Page = () => {
         <div className='mt-8'>
             <ol className='list-inside list-decimal flex flex-col space-y-4'>
                 <li>
-                    The Plaintiff, {clientData.plaintiff.firstName} {clientData.plaintiff.lastName}, resides
+                    The Plaintiff, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}, resides
                     at {clientData.plaintiff.address1},
                     in the City of {clientData.plaintiff.city} and the State of {clientData.plaintiff.state} by way of
                     complaint against the defendant, says:
                 </li>
                 <li>
                     Plaintiff was lawfully married
-                    to {clientData.defendant.firstName} {clientData.defendant.lastName}, the defendant herein, in a
+                    to {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}, the defendant herein, in a
                     civil ceremony on{' '}
                     {clientData.marriage.dateOfMarriage} in {clientData.marriage.cityOfMarriage},{' '}
                     {clientData.marriage.stateOfMarriage}.
@@ -435,7 +435,7 @@ const Page = () => {
                 </div>
                 <div className={`flex flex-row gap-2 mt-12 w-full justify-start `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2> Dated: <span className={`underline`}>{format(Date.now(), 'PPP')}</span></h2>
+                        <h2> Dated: __________________</h2>
                     </div>
                     <div>
 

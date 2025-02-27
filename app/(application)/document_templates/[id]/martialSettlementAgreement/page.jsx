@@ -240,13 +240,13 @@ const Page = () => {
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full`}>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>{clientData.plaintiff.address1}</h2>
                     <h2>{clientData.plaintiff.address2}</h2>
                     <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
                     <h2>{clientData.plaintiff.mobile}</h2>
                     <div className='bg-black text-black w-full h-[1px] my-3'/>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
                 <div className={`w-full`}>
@@ -267,7 +267,7 @@ const Page = () => {
         <div className=' w-full h-[1px] my-6'/>
         <div className='w-full flex justify-between items-end'>
             <div className='font-medium capitalize flex flex-col justify-between w-[350px]'>
-                <h2>{clientData.defendant.firstName} {clientData.defendant.lastName}</h2>
+                <h2>{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}</h2>
                 <h2>Defendant</h2>
                 <div className='bg-black text-black w-full h-[1px] my-3'/>
             </div>
@@ -409,7 +409,7 @@ const Page = () => {
                 </div>
                 <div className={` flex flex-col gap-4 mt-12 w-full font-bold `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2 className={``}> {`${clientData.defendant.lastName} ${clientData.defendant.middleName} ${clientData.defendant.firstName}`}</h2>
+                        <h2 className={``}> {`${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName}`}</h2>
                         <div className={`w-64 h-[1px]  -mt-2 bg-black`}/>
                         <h2 className={``}>Defendant <span className={`text-`}> </span>
                         </h2>

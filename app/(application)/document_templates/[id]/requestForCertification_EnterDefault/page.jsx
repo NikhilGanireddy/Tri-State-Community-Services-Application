@@ -126,13 +126,13 @@ const Page = () => {
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full flex flex-col`}>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>{clientData.plaintiff.address1}</h2>
                     <h2>{clientData.plaintiff.address2}</h2>
                     <h2>{clientData.plaintiff.city}, {clientData.plaintiff.state}, {clientData.plaintiff.zip}</h2>
                     <h2>{clientData.plaintiff.mobile}</h2>
                     <div className='bg-black text-black w-full h-[1.5px] my-3'/>
-                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.lastName}</h2>
+                    <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                     <h2>Plaintiff</h2>
                 </div>
                 <div className={`w-full`}>
@@ -196,7 +196,7 @@ const Page = () => {
 
                 </li>
                 <li>
-                    The complaint and summons in this action were served upon the defendant on _______________, 2017.
+                    The complaint and summons in this action were served upon the defendant on _______________, ________.
 
                 </li>
                 <li>
@@ -204,7 +204,7 @@ const Page = () => {
 
                 </li>
                 <li>
-                    The defendant, _______________, has not answered or otherwise moved.
+                    The defendant, {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName} has not answered or otherwise moved.
 
                 </li>
                 <li>
@@ -212,7 +212,7 @@ const Page = () => {
 
                 </li>
                 <li>
-                    I, Plaintiff, ____________________ certify that the foregoing statements made by me are true in every manner
+                    I, Plaintiff, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName} certify that the foregoing statements made by me are true in every manner
                     whatsoever. I am aware that if any of the foregoing statements made by me are willfully false, I am
                     subject to punishment.
                 </li>
