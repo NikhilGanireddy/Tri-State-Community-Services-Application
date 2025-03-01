@@ -134,8 +134,8 @@ const UsersPage = () => {
             style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
         />
         <div
-            className="w-[90%] max-w-[1600px] flex flex-col  items-center p-8 rounded-3xl min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md">
-            <div className={`flex justify-between items-center w-full`}>
+            className="w-[90%] max-w-[1600px] flex flex-col  items-center p-8 rounded-3xl min-h-[90vh] max-h-[90vh] overflow-y-auto shadow-2xl bg-white/10 h-full backdrop-blur-md">
+            <div className={`flex justify-between items-center w-full `}>
                 <Link href={'/'} className={`text-xl md:text-4xl font-semibold w-max`}>
                     Tri State Community Services
                 </Link>
@@ -157,8 +157,7 @@ const UsersPage = () => {
             {error && <p className='text-red-500'>{error}</p>}
 
             {!loading && !error && filteredUsers.length > 0 ? (<div className={`w-full mt-6`}>
-                <Table>
-                    <TableCaption>A list of all your clients.</TableCaption>
+                <Table className={`md:text-sm w-full md:w-1/2 mx-auto`}>
                     <TableHeader>
                         <TableRow>
                             <TableHead>First Name</TableHead>
