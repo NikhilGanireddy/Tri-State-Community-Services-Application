@@ -144,10 +144,10 @@ const Page = () => {
         <div
             className="w-[90%] max-w-[1600px] flex flex-col overflow-y-scroll  items-center p-8 rounded-3xl max-h-[90vh] min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md">
             <div className={`flex justify-between items-center w-full h-full`}>
-                <Link href={'/'} className={`text-xl md:text-4xl font-semibold w-max`}>
+                <Link href={'/application/dashboard'} className={`text-xl md:text-4xl font-semibold w-max`}>
                     Tri State Community Services
                 </Link>
-                <Link href={'/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
+                <Link href={'/application/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
                     <Button>Dashboard</Button>
                 </Link>
             </div>
@@ -168,7 +168,7 @@ const Page = () => {
                     className={`w-full max-h-[60vh] min-h-[60vh] h-full overflow-y-auto text-sm gap-4 flex-col flex text-start`}>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/civilActionComplaintForDivorce`}>
+                        href={`/application/document_templates/${id}/civilActionComplaintForDivorce`}>
                         {' '}
                         Complaint For Divorce
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -182,7 +182,7 @@ const Page = () => {
 
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/acknowledgementOfServices`}>
+                        href={`/application/document_templates/${id}/acknowledgementOfServices`}>
                         {' '}
                         Acknowledgement Of Services
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -195,7 +195,7 @@ const Page = () => {
 
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/requestForNonAppearanceJudgementForDivorce`}>
+                        href={`/application/document_templates/${id}/requestForNonAppearanceJudgementForDivorce`}>
                         {' '}
                         Request for Non-Appearance Judgement For Divorce
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -207,7 +207,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/martialSettlementAgreement`}>
+                        href={`/application/document_templates/${id}/martialSettlementAgreement`}>
                         {' '}
                         Martial Settlement Agreement
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -220,7 +220,7 @@ const Page = () => {
 
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/military`}>
+                        href={`/application/document_templates/${id}/military`}>
                         {' '}
                         Military
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -233,7 +233,7 @@ const Page = () => {
 
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/requestForNameChangePlaintiff`}>
+                        href={`/application/document_templates/${id}/requestForNameChangePlaintiff`}>
                         {' '}
                         Plaintiff - Request For Name Change
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -245,7 +245,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/requestForNameChangeDefendant`}>
+                        href={`/application/document_templates/${id}/requestForNameChangeDefendant`}>
                         {' '}
                         Defendant - Request For Name Change
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -258,7 +258,7 @@ const Page = () => {
 
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/finalJudgementOfDivorce`}>
+                        href={`/application/document_templates/${id}/finalJudgementOfDivorce`}>
                         {' '}
                         Final Judgement Of Divorce
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
@@ -270,7 +270,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/certificationOfVerificationAndNonCollusion`}>
+                        href={`/application/document_templates/${id}/certificationOfVerificationAndNonCollusion`}>
                         {' '}
                         Certification Of Verification And Non-Collusion
 
@@ -283,7 +283,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/rule5:4_2(h)CertificationBySelf_RepresentedLitigant`}>
+                        href={`/application/document_templates/${id}/rule5:4_2(h)CertificationBySelf_RepresentedLitigant`}>
                         {' '}
                         Rule 5:4-2(h) Certification by Self-Represented Litigant
 
@@ -296,7 +296,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/certificationOfNonMilitaryService`}>
+                        href={`/application/document_templates/${id}/certificationOfNonMilitaryService`}>
                         {' '}
                         Certification of Non-Military Service
 
@@ -309,7 +309,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/plaintiffAffidavitOfNon_Military`}>
+                        href={`/application/document_templates/${id}/plaintiffAffidavitOfNon_Military`}>
                         {' '}
                         Plaintiff Affidavit Of Non_Military
 
@@ -323,7 +323,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/defendantAffidavitOfNon_Military`}>
+                        href={`/application/document_templates/${id}/defendantAffidavitOfNon_Military`}>
                         {' '}
                         Defendant's Affidavit of Non-Military
 
@@ -336,7 +336,7 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/requestForCertification_EnterDefault`}>
+                        href={`/application/document_templates/${id}/requestForCertification_EnterDefault`}>
                         Request And Certification To Enter Default
 
 
@@ -349,8 +349,21 @@ const Page = () => {
                     </Link>
                     <Link
                         className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
-                        href={`/document_templates/${id}/certificationOfInternationalDomicile`}>
+                        href={`/application/document_templates/${id}/certificationOfInternationalDomicile`}>
                       Certification Of International Domicile
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                             stroke="currentColor"
+                             className="hidden size-4 transition-all duration-100 group-hover:flex">
+                            <path strokeLinecap="round" strokeLinejoin="round"
+                                  d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3"/>
+                        </svg>
+                    </Link>
+                    <Link
+                        className={'flex justify-between items-center group overflow-hidden px-6 py-3 bg-black rounded-lg text-white text-sm '}
+                        href={`/application/document_templates/${id}/certificationOfInsurance`}>
+                        Certification Of Insurance
 
 
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"

@@ -1,4 +1,4 @@
-'use client'
+"use client"
 import * as React from 'react'
 import {useEffect, useState} from 'react'
 import {Button} from '@/components/ui/button'
@@ -12,18 +12,6 @@ import {cn} from '@/lib/utils'
 import {Calendar} from '@/components/ui/calendar'
 import {format} from 'date-fns'
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
-import {
     Select,
     SelectContent,
     SelectGroup,
@@ -35,20 +23,34 @@ import {
 import {Checkbox} from '@/components/ui/checkbox'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from '@/components/ui/table'
 import Link from 'next/link'
-import {useRouter} from 'next/navigation'
+import {usePathname, useRouter} from 'next/navigation'
 
 import {motion} from "framer-motion";
 import useMousePosition from "@/utils/cursor";
-import {useToast} from "@/hooks/use-toast"; // Ensure this is returning correct clientX, clientY
-
-const metadata = {
-    title: 'Intake Sheet | Tri State Community Services',
-};
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
+} from "@/components/ui/alert-dialog";
+import {useToast} from "@/hooks/use-toast";
 
 const Page = () => {
-    // State for Plaintiff and Defendant Data
-    const {x, y} = useMousePosition();
 
+    const [clientDaata, setClientDaata] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const router = useRouter();
+    const {toast} = useToast();
+    const pathname = usePathname().split("/")
+    const id = pathname[pathname.length - 1]
+
+    const [user, setUser] = useState(null);
     const [clientData, setClientData] = useState({
         plaintiff: {
             firstName: '',
@@ -64,7 +66,7 @@ const Page = () => {
             dob: null,
             mobile: '',
             placeOfBirth: '',
-            inNewJersey: false,
+            inNewJersey: null
         }, defendant: {
             firstName: '',
             middleName: '',
@@ -78,12 +80,12 @@ const Page = () => {
             dob: null,
             mobile: '',
             placeOfBirth: '',
-            fault: "",
+            fault: '',
         }, marriage: {
             dateOfMarriage: null, cityOfMarriage: '', stateOfMarriage: '', dateOfSeparation: null
         }, children: {
             count: 1, details: [{
-                id: '0', name: '', dob: null, placeOfBirth: '', ssn: ''
+                id: '0', name: '', dob: null, placeOfBirth: '', ssn: '',
             }]
         }, custody: {
             physicalCustody: '',
@@ -126,36 +128,29 @@ const Page = () => {
         }, serviceFee: '' // New field for service fee
     })
 
-    const router = useRouter()
-    const {toast} = useToast()
-    const handleSave = async () => {
-        try {
-            const response = await fetch('/api/saveClientData', {
-                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(clientData) // Send clientData to the backend
-            })
+    // const onPageLoad = async () => {
+    //     try {
+    //         const response = await fetch('/api/editClientData', {
+    //             method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(clientId), // Send clientData to the backend
+    //         });
+    //
+    //         if (response.ok) {
+    //             setClientData(response.body)
+    //             // alert('Client data fetched successfully!');
+    //             toast({
+    //                 title: 'Success', description: "Client data fetched successfully!"
+    //             })
+    //         } else {
+    //             const errorData = await response.json();
+    //             alert(`Error: ${errorData.message}`);
+    //         }
+    //     } catch (error) {
+    //         alert('Error saving client data.');
+    //     }
+    // };
 
-            if (response.ok) {
-                toast({
-                    title: 'Success', description: "Client data saved successfully!"
-                })
-                // alert('Client data saved successfully!')
-                router.push('/clients')
-                // router.push(`${}`)
-            } else {
-                const errorData = await response.json()
-                toast({
-                    title: 'Error', description: `${errorData.message}`
-                })
-            }
-        } catch (error) {
-            console.error('Error saving client data:', error)
 
-            toast({
-                title: 'Error', description: `Error saving client data`,
-            })
-        }
-    }
-
+// onPageLoad()
     const handleFieldChange = (category, field, value) => {
         setClientData(prev => ({
             ...prev, [category]: {
@@ -181,7 +176,7 @@ const Page = () => {
 
             if (count > currentCount) {
                 const newChildren = Array.from({length: count - currentCount}, (_, i) => ({
-                    id: `${currentCount + i}`, name: '', dob: null, placeOfBirth: '', ssn: ''
+                    id: `${currentCount + i}`, name: '', dob: null, placeOfBirth: '', ssn: '', sex: ''
                 }))
                 return {
                     ...prev, children: {count, details: [...updatedChildren, ...newChildren]}
@@ -201,6 +196,7 @@ const Page = () => {
             }
         }))
     }
+    const {x, y} = useMousePosition();
 
     const handleDefendantChange = (field, value) => {
         setClientData(prev => ({
@@ -242,14 +238,44 @@ const Page = () => {
             }
         }))
     }
+    const handleSave = async () => {
+        try {
+            const response = await fetch("/api/updateClient", {
+                method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({id, clientData}),
+            });
 
+            if (response.ok) {
+                // alert("Client data updated successfully!");
+                toast({
+                    title: 'Success', description: "Client data updated successfully!"
+                })
+                router.push("/clients");
+            } else {
+                const errorData = await response.json();
+                toast({
+                    title: 'Error', description: `${errorData.errorMessage}`
+                })
+            }
+        } catch (error) {
+            console.error("Error updating client data:", error);
+            toast({
+                title: 'Error', description: "Error updating the client data."
+            })
+        }
+    };
 
-
+    const handleSaveChildrenData = () => {
+        // Your logic to save or process the data goes here
+        // Example: you could send clientData to an API or local storage
+    }
+    const [date, setDate] = React.useState()
     const [childrenCount, setChildrenCount] = useState(1)
 
     const [childrenData, setChildrenData] = useState([{
         id: '0', name: '', dob: null, placeOfBirth: '', ssn: '',
+
     }])
+
 
     useEffect(() => {
         setChildrenData(prev => {
@@ -257,7 +283,7 @@ const Page = () => {
             if (prev.length < childrenCount) {
                 const itemsToAdd = childrenCount - prev.length
                 const newItems = Array.from({length: itemsToAdd}, (_, idx) => ({
-                    id: String(prev.length + idx), name: '', dob: null, placeOfBirth: '', ssn: ''
+                    id: String(prev.length + idx), name: '', dob: null, placeOfBirth: '', ssn: '', sex: ''
                 }))
                 return [...prev, ...newItems]
             }
@@ -280,30 +306,8 @@ const Page = () => {
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
-                            variant={'outline'}
-                            className={`w-full py-2 px-2 text-left flex justify-start items-start bg-transparent ${!!child.dob ? 'text-black' : ''}`}
-                        >
-                            <CalendarIcon className='mr-2 h-4 w-4'/>
-                            {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
-                        </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0' align='start'>
-                        <Calendar
-                            mode='single'
-                            selected={child.dob}
-                            onSelect={date => handleChildDateChange(i, date)}
-                            initialFocus
-                            captionLayout="dropdown-buttons" // Enables dropdowns for year & month
-                            fromYear={1900} // Set an appropriate range for year selection
-                            toYear={new Date().getFullYear()}
-                        />
-                    </PopoverContent>
-                </Popover>
-                <Popover>
-                    <PopoverTrigger asChild>
-                        <Button
                             variant='outline'
-                            className={cn('w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ', !child.dob && 'text-muted-foreground')}
+                            className={cn('className bg-transparent', !child.dob && 'text-black')}
                         >
                             <CalendarIcon className='mr-2 h-4 w-4'/>
                             {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
@@ -339,10 +343,34 @@ const Page = () => {
         </TableRow>))
     }
 
+    useEffect(() => {
+        if (!id) return; // Wait for the ID to be available
+
+        const fetchClientData = async () => {
+            try {
+                const response = await fetch(`/api/getClientById/${id}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch client data');
+                }
+                const data = await response.json()
+                setClientData(data)
+                // .then(() => setSelectedMarriageDate(clientData.marriage.dateOfMarriage))
+
+                setLoading(false);
+            } catch (error) {
+                setError(error.message);
+                setLoading(false);
+            }
+        };
+
+        fetchClientData();
+    }, [id]);
+
+// console.log(clientData);
     const [selectedPlaintiffDobDate, setSelectedPlaintiffDobDate] = useState(clientData.plaintiff.dob || null);
     const [selectedDefendantDobDate, setSelectedDefendantDobDate] = useState(clientData.defendant.dob || null);
-    const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.plaintiff.dob || null);
-    const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.plaintiff.dob || null);
+    const [selectedMarriageDate, setSelectedMarriageDate] = useState(clientData.marriage.dateOfMarriage || null);
+    const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.marriage.dateOfSeparation || null);
 
     return (<div
         className={` cursor-none relative overflow-y-auto bg-fixed bg-cover bg-center h-full flex flex-col items-center justify-center bg-[url('/Wall2.jpg')]  min-h-screen`}>
@@ -372,13 +400,15 @@ const Page = () => {
             className={`w-[90%] max-w-[1600px] overflow-y-auto flex flex-col justify-start   p-4 md:p-8 rounded-3xl max-h-[90vh] min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md`}>
             <title>Intake Sheet | Tri State Community Services</title>
             <div className={`flex justify-between items-center`}>
-                <Link href={'/'} className={`text-xl md:text-4xl font-semibold w-max`}>
+                <Link href={'/application/dashboard'} className={`text-xl md:text-4xl font-semibold w-max`}>
                     Tri State Community Services
                 </Link>
-                <Link href={'/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
+                <Link href={'/application/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
                     <Button>Dashboard</Button>
                 </Link>
             </div>
+            <h2 className={`mt-4 text-lg`}> Edit Intake sheet
+                of {` ${clientData.plaintiff.firstName} ${clientData.plaintiff.lastName}`}</h2>
 
             <div className={`h-full mt-8 md:mt-16`}>
                 <div className={`h-full`}>
@@ -389,7 +419,7 @@ const Page = () => {
                         <TabsList
                             className=' bg-white/10 shadow-2xl flex flex-1 backdrop-blur-md text-black flex-row md:flex-col w-full md:w-1/4 h-max px-0 p-2 rounded-3xl justify-start items-start overflow-x-scroll'>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='Plaintiff'
                             >
                                 Plaintiff
@@ -401,68 +431,68 @@ const Page = () => {
                                 Defendant
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='Marriage'
                             >
                                 Marriage
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='Children'
                             >
                                 Children
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='Custody'
                             >
                                 Custody
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='CourtDecision'
                             >
                                 Court Decision
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='RealEstateDetails'
                             >
                                 Real Estate Details
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='Insurance'
                             >
                                 Insurance
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='License'
                             >
                                 License
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='BiographicDetails'
                             >
                                 Biographic Details
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
+                                className={`className`}
                                 value='SheriffAddress'
                             >
                                 Sheriff Address
                             </TabsTrigger>
                             <TabsTrigger
-                                className={``}
-                                value='SaveClientData'
+                                className={`className`}
+                                value='UpdateClientData'
                             >
-                                Save Client Data
+                                Update Client Data
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent className={`w-full md:w-3/4`} value='Plaintiff'>
-                            <Card className={``}>
+                            <Card>
                                 <CardHeader>
                                     <CardTitle>Plaintiff</CardTitle>
                                     <CardDescription>
@@ -558,7 +588,8 @@ const Page = () => {
                                                             <SelectItem value='Louisiana'>Louisiana</SelectItem>
                                                             <SelectItem value='Maine'>Maine</SelectItem>
                                                             <SelectItem value='Maryland'>Maryland</SelectItem>
-                                                            <SelectItem value='Massachusetts'>Massachusetts</SelectItem>
+                                                            <SelectItem
+                                                                value='Massachusetts'>Massachusetts</SelectItem>
                                                             <SelectItem value='Michigan'>Michigan</SelectItem>
                                                             <SelectItem value='Minnesota'>Minnesota</SelectItem>
                                                             <SelectItem value='Mississippi'>Mississippi</SelectItem>
@@ -566,28 +597,34 @@ const Page = () => {
                                                             <SelectItem value='Montana'>Montana</SelectItem>
                                                             <SelectItem value='Nebraska'>Nebraska</SelectItem>
                                                             <SelectItem value='Nevada'>Nevada</SelectItem>
-                                                            <SelectItem value='New Hampshire'>New Hampshire</SelectItem>
+                                                            <SelectItem value='New Hampshire'>New
+                                                                Hampshire</SelectItem>
                                                             <SelectItem value='New Jersey'>New Jersey</SelectItem>
                                                             <SelectItem value='New Mexico'>New Mexico</SelectItem>
                                                             <SelectItem value='New York'>New York</SelectItem>
                                                             <SelectItem value='North Carolina'>North
                                                                 Carolina</SelectItem>
-                                                            <SelectItem value='North Dakota'>North Dakota</SelectItem>
+                                                            <SelectItem value='North Dakota'>North
+                                                                Dakota</SelectItem>
                                                             <SelectItem value='Ohio'>Ohio</SelectItem>
                                                             <SelectItem value='Oklahoma'>Oklahoma</SelectItem>
                                                             <SelectItem value='Oregon'>Oregon</SelectItem>
-                                                            <SelectItem value='Pennsylvania'>Pennsylvania</SelectItem>
-                                                            <SelectItem value='Rhode Island'>Rhode Island</SelectItem>
+                                                            <SelectItem
+                                                                value='Pennsylvania'>Pennsylvania</SelectItem>
+                                                            <SelectItem value='Rhode Island'>Rhode
+                                                                Island</SelectItem>
                                                             <SelectItem value='South Carolina'>South
                                                                 Carolina</SelectItem>
-                                                            <SelectItem value='South Dakota'>South Dakota</SelectItem>
+                                                            <SelectItem value='South Dakota'>South
+                                                                Dakota</SelectItem>
                                                             <SelectItem value='Tennessee'>Tennessee</SelectItem>
                                                             <SelectItem value='Texas'>Texas</SelectItem>
                                                             <SelectItem value='Utah'>Utah</SelectItem>
                                                             <SelectItem value='Vermont'>Vermont</SelectItem>
                                                             <SelectItem value='Virginia'>Virginia</SelectItem>
                                                             <SelectItem value='Washington'>Washington</SelectItem>
-                                                            <SelectItem value='West Virginia'>West Virginia</SelectItem>
+                                                            <SelectItem value='West Virginia'>West
+                                                                Virginia</SelectItem>
                                                             <SelectItem value='Wisconsin'>Wisconsin</SelectItem>
                                                             <SelectItem value='Wyoming'>Wyoming</SelectItem>
                                                         </SelectGroup>
@@ -617,13 +654,13 @@ const Page = () => {
                                                     className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedPlaintiffDobDate ? 'text-black' : ''}`}
                                                 >
                                                     <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                    {selectedPlaintiffDobDate ? format(selectedPlaintiffDobDate, 'PPP') : 'Pick a date'}
+                                                    {clientData.plaintiff.dob ? format(clientData.plaintiff.dob, 'PPP') : 'Pick a date'}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className='w-auto p-0' align='start'>
                                                 <Calendar
                                                     mode='single'
-                                                    selected={selectedPlaintiffDobDate}
+                                                    selected={clientData.plaintiff.dob}
                                                     onSelect={(date) => {
                                                         setSelectedPlaintiffDobDate(date);
                                                         handlePlaintiffChange('dob', date);
@@ -667,6 +704,7 @@ const Page = () => {
                                 </CardContent>
                             </Card>
                         </TabsContent>
+
                         <TabsContent className={`w-full md:w-3/4`} value='Defendant'>
                             <Card>
                                 <CardHeader>
@@ -712,7 +750,7 @@ const Page = () => {
                                             onChange={e => handleDefendantChange('maidenName', e.target.value)}
                                         />
                                     </div>
-                                    <div className='space-y-2'>
+                                    <div className='space-y-1'>
                                         <Label>Address</Label>
                                         <Input
                                             id='defendantAddress1'
@@ -726,7 +764,7 @@ const Page = () => {
                                             placeholder='Address line 2'
                                             onChange={e => handleDefendantChange('address2', e.target.value)}
                                         />
-                                        <div className='flex w-full items-center justify-between gap-2'>
+                                        <div className='flex w-full items-center justify-between gap-3'>
                                             <Input
                                                 id='defendantCity'
                                                 value={clientData.defendant.city}
@@ -775,14 +813,16 @@ const Page = () => {
                                                         <SelectItem value='New Jersey'>New Jersey</SelectItem>
                                                         <SelectItem value='New Mexico'>New Mexico</SelectItem>
                                                         <SelectItem value='New York'>New York</SelectItem>
-                                                        <SelectItem value='North Carolina'>North Carolina</SelectItem>
+                                                        <SelectItem value='North Carolina'>North
+                                                            Carolina</SelectItem>
                                                         <SelectItem value='North Dakota'>North Dakota</SelectItem>
                                                         <SelectItem value='Ohio'>Ohio</SelectItem>
                                                         <SelectItem value='Oklahoma'>Oklahoma</SelectItem>
                                                         <SelectItem value='Oregon'>Oregon</SelectItem>
                                                         <SelectItem value='Pennsylvania'>Pennsylvania</SelectItem>
                                                         <SelectItem value='Rhode Island'>Rhode Island</SelectItem>
-                                                        <SelectItem value='South Carolina'>South Carolina</SelectItem>
+                                                        <SelectItem value='South Carolina'>South
+                                                            Carolina</SelectItem>
                                                         <SelectItem value='South Dakota'>South Dakota</SelectItem>
                                                         <SelectItem value='Tennessee'>Tennessee</SelectItem>
                                                         <SelectItem value='Texas'>Texas</SelectItem>
@@ -810,10 +850,10 @@ const Page = () => {
                                             <PopoverTrigger asChild>
                                                 <Button
                                                     variant={'outline'}
-                                                    className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedPlaintiffDobDate ? 'text-black ' : ''}`}
+                                                    className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedPlaintiffDobDate ? 'text-black' : ''}`}
                                                 >
                                                     <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                    {selectedDefendantDobDate ? format(selectedDefendantDobDate, 'PPP') : 'Pick a date'}
+                                                    {clientData.defendant.dob ? format(clientData.defendant.dob, 'PPP') : 'Pick a date'}
                                                 </Button>
                                             </PopoverTrigger>
                                             <PopoverContent className='w-auto p-0' align='start'>
@@ -875,24 +915,24 @@ const Page = () => {
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button
-                                                variant={'outline'}
-                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent text-xs ${!selectedMarriageDate ? 'text-black' : ''}`}
+                                                variant="outline"
+                                                className={cn("w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent", !selectedMarriageDate ? "text-black" : "")}
                                             >
-                                                <CalendarIcon className='mr-2 h-4 w-4'/>
-                                                {clientData?.marriage?.dateOfMarriage ? format(clientData?.marriage?.dateOfMarriage, 'PPP') : 'Pick a date'}
+                                                <CalendarIcon className="mr-2 h-4 w-4"/>
+                                                {clientData?.marriage?.dateOfMarriage ? format(clientData?.marriage?.dateOfMarriage, "PPP") : "Pick a date"}
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent className='w-auto p-0' align='start'>
+                                        <PopoverContent className="w-auto p-0" align="start">
                                             <Calendar
-                                                mode='single'
+                                                mode="single"
                                                 selected={selectedMarriageDate}
                                                 onSelect={(date) => {
                                                     setSelectedMarriageDate(date);
-                                                    handleFieldChange('marriage', "dateOfMarriage", date);
+                                                    handleFieldChange("marriage", "dateOfMarriage", date);
                                                 }}
                                                 initialFocus
-                                                captionLayout="dropdown-buttons" // Enables dropdowns for year & month
-                                                fromYear={1900} // Set an appropriate range for year selection
+                                                captionLayout="dropdown-buttons"
+                                                fromYear={1900}
                                                 toYear={new Date().getFullYear()}
                                             />
                                         </PopoverContent>
@@ -916,7 +956,7 @@ const Page = () => {
                                         <PopoverTrigger asChild>
                                             <Button
                                                 variant={'outline'}
-                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent text-xs ${!selectedSeparationDate ? 'text-black' : ''}`}
+                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!selectedSeparationDate ? 'text-black' : ''}`}
                                             >
                                                 <CalendarIcon className='mr-2 h-4 w-4'/>
                                                 {clientData?.marriage?.dateOfSeparation ? format(clientData?.marriage?.dateOfSeparation, 'PPP') : 'Pick a date'}
@@ -979,28 +1019,25 @@ const Page = () => {
                                                     <Popover>
                                                         <PopoverTrigger asChild>
                                                             <Button
-                                                                variant={'outline'}
-                                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent  ${!child.dob ? 'text-black' : ''}`}
+                                                                variant='outline'
+                                                                className={`w-full justify-start text-left font-normal bg-transparent border-black border-[0.2px] hover:bg-transparent ${!child.dob && 'text-black'}`}
                                                             >
                                                                 <CalendarIcon className='mr-2 h-4 w-4'/>
                                                                 {child.dob ? format(child.dob, 'PPP') : 'Pick a date'}
                                                             </Button>
                                                         </PopoverTrigger>
-                                                        <PopoverContent className='w-auto p-0' align='start'>
+                                                        <PopoverContent
+                                                            className='w-auto p-0'
+                                                            align='start'
+                                                        >
                                                             <Calendar
                                                                 mode='single'
                                                                 selected={child.dob}
-                                                                onSelect={(date) => {
-                                                                    handleChildFieldChange(i, 'dob', date)
-                                                                }}
+                                                                onSelect={date => handleChildFieldChange(i, 'dob', date)}
                                                                 initialFocus
-                                                                captionLayout="dropdown-buttons" // Enables dropdowns for year & month
-                                                                fromYear={1900} // Set an appropriate range for year selection
-                                                                toYear={new Date().getFullYear()}
                                                             />
                                                         </PopoverContent>
                                                     </Popover>
-
                                                 </TableCell>
                                                 <TableCell>
                                                     <Input
@@ -1016,6 +1053,7 @@ const Page = () => {
                                                         placeholder='SSN'
                                                     />
                                                 </TableCell>
+
                                             </TableRow>))}
                                         </TableBody>
                                     </Table>
@@ -1745,7 +1783,6 @@ const Page = () => {
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
-
                                                         <SelectLabel>Select State</SelectLabel>
                                                         <SelectItem value='Alabama'>Alabama</SelectItem>
                                                         <SelectItem value='Alaska'>Alaska</SelectItem>
@@ -1821,12 +1858,12 @@ const Page = () => {
                                 </CardContent>
                             </Card>
                         </TabsContent>
-                        <TabsContent className={`w-full md:w-3/4`} value='SaveClientData'>
+                        <TabsContent className={`w-full md:w-3/4`} value='UpdateClientData'>
                             <Card>
                                 <CardHeader>
-                                    <CardTitle>Save Client Data</CardTitle>
+                                    <CardTitle>Update Client Data</CardTitle>
                                     <CardDescription>
-                                        Make sure all the details of the client have been entered properly.
+                                        Make sure all the details of the client have been updated properly.
                                     </CardDescription>
                                 </CardHeader>
 
@@ -1836,10 +1873,9 @@ const Page = () => {
                                             className={`bg-black text-white px-4 py-2 rounded-xl`}>Submit</AlertDialogTrigger>
                                         <AlertDialogContent>
                                             <AlertDialogHeader>
-                                                <AlertDialogTitle>Are all the details accurate?</AlertDialogTitle>
+                                                <AlertDialogTitle>Are all the details updated?</AlertDialogTitle>
                                                 <AlertDialogDescription>
-                                                    You can go to clients page to edit the clients data after
-                                                    submission.
+                                                    You can go to clients page to see the clients data after submission.
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
@@ -1848,7 +1884,6 @@ const Page = () => {
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>
-
                                 </CardFooter>
                             </Card>
                         </TabsContent>

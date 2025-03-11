@@ -5,8 +5,8 @@ export async function GET() {
   try {
     await connectToDB();
 
-    // Fetch all users from the database
-    const users = await User.find({});
+    // Fetch all users and sort them in descending order by createdAt
+    const users = await User.find({}).sort({ dateCreated: -1 });
 
     return new Response(JSON.stringify(users), {
       status: 200,

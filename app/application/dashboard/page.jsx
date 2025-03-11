@@ -38,7 +38,7 @@ const Page = () => {
         {/* Main Container */}
         <div
             className="w-[90%] max-w-[1600px] flex flex-col justify-center items-center p-8 rounded-3xl min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md">
-            <Link href="/" className="text-xl md:text-5xl font-bold funnel-display-800">
+            <Link href="/application/dashboard" className="text-xl md:text-5xl font-bold funnel-display-800">
                 Tri State Community Services
             </Link>
 
@@ -47,12 +47,12 @@ const Page = () => {
 
             {/* Buttons Section */}
             <div className="flex w-full justify-center gap-6 mt-6">
-                <Link href="/intake-sheet">
+                <Link href="/application/intake-sheet">
                 <Button
                     className="py-4 rounded-lg px-6 text-md font-medium text-white bg-black shadow-md transition-all duration-300 hover:bg-gray-950 hover:shadow-lg">
-                    <Link href="/intake-sheet">Intake Sheet</Link>
+                    <Link href="/application/intake-sheet">Intake Sheet</Link>
                 </Button></Link>
-                <Link href="/clients">
+                <Link href="/application/clients">
                     <Button
                         className="py-4 rounded-lg px-6 text-md font-medium text-white bg-black shadow-md transition-all duration-300 hover:bg-gray-950 hover:shadow-lg">
                         Clients

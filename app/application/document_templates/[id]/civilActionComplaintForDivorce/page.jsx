@@ -426,7 +426,7 @@ const Page = () => {
                     <div>
                     </div>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2 className={``}> {`${clientData.plaintiff.lastName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.firstName}`}</h2>
+                        <h2 className={``}> {`${clientData.plaintiff.firstName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.lastName}`}</h2>
                         <div className={`w-64 h-[1.5px]  -mt-2 bg-black`}/>
                         <h2 className={``}>(Plaintiff's Name, Printed) <span className={`text-`}> Plaintiff</span>
                         </h2>

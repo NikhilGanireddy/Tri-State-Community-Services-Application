@@ -279,7 +279,7 @@ const Page = () => {
         <div className='mt-4 space-y-8'>
             <div className={`uppercase font-bold`}>
                 <h1>STATE OF NEW JERSEY</h1>
-                <h1>county of {clientData.plaintiff.county}</h1>
+                <h1>county of {clientData.defendant.county}</h1>
             </div>
             <p>
                 I, {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},

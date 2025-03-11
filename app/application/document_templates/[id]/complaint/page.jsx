@@ -163,7 +163,7 @@ const Page = () => {
     <div className=' flex flex-col min-w-screen min-h-screen w-full h-screen'>
       <div className='w-full flex flex-row items-center justify-between'>
         <div>
-          <h2>{`${clientData.plaintiff.firstName} ${clientData.plaintiff.lastName}`}</h2>
+          <h2>{`${clientData.plaintiff.firstName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.lastName}`}</h2>
           <h2>{`${clientData.plaintiff.address1}`}</h2>
           <h2>{`${clientData.plaintiff.address2}`}</h2>
           <h2>{`${clientData.plaintiff.city}, ${clientData.plaintiff.state}, ${clientData.plaintiff.zip}`}</h2>
@@ -179,14 +179,14 @@ const Page = () => {
       <div className='bg-black text-black w-full h-[0.5px]' />
       <div className='w-full flex flex-row items-center justify-between'>
         <div>
-          <h2>{`${clientData.plaintiff.firstName} ${clientData.plaintiff.lastName}`}</h2>
+          <h2>{`${clientData.plaintiff.firstName} ${clientData.plaintiff.middleName} ${clientData.plaintiff.lastName}`}</h2>
           <h2>Plaintiff</h2>
           <h2>{" "}</h2>
           <h2>{" "}</h2>
           <h2>Vs</h2>
           <h2>{" "}</h2>
           <h2>{" "}</h2>
-          <h2>{`${clientData.defendant.firstName} ${clientData.defendant.lastName}`}</h2>
+          <h2>{`${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName}`}</h2>
           <h2>Defendant</h2>
         </div>
         <div>

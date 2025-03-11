@@ -100,7 +100,9 @@ const UsersPage = () => {
         } else {
             const filtered = users.filter(user =>
                 user.plaintiff.firstName.toLowerCase().includes(query.toLowerCase()) ||
-                user.plaintiff.lastName.toLowerCase().includes(query.toLowerCase())
+                user.plaintiff.lastName.toLowerCase().includes(query.toLowerCase()) ||
+                user.defendant.firstName.toLowerCase().includes(query.toLowerCase()) ||
+                user.defendant.lastName.toLowerCase().includes(query.toLowerCase())
             )
             setFilteredUsers(filtered)
         }
@@ -134,12 +136,12 @@ const UsersPage = () => {
             style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
         />
         <div
-            className="w-[90%] max-w-[1600px] flex flex-col  items-center p-8 rounded-3xl min-h-[90vh] max-h-[90vh] overflow-y-auto shadow-2xl bg-white/10 h-full backdrop-blur-md">
+            className="w-[90%] text-base max-w-[1600px] flex flex-col  items-center p-8 rounded-3xl min-h-[90vh] max-h-[90vh] overflow-y-auto shadow-2xl bg-white/10 h-full backdrop-blur-md">
             <div className={`flex justify-between items-center w-full `}>
-                <Link href={'/'} className={`text-xl md:text-4xl font-semibold w-max`}>
+                <Link href={'/application/dashboard'} className={`text-xl md:text-4xl font-semibold w-max`}>
                     Tri State Community Services
                 </Link>
-                <Link href={'/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
+                <Link href={'/application/dashboard'} className={`text-sm md:text-base font-semibold w-max`}>
                     <Button>Dashboard</Button>
                 </Link>
             </div>
@@ -160,8 +162,8 @@ const UsersPage = () => {
                 <Table className={`md:text-sm w-full md:w-1/2 mx-auto`}>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>First Name</TableHead>
-                            <TableHead>Last Name</TableHead>
+                            <TableHead>Plaintiff</TableHead>
+                            <TableHead>Defendant</TableHead>
                             <TableHead>Date Added</TableHead>
                             <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
@@ -169,12 +171,12 @@ const UsersPage = () => {
                     <TableBody className={``}>
                         {filteredUsers.map(user => (
                             <TableRow className={``} key={user._id}>
-                                <TableCell>{user.plaintiff.firstName}</TableCell>
-                                <TableCell>{user.plaintiff.lastName}</TableCell>
+                                <TableCell>{user.plaintiff.firstName} {user.plaintiff.lastName}</TableCell>
+                                <TableCell>{user.defendant.firstName} {user.defendant.lastName}</TableCell>
                                 <TableCell>{`${getMonth(user.dateCreated) + 1}-${getDate(user.dateCreated)}-${getYear(user.dateCreated)}`}</TableCell>
                                 <TableCell className='text-right flex gap-2 justify-end items-center'>
     <span>
-    <Link href={`/clients/${user._id}`}>
+    <Link href={`/application/clients/${user._id}`}>
 <svg
     xmlns='http://www.w3.org/2000/svg'
     fill='none'
@@ -193,7 +195,7 @@ const UsersPage = () => {
 </span>
                                     <span>
                     {' '}
-                                        <Link href={`/document_templates/${user._id}`}>
+                                        <Link href={`/application/document_templates/${user._id}`}>
                       <svg
                           xmlns='http://www.w3.org/2000/svg'
                           fill='none'
