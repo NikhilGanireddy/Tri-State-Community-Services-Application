@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Ronnie from "@/public/ronnie.jpg"
+import Akash from "@/public/akash.jpg"
 import TriState from "@/public/tristate.png"
 
 
@@ -53,8 +53,8 @@ const Heropage = () => {
         </div>
         <div className={` hidden lg:flex w-full h-full max-h-[600px]`}>
             <Image
-                src={Ronnie}
-                alt={"Ronnie Khurana"} className={`w-full h-full overflow-hidden rounded-3xl object-cover object-top `}
+                src={Akash}
+                alt={"Akash Khurana"} className={`w-full h-full overflow-hidden rounded-3xl object-cover object-top `}
             />
         </div>
     </div>
