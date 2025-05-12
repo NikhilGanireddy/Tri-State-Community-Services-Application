@@ -23,7 +23,6 @@ const documents = [
     { key: 'requestForCertification_EnterDefault', label: 'Request And Certification To Enter Default' },
     { key: 'certificationOfInternationalDomicile', label: 'Certification Of International Domicile' },
     { key: 'certificationOfInsurance', label: 'Certification Of Insurance' },
-    { key: 'sample', label: 'Sample' },
 ]
 
 export default function Page() {
