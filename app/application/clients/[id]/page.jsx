@@ -373,29 +373,8 @@ const Page = () => {
     const [selectedSeparationDate, setSelectedSeparationDate] = useState(clientData.marriage.dateOfSeparation || null);
 
     return (<div
-        className={` cursor-none relative overflow-y-auto bg-fixed bg-cover bg-center h-full flex flex-col items-center justify-center bg-[url('/Wall2.jpg')]  min-h-screen`}>
-        <motion.div
-            initial={{opacity: 0}}
-            animate={{
-                x: x - 32, // Offset to center
-                y: y - 32, opacity: 1,
-            }}
-            transition={{type: "tween", ease: "backOut", duration: 0.3}}
-            className="hidden md:inline-flex md:fixed md:w-16 md:h-16 md:border-[1px] md:border-black md:bg-transparent md:rounded-full md:z-50 pointer-events-none"
-            style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
-        />
+        className={` relative overflow-y-auto bg-fixed bg-cover bg-center h-full flex flex-col items-center justify-center bg-[url('/Wall2.jpg')]  min-h-screen`}>
 
-        {/* Custom Cursor Small Dot */}
-        <motion.div
-            initial={{opacity: 0}}
-            animate={{
-                x: x - 1, // Small offset for precision
-                y: y - 1, opacity: 1,
-            }}
-            transition={{type: "tween", ease: "backOut", duration: 0.1}}
-            className="hidden md:inline-flex md:fixed md:w-2 md:h-2 md:bg-black md:rounded-full md:z-50 pointer-events-none"
-            style={{left: 0, top: 0, transform: "translate(-50%, -50%)"}}
-        />
         <div
             className={`w-[90%] max-w-[1600px] overflow-y-auto flex flex-col justify-start   p-4 md:p-8 rounded-3xl max-h-[90vh] min-h-[90vh] shadow-2xl bg-white/10 h-full backdrop-blur-md`}>
             <title>Intake Sheet | Tri State Community Services</title>

@@ -1,5 +1,5 @@
 'use client'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import {Button} from '@/components/ui/button'
 import {usePathname} from 'next/navigation'
 import {format} from 'date-fns'
@@ -13,6 +13,7 @@ const Page = () => {
     const id = pathname[pathname.length - 2]
     const {toast} = useToast()
 
+
     const [clientData, setClientData] = useState({
         plaintiff: {
             firstName: '',
@@ -24,7 +25,7 @@ const Page = () => {
             city: '',
             state: '',
             zip: '',
-            county:'',
+            county: '',
             dob: null,
             mobile: '',
             placeOfBirth: ''
@@ -101,136 +102,128 @@ const Page = () => {
     }
 
     // For the "complaint for divorce" textboxes
-    const [textBoxes, setTextBoxes] = useState([])
-    const [submitted, setSubmitted] = useState(false)
+    const [textBoxes, setTextBoxes] = useState([])       // draft array
+    const [submitted, setSubmitted] = useState(false)    // has been saved?
     const [saving, setSaving] = useState(false)
+    const [editMode, setEditMode] = useState(false)
+
+    const closeEditor = () => {
+        setEditMode(false);      // switch back to read‑only view
+    };
+    // --- debounce helpers ---
+    const firstLoad = useRef(true);          // skip autosave on initial mount
+    const debounceTimer = useRef(null);      // store setTimeout id
+
+    const autoSave = async (boxes) => {
+        setSaving(true);
+        try {
+            const res = await fetch('/api/saveDocumentTemplates', {
+                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
+                    id, documentName: 'martialSettlementAgreement', martialSettlementAgreement: boxes,
+                }),
+            });
+            if (!res.ok) throw new Error('network');
+
+            const result = await res.json();
+            // refresh local cache
+            setClientData(prev => ({
+                ...prev, documentTemplatesExtraDetails: {
+                    ...prev.documentTemplatesExtraDetails,
+                    martialSettlementAgreement: result.data.documentTemplatesExtraDetails.martialSettlementAgreement,
+                },
+            }));
+            setSubmitted(true);
+        } catch (err) {
+            console.error(err);
+            toast({title: 'Error', description: 'Failed to save data.'});
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const addTextBox = () => {
-        setTextBoxes([...textBoxes, {id: Date.now(), title: '', details: ''}])
+        setTextBoxes(prev => [...prev, {id: Date.now(), title: '', details: ''}])
     }
 
+    /* Delete a row */
+    const deleteTextBox = (id) => {
+        setTextBoxes(prev => prev.filter(box => box.id !== id))
+    }
+
+    /* Field change */
     const handleChange = (id, field, value) => {
         setTextBoxes(prev => prev.map(box => (box.id === id ? {...box, [field]: value} : box)))
     }
 
+    /* Persist to DB */
     const handleSave = async () => {
         setSaving(true)
         try {
-            const response = await fetch('/api/saveDocumentTemplates', {
+            const res = await fetch('/api/saveDocumentTemplates', {
                 method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
-                    martialSettlementAgreement: textBoxes, documentName: 'martialSettlementAgreement', id
+                    id, documentName: 'martialSettlementAgreement', martialSettlementAgreement: textBoxes
                 })
             })
 
-            if (response.ok) {
-                const result = await response.json()
-                setClientData(prev => ({
-                    ...prev, documentTemplatesExtraDetails: {
-                        ...prev.documentTemplatesExtraDetails,
-                        martialSettlementAgreement: result.data.documentTemplatesExtraDetails.martialSettlementAgreement
-                    }
-                }))
-                setSubmitted(true)
-            } else {
-                toast({
-                    title: 'Error', description: "Error saving data."
-                })
-            }
-        } catch (error) {
-            console.error('Error:', error)
-            toast({
-                title: 'Error', description: "Error saving data."
-            })
+            if (!res.ok) throw new Error('Network response was not ok')
+            const result = await res.json()
+
+            // update local cache + UI flags
+            setClientData(prev => ({
+                ...prev, documentTemplatesExtraDetails: {
+                    ...prev.documentTemplatesExtraDetails,
+                    martialSettlementAgreement: result.data.documentTemplatesExtraDetails.martialSettlementAgreement
+                }
+            }))
+            toast({title: 'Success', description: 'Saved successfully!'})
+            setSubmitted(true)
+            setEditMode(false)
+        } catch (err) {
+            console.error(err)
+            toast({title: 'Error', description: 'Failed to save data.'})
         } finally {
             setSaving(false)
         }
     }
+    /* Start editing an existing document */
+    const startEdit = () => {
+        const existing = clientData.documentTemplatesExtraDetails.martialSettlementAgreement || []
+        const hydrated = existing.map((item, idx) => ({
+            id: Date.now() + idx, title: item.title, details: item.details
+        }))
+        setTextBoxes(hydrated)
+        setSubmitted(false)
+        setEditMode(true)
+    }
 
-    // Judgment demands
-    const judgmentOptions = ["The plaintiff demands child support payments.", "The plaintiff requests sole custody of children.", "The plaintiff seeks an equitable distribution of marital assets.", "The plaintiff asks for spousal support for a period of 5 years.", "The plaintiff requests reimbursement for legal fees.", "Dissolving the marraiage between the parties", "Awarding Physical and Legal custody of the children to the Plaintiff and Defendant as per the attached agreement", "Ordering that defendant pay child support to plaintiff", "Ordering Plaintiff and Defendant to continue to mutually determine the amount of time that the children will spend with each parent as per the attached agreement.", "Ordering the Defendant to continue to pay child support to the Plaintiff as per the attached agreement.", "Incorporating the attached Property Settlement Agreement into Final Judgement of Divorce.", "Granting such relief as the count may deem equitable and just."]
-
-    // Default & custom demands
-    const [selectedJudgmentDemands, setSelectedJudgmentDemands] = useState([])
-    const [customJudgmentDemands, setCustomJudgmentDemands] = useState([])
-    const [judgmentDemandsSaved, setJudgmentDemandsSaved] = useState(false)
-
-
+    /** Fetch client data on mount */
     useEffect(() => {
         if (!id) return
 
-        const fetchClientData = async () => {
+        (async () => {
             try {
-                const response = await fetch(`/api/getClientById/${id}`)
-                if (!response.ok) {
-                    new Error('Failed to fetch client data')
-                }
-                const data = await response.json()
+                const res = await fetch(`/api/getClientById/${id}`)
+                if (!res.ok) throw new Error('Failed to fetch client')
+                const data = await res.json()
                 setClientData(data)
-
-                if (data?.plaintiff?.firstName && data?.defendant?.firstName) {
-                    document.title = `${data.plaintiff.firstName} Vs ${data.defendant.firstName} | Martial Settlement Agreement`;
-                }
-                // Build up "selected" vs. "custom" from DB
-                if (data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands) {
-                    setSelectedJudgmentDemands(data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
-                        .filter(d => judgmentOptions.includes(d.demand))
-                        .map(d => d.demand))
-                    setCustomJudgmentDemands(data.documentTemplatesExtraDetails.civilActionComplaintForDivorceJudgementDemands
-                        .filter(d => !judgmentOptions.includes(d.demand))
-                        .map(d => ({id: Date.now() + Math.random(), demand: d.demand})))
-                }
-                setSubmitted(data.documentTemplatesExtraDetails.martialSettlementAgreement.length !== 0)
-            } catch (error) {
-                console.error('Error:', error)
+                setSubmitted((data.documentTemplatesExtraDetails?.martialSettlementAgreement || []).length !== 0)
+            } catch (err) {
+                console.error(err)
             }
-        }
-
-        fetchClientData()
+        })()
     }, [id])
 
-    const toggleJudgmentDemand = (sentence) => {
-        setSelectedJudgmentDemands(prev => prev.includes(sentence) ? prev.filter(item => item !== sentence) : [...prev, sentence])
-    }
-
-    const addCustomJudgmentDemand = () => {
-        setCustomJudgmentDemands([...customJudgmentDemands, {id: Date.now(), demand: ''}])
-    }
-
-    const updateCustomJudgmentDemand = (id, value) => {
-        setCustomJudgmentDemands(prev => prev.map(demand => (demand.id === id ? {...demand, demand: value} : demand)))
-    }
-
-    const handleSaveJudgmentDemands = async () => {
-        try {
-            // Only saving demands to the DB;
-            // no file or folder creation is happening here.
-            const response = await fetch('/api/saveDocumentTemplates', {
-                method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({
-                    civilActionComplaintForDivorceJudgementDemands: [...selectedJudgmentDemands.map(demand => ({demand})), ...customJudgmentDemands.map(d => ({demand: d.demand}))],
-                    documentName: 'civilActionComplaintForDivorceJudgementDemands',
-                    id
-                })
-            })
-
-            if (!response.ok) {
-                toast({
-                    title: 'Error', description: "Error saving judgment demands.", variant: "sucess"
-                })
-                return
-            }
-            toast({
-                title: 'Success', description: "Judgment Demands saved successfully!"
-            })
-            setJudgmentDemandsSaved(true)
-
-        } catch (error) {
-            console.error('Error:', error)
-            toast({
-                title: 'Error', description: "Error saving judgment demands."
-            })
+    useEffect(() => {
+        if (firstLoad.current) {          // skip first render
+            firstLoad.current = false;
+            return;
         }
-    }
 
+        if (debounceTimer.current) clearTimeout(debounceTimer.current);
+        debounceTimer.current = setTimeout(() => autoSave(textBoxes), 600); // 600 ms
+
+        return () => debounceTimer.current && clearTimeout(debounceTimer.current);
+    }, [textBoxes]);
     console.log(submitted)
 
     return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
@@ -290,7 +283,7 @@ const Page = () => {
             <ol className='list-inside list-decimal flex flex-col space-y-4'>
                 <li>
                     Plaintiff and Defendant were lawfully married
-                    on {clientData.marriage.dateOfMarriage},
+                    on {format(new Date(clientData?.marriage?.dateOfMarriage), 'PPP')},
                     in {clientData.marriage.cityOfMarriage}, {clientData.marriage.stateOfMarriage} .Because certain
                     irreconcilable problems have developed between Plaintiff and Defendant, they have agreed to live
                     separately and apart, have filed for divorce, and are attempting to resolve the property issues
@@ -309,29 +302,47 @@ const Page = () => {
                     entitled to his or her reasonable costs and attorney’s fees.
                 </li>
 
+                {submitted && !editMode ? (<>
+                        {clientData.documentTemplatesExtraDetails.martialSettlementAgreement.map((item, idx) => (
+                            <li key={idx} className='my-4'>
+                                <span className=''>{item.title}:</span> {item.details}
+                            </li>))}
+                        <Button variant='outline' onClick={startEdit} className='mt-4 print:hidden'>Add Text Box</Button>
+                    </>) : (<>
+                        {/* toolbar */}
+                        <div className='flex gap-2 mb-4'>
+                            <Button className=' print:hidden' onClick={addTextBox}>Add Textbox</Button>
+
+                            {saving && (<span className='text-xs text-muted-foreground self-center'>Saving…</span>)}
+                            {editMode && (<Button variant='outline' onClick={closeEditor}>
+                                    Done
+                                </Button>)}
+                        </div>
+
+                        {/* editor */}
+                        {textBoxes.map(box => (<div key={box.id} className='border rounded-lg shadow p-4 my-2'>
+                                <div className='flex justify-between items-center mb-2'>
+                                    <Label className='font-medium'>Title</Label>
+                                    <Button variant='destructive' size='sm'
+                                            onClick={() => deleteTextBox(box.id)}>Delete</Button>
+                                </div>
+                                <Input
+                                    value={box.title}
+                                    onChange={e => handleChange(box.id, 'title', e.target.value)}
+                                    placeholder='Section title…'
+                                />
+
+                                <Label className='font-medium mt-4 block'>Details</Label>
+                                <Textarea
+                                    value={box.details}
+                                    onChange={e => handleChange(box.id, 'details', e.target.value)}
+                                    placeholder='Enter details…'
+                                    className='mt-1'
+                                />
+                            </div>))}
+                    </>)}
             </ol>
 
-            {submitted ? (clientData.documentTemplatesExtraDetails.martialSettlementAgreement.map((item, index) => (
-                <p className={`my-4`} key={index}>
-                    {item.title}: {item.details}
-                </p>))) : (<>
-                <Button onClick={addTextBox}>Add Textbox</Button>
-                {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow my-2'>
-                    <Label>Title</Label>
-                    <Input
-                        value={box.title}
-                        onChange={e => handleChange(box.id, 'title', e.target.value)}
-                    />
-                    <Label>Details</Label>
-                    <Textarea
-                        value={box.details}
-                        onChange={e => handleChange(box.id, 'details', e.target.value)}
-                    />
-                </div>))}
-                <Button onClick={handleSave} disabled={saving}>
-                    {saving ? 'Saving...' : 'Save'}
-                </Button>
-            </>)}
 
             <div className='mt-8 border-t pt-4'>
                 {/*<h2 className="font-bold mb-3">WHEREFORE THE PLAINTIFF DEMANDS JUDGMENT:</h2>*/}
@@ -430,11 +441,8 @@ const Page = () => {
                 </div>
 
                 {/* Print Button (delayed by 2s, disabled while waiting) */}
-                {isPrinting ? (" ") : (<div className="mt-6">
-                    <Button variant="outline" onClick={handlePrint}>
-                        Print Document
-                    </Button>
-                </div>)}
+                {isPrinting ? null : (
+                    <Button variant='outline' onClick={handlePrint} className='mt-6 print:hidden'>Print Document</Button>)}
             </div>
         </div>
     </div>)

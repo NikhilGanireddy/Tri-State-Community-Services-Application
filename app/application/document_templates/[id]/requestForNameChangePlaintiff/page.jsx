@@ -232,7 +232,6 @@ const Page = () => {
     return (<div className='p-4 text-sm flex flex-col min-w-screen min-h-screen w-full h-screen font-sans'>
         {/* Top Section */}
 
-
         <div className='w-full flex flex-col justify-between'>
             <div className='font-medium capitalize flex flex-row justify-between items-center'>
                 <div className={`w-full`}>
@@ -301,75 +300,12 @@ const Page = () => {
                 </li>
 
 
-                {/*/!* Additional paragraphs from DB or newly added *!/*/}
-                {/*{submitted ? (clientData.documentTemplatesExtraDetails.civilActionComplaintForDivorce.map((item, index) => (*/}
-                {/*    <li key={index}>*/}
-                {/*        {item.title}: {item.details}*/}
-                {/*    </li>))) : (<>*/}
-                {/*    <Button onClick={addTextBox}>Add Textbox</Button>*/}
-                {/*    {textBoxes.map(box => (<div key={box.id} className='border p-4 rounded-lg shadow my-2'>*/}
-                {/*        <Label>Title</Label>*/}
-                {/*        <Input*/}
-                {/*            value={box.title}*/}
-                {/*            onChange={e => handleChange(box.id, 'title', e.target.value)}*/}
-                {/*        />*/}
-                {/*        <Label>Details</Label>*/}
-                {/*        <Textarea*/}
-                {/*            value={box.details}*/}
-                {/*            onChange={e => handleChange(box.id, 'details', e.target.value)}*/}
-                {/*        />*/}
-                {/*    </div>))}*/}
-                {/*    <Button onClick={handleSave} disabled={saving}>*/}
-                {/*        {saving ? 'Saving...' : 'Save'}*/}
-                {/*    </Button>*/}
-                {/*</>)}*/}
-
             </ol>
 
 
 
             <div className='mt-8 pt-4'>
-                {/*<h2 className="font-bold mb-3">WHEREFORE THE PLAINTIFF DEMANDS JUDGMENT:</h2>*/}
-                {/*<ol className="list-decimal pl-5 mb-6">*/}
-                {/*    {selectedJudgmentDemands.map((demand, index) => (<li key={`selected-${index}`} className="mt-1">*/}
-                {/*        {demand}*/}
-                {/*    </li>))}*/}
-                {/*    {customJudgmentDemands.map((demand, index) => (<li key={`custom-${index}`} className="mt-1">*/}
-                {/*        {demand.demand}*/}
-                {/*    </li>))}*/}
-                {/*</ol>*/}
 
-                {/* Hide "Add or Remove Judgments" after saving */}
-                {/*{!judgmentDemandsSaved && (<>*/}
-                {/*    <h2 className="font-bold mb-2">Add or Remove Judgments</h2>*/}
-                {/*    {judgmentOptions.map((option, index) => (<div key={index} className='flex items-center gap-2 mb-1'>*/}
-                {/*        <Checkbox*/}
-                {/*            checked={selectedJudgmentDemands.includes(option)}*/}
-                {/*            onCheckedChange={() => toggleJudgmentDemand(option)}*/}
-                {/*        />*/}
-                {/*        <Label>{option}</Label>*/}
-                {/*    </div>))}*/}
-
-                {/*    <div className="mt-4">*/}
-                {/*        <Button onClick={addCustomJudgmentDemand}>*/}
-                {/*            Add Custom Demand*/}
-                {/*        </Button>*/}
-                {/*        {customJudgmentDemands.map((demand) => (*/}
-                {/*            <div key={demand.id} className='mt-3 flex items-center gap-2'>*/}
-                {/*                <Input*/}
-                {/*                    value={demand.demand}*/}
-                {/*                    placeholder='Enter custom demand...'*/}
-                {/*                    onChange={(e) => updateCustomJudgmentDemand(demand.id, e.target.value)}*/}
-                {/*                />*/}
-                {/*            </div>))}*/}
-                {/*    </div>*/}
-
-                {/*    <div className="mt-4">*/}
-                {/*        <Button onClick={handleSaveJudgmentDemands}>*/}
-                {/*            Save Judgment Demands*/}
-                {/*        </Button>*/}
-                {/*    </div>*/}
-                {/*</>)}*/}
 
                 <div className={`font-bold flex flex-col gap-4 my-8 w-full justify-start `}>
                     <div className={`flex flex-col gap- justify-start mt-`}>
