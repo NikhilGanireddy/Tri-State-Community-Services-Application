@@ -285,12 +285,12 @@ const Page = () => {
                     being of full age and duly sworn according to laws that support affidavits in the
                     State of New Jersey, depose and say:
                 </p>
-                <p className={`indent-8`}>I am the plaintiff in this case and I am making this affidavit of my husband’s
+                <p className={`indent-8`}>I am the plaintiff in this case and I am making this affidavit of my spouse
                     military service in support of my complaint for divorce.
                 </p>
 
                 <p className={`indent-8`}>
-                    I know for my own personal knowledge that my husband,{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}, is in the United
+                    I know for my own personal knowledge that my spouse,{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}, is in the United
                     States Military and is residing at the following address:
 
                     {clientData.defendant.address1} {clientData.defendant.address2}, {clientData.defendant.city}, {clientData.defendant.state} {clientData.defendant.zip} .

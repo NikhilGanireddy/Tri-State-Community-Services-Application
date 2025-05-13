@@ -420,15 +420,15 @@ const Page = () => {
                 </div>
                 <div className={` flex flex-col gap-4 mt-12 w-full font-bold `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2 className={``}> {`${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName}`}</h2>
                         <div className={`w-64 h-[1px]  -mt-2 bg-black`}/>
+                        <h2 className={``}> {`${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName}`}</h2>
+
                         <h2 className={``}>Defendant <span className={`text-`}> </span>
                         </h2>
                     </div>
                     <div>
-                        <h1>City of {clientData.defendant.city}</h1>
-                        <h1 className={`flex space-x-2 items-end`}>Country of <div
-                            className={`w-24 h-[1px] bg-black`}/></h1>
+                        <h1>State of __________________</h1>
+                        <h1 className={`flex space-x-2 items-end`}>County of __________________</h1>
                     </div>
                     <div className={`flex space-x-2 items-end justify-start`}>Signed before on this <div
                         className={`w-24 h-[1px] bg-black`}/>of <div

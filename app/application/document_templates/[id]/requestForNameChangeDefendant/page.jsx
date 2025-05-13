@@ -379,7 +379,8 @@ const Page = () => {
                         <h2><span className={`text-`}> Signature of the Defendant</span></h2>
                     </div>
                     <div>
-                        <h1>State of New New Jersey</h1>
+                        <h1 className={`flex gap-2 justify-start items-end`}>State of <div
+                            className={`w-24 h-[1.5px] bg-black`}/></h1>
                         <h1 className={`flex gap-2 justify-start items-end`}>County of <div
                             className={`w-24 h-[1.5px] bg-black`}/></h1>
                     </div>

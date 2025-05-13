@@ -191,8 +191,8 @@ const Page = () => {
                 </div>
 
                 <div className={`flex flex-col mt-12 w-full justify-between items-start `}>
-                    <h2> State of New Jersey &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
-                    <h2> County of  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
+                    <h2> State of  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
+                    <h2> County of  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
 
                 </div>
 

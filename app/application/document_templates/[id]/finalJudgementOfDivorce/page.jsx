@@ -133,8 +133,8 @@ const Page = () => {
                     <h2>{clientData.plaintiff.mobile}</h2>
 
                     <div className='font-medium capitalize flex flex-col justify-between mt-6'>
-                        <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
                         <div className='bg-black text-black h-[1.5px] w-[350px] '/>
+                        <h2>{clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName}</h2>
 
                         <h2>Plaintiff</h2>
                     </div>
@@ -161,7 +161,7 @@ const Page = () => {
                 <h2>{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName}</h2>
                 <h2>Defendant</h2>
                 <div className='bg-black text-black w-full h-[1.5px] '/>
-                
+
             </div>
             <div className='font-medium'>
                 <h1 className='text-xl font-bold text-center'>CIVIL ACTION</h1>
@@ -196,7 +196,7 @@ const Page = () => {
                     <span className={`font-bold uppercase`}>ORDERED</span>, as follows:
                 </p>
 
-                <p className={"font-bold indent-12"}>The marriage is dissolved.</p>
+                <p className={"font-bold indent-12"}>{clientData.plaintiff.maidenName || clientData.defendant.maidenName !== "" ? ` The marriage is dissolved and the ${clientData.plaintiff.maidenName == "" ? " defendant" : "plaintiff"} is permitted to use the maiden name: ${clientData.plaintiff.maidenName || clientData.defendant.maidenName}` : " The marriage is dissolved."}</p>
 
             </div>
             {/* Judgment Demands */}

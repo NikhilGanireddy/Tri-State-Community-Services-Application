@@ -311,8 +311,8 @@ export default function PrintSelected() {
                 </div>
 
                 <div className={`flex flex-col mt-12 w-full justify-between items-start `}>
-                    <h2> State of New Jersey &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
-                    <h2> County of  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
+                    <h2> State of &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
+                    <h2> County of  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {`}`}</h2>
 
                 </div>
 
@@ -529,15 +529,14 @@ export default function PrintSelected() {
                 </div>
                 <div className={` flex flex-col gap-4 mt-12 w-full font-bold `}>
                     <div className={`flex flex-col gap-2 justify-start`}>
-                        <h2 className={``}> {`${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName}`}</h2>
                         <div className={`w-64 h-[1px]  -mt-2 bg-black`}/>
+                        <h2 className={``}> {`${clientData.defendant.firstName} ${clientData.defendant.middleName} ${clientData.defendant.lastName}`}</h2>
                         <h2 className={``}>Defendant <span className={`text-`}> </span>
                         </h2>
                     </div>
                     <div>
-                        <h1>City of {clientData.defendant.city}</h1>
-                        <h1 className={`flex space-x-2 items-end`}>Country of <div
-                            className={`w-24 h-[1px] bg-black`}/></h1>
+                        <h1>State of __________________</h1>
+                        <h1 className={`flex space-x-2 items-end`}>County of __________________</h1>
                     </div>
                     <div className={`flex space-x-2 items-end justify-start`}>Signed before on this <div
                         className={`w-24 h-[1px] bg-black`}/>of <div
@@ -608,13 +607,13 @@ export default function PrintSelected() {
                     being of full age and duly sworn according to laws that support affidavits in the
                     State of New Jersey, depose and say:
                 </p>
-                <p className={`indent-8`}>I am the plaintiff in this case and I am making this affidavit of my husband’s
+                <p className={`indent-8`}>I am the plaintiff in this case and I am making this affidavit of my spouse
                     military service in support of my complaint for divorce.
                 </p>
 
                 <p className={`indent-8`}>
                     I know for my own personal knowledge that my
-                    husband,{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},
+                    spouse,{clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},
                     is in the United
                     States Military and is residing at the following address:
 
@@ -924,7 +923,8 @@ export default function PrintSelected() {
                     <span className={`font-bold uppercase`}>ORDERED</span>, as follows:
                 </p>
 
-                <p className={"font-bold indent-12"}>The marriage is dissolved.</p>
+                <p className={"font-bold indent-12"}>{clientData.plaintiff.maidenName || clientData.defendant.maidenName !== "" ? ` The marriage is dissolved and the ${clientData.plaintiff.maidenName == "" ? " defendant" : "plaintiff"} is permitted to use the maiden name: ${clientData.plaintiff.maidenName || clientData.defendant.maidenName}` : " The marriage is dissolved."}</p>
+
 
             </div>
             {/* Judgment Demands */}
@@ -1591,7 +1591,7 @@ export default function PrintSelected() {
                 <h1 className={`uppercase`}>COUNTY OF {clientData.plaintiff.county}</h1>
             </div>
             <h1 className={`mb-8`}>
-                I, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName},
+                I, {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},
                 of full age, hereby certify:
             </h1>
             <ol className='list-inside list-decimal flex flex-col space-y-4'>

@@ -280,7 +280,7 @@ const Page = () => {
                 <h1 className={`uppercase`}>COUNTY OF {clientData.plaintiff.county}</h1>
             </div>
             <h1 className={`mb-8`}>
-                I, {clientData.plaintiff.firstName} {clientData.plaintiff.middleName} {clientData.plaintiff.lastName},
+                I, {clientData.defendant.firstName} {clientData.defendant.middleName} {clientData.defendant.lastName},
                 of full age, hereby certify:
             </h1>
             <ol className='list-inside list-decimal flex flex-col space-y-4'>
