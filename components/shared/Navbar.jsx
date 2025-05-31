@@ -18,7 +18,7 @@ const Navbar = () => {
 
         </SignedIn>
         <SignedOut>
-            {/* e.g. a button leading to /sign-in */} hi
+            {/* e.g. a button leading to /sign-in */}
         </SignedOut>
 
     </div>
